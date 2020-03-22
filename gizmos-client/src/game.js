@@ -27,7 +27,7 @@ const Gizmos = {
             .fill("B", 13, 27)
             .fill("U", 26, 40)
             .fill("Y", 39, 52),
-        cards = CardsList,
+        cards: CardsList(),
 
         playerSetup: (playerID) => ({
             playerId: playerID,
@@ -36,34 +36,37 @@ const Gizmos = {
             energyStorage: Array(0),
             archivesLimit: Array(0),
 
-            energyStorageCapacity = initialEnergyStorageCapacity,
-            archiveLimit = initialArchiveLimit,
-            researchLimit = initialResearchLimit,
+            energyStorageCapacity: initialEnergyStorageCapacity,
+            archiveLimit: initialArchiveLimit,
+            researchLimit: initialResearchLimit,
 
             machines: Array(1).fill(InitialCard()),
             archive: Array(0)
         }),
 
-        plugins: [PluginPlayer],
+        plugins: [PluginPlayer] // FIXME: no import, no declaration
     }),
 
     moves: {
         archive(G, ctx, cardId) {
             const playerState = ctx.player.get();
             if (playerState.archive.length < playerState.archiveLimit) {
-                let cards = [...G.cards]
-                const selectedCard = cards.find((c) => c.cardId == cardId);
+                let cards = [...G.cards];
+                const selectedCard = cards.find((c) => c.cardId === cardId);
 
-                if (typeof selectedCard === 'undefined')
+                if (!selectedCard)
                     return;
 
                 // add card to player's archive
-                let archive = [...playerState.archive];
-                archive.push(selectedCard);
+                let archive = [
+                    ...playerState.archive,
+                    selectedCard
+                ];
+
                 ctx.player.set({...playerState, archive });
 
                 // remove card from common area
-                cards = cards.filter((c) => c.cardId != cardId);
+                cards = cards.filter((c) => c.cardId !== cardId);
                 return {...G, cards };
             }
         },
@@ -77,105 +80,119 @@ const Gizmos = {
                 return;
 
             let dispenser = [...G.dispenser];
-            let energy = dispenser[energy];
+            const energy = dispenser[energy]; // FIXME: no access to energy, will throw reference error
 
             // add energy to player's storage
-            let energyStorage = [...playerState.energyStorage];
-            energyStorage.push(energy);
-            ctx.player.set({...playerState, energyStorage })
+            const energyStorage = [
+                ...playerState.energyStorage,
+                energy
+            ];
+
+            ctx.player.set({...playerState, energyStorage });
 
             // remove energy from dispenser
-            dispenser = dispenser.filter((e, i) => i != energyIndex);
+            dispenser = dispenser.filter((e, i) => i !== energyIndex);
             return {...G, dispenser };
         },
 
         buildFromCommon(G, ctx, cardId, paidEnergy) {
             const playerState = ctx.player.get();
-            const selectedCard = cards.find((c) => c.cardId == cardId)
-            if (typeof selectedCard === 'undefined')
+            const selectedCard = cards.find((c) => c.cardId === cardId);  // FIXME: no access to cards, will throw reference error
+            if (!selectedCard)
                 return;
 
             let energyStorage = [...playerState.energyStorage];
 
             // declared energy can pay
-            let costColors = selectedCard.color.toCharArray();
+            const costColors = selectedCard.color.toCharArray(); // FIXME, why toCharArray then for..in
             let amountToPay = selectedCard.cost;
             for (let energy in costColors) {
-                if (payment.hasOwnProperty(energy))
+                if (payment.hasOwnProperty(energy)) // FIXME: no access to payment
                     amountToPay -= payment[energy];
             }
-            if (amountToPay != 0)
+
+            if (amountToPay !== 0)
                 return;
 
             // add card to player's machines
-            let removeOneEnergy = function(storage, energy) {
-                let i = storage.indexOf(energy);
-                return storage.slice(0, i) + storage.slice(i + 1, storage.length);
-            }
+            const removeOneEnergy = (storage, energy) => {
+                return storage.filter(e => e !== energy);
+            };
+
             energyStorage = energyStorage.reduce(removeOneEnergy, energyStorage);
 
             // add card to player's machines
-            let machines = [...playerState.archive];
-            machines.push(selectedCard);
+            let machines = [
+                ...playerState.archive,
+                selectedCard
+            ];
+
             ctx.player.set({...playerState, machines, energyStorage });
 
             // remove card from common area
-            cards = cards.filterzc
+            cards = cards.filterzc // FIXME: wtf, no access to cards
             return {...G, cards };
         },
 
         buildFromArchive(G, ctx, cardId, paidEnergy) {
             const playerState = ctx.player.get();
-            const selectedCard = [...playerState.archive.find((c) => c.cardId == cardId)]
-            if (typeof selectedCard === 'undefined') return;
+            const selectedCard = playerState.archive.filter(c => c.cardId === cardId);
+
+            if (!selectedCard)
+                return;
 
             let energyStorage = [...playerState.energyStorage];
 
             // player has declared energy
-            let countOcurrences = function(counters, energy) {
+            const countOcurrences = (counters, energy) => {
                 if (!counters[energy]) {
-                    counters[energy] = 1;
-                } else {
-                    counters[energy] = counters[energy] + 1;
+                    return counters[energy] = 1;
                 }
-                return counters;
-            }
+
+                return counters[energy] = counters[energy] + 1;
+            };
 
             let playerEnergy = energyStorage.reduce(countOcurrences, {});
             let payment = paidEnergy.reduce(countOcurrences, {});
 
             let playerHasDeclaredEnergy = true;
-            for (let energy in payment) {
+            for (let energy in payment) { // POTENTIAL ERROR
                 playerHasDeclaredEnergy = playerHasDeclaredEnergy &&
                     payment.hasOwnProperty(energy) &&
                     playerEnergy.hasOwnProperty(energy) &&
-                    (payment[energy] <= playerEnergy[energyEnergy]);
+                    (payment[energy] <= playerEnergy[energyEnergy]); // FIXME: no access to energyEnergy
             }
 
-            if (!playerHasDeclaredEnergy) return;
+            if (!playerHasDeclaredEnergy)
+                return;
 
             // declared energy can pay
-            let costColors = selectedCard.color.toCharArray();
+            let costColors = selectedCard.color.toCharArray(); // FIXME why toCharArray and for..in?
             let amountToPay = selectedCard.cost;
-            for (let energy in costColors) {
+            for (let energy in costColors) { // TODO: Using TS will reduce hasOwnProperty
                 if (payment.hasOwnProperty(energy))
                     amountToPay -= payment[energy];
             }
-            if (amountToPay != 0)
+
+            if (amountToPay !== 0)
                 return;
 
             // add card to player's machines
-            let removeOneEnergy = function(storage, energy) {
+            // FIXME: Duplication
+            const removeOneEnergy = (storage, energy) => {
                 let i = storage.indexOf(energy);
                 return storage.slice(0, i) + storage.slice(i + 1, storage.length);
-            }
+            };
+
             energyStorage = energyStorage.reduce(removeOneEnergy, energyStorage);
 
-            let machines = [...playerState.machines];
-            machines.push(selectedCard);
+            let machines = [
+                ...playerState.machines,
+                selectedCard
+            ];
 
             let archive = [...playerState.archive];
-            archive = archive.filter((c) => c.cardId != cardId);
+            archive = archive.filter((c) => c.cardId !== cardId);
 
             ctx.player.set({...playerState, machines, archive, energyStorage });
 
@@ -194,8 +211,8 @@ const Gizmos = {
 
     endIf: (G, ctx) => {
         if (SomeoneHas16Machines(G) || SomeoneHas4MachinesOf_III_Level(G)) {
-            const winerIndex = G.victoryPoints.indexOf(Math.max(...arr));
-            return { winner: winerIndex };
+            const winnerIndex = G.victoryPoints.indexOf(Math.max(...arr)); // FIXME: no access to arr
+            return { winner: winnerIndex };
         }
     }
 };
