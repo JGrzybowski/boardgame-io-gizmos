@@ -8,18 +8,15 @@ export function archive(
 ): GameState | void {
   const playerState = ctx.player.get();
   if (playerState.archive.length < playerState.archiveLimit) {
-    let cards = [...G.cards];
-    const selectedCard = cards.find(c => c.cardId === cardId);
-
-    if (typeof selectedCard === "undefined") return;
+    const selectedCard = G.findCardOnTheTable(cardId);
+    if (selectedCard === null) return;
 
     // add card to player's archive
-    let archive = [...playerState.archive];
-    archive.push(selectedCard);
+    let archive = playerState.archiveWith(selectedCard);
     ctx.player.set({ ...playerState, archive });
 
     // remove card from common area
-    cards = cards.filter(c => c.cardId !== cardId);
+    let cards = G.cardsWithout(cardId);
     return { ...G, cards };
   }
 }

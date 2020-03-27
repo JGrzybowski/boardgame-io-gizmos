@@ -32,7 +32,20 @@ export abstract class Card<T extends CardEffect = any> {
   ) {}
 }
 
+export class CardCost {
+  constructor(
+    public readonly r: number = 0,
+    public readonly u: number = 0,
+    public readonly b: number = 0,
+    public readonly y: number = 0,
+    public readonly any: number = 0
+  ) {}
+}
+
 export abstract class CardEffect {
   abstract canBeResolved(G: GameState, ctx: GameContext): boolean;
-  abstract gameStateAfterEffect(G: GameState, ctx: GameContext): GameState;
+  abstract gameStateAfterEffect(
+    G: GameState,
+    ctx: GameContext
+  ): GameState | void;
 }
