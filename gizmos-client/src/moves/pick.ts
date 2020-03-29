@@ -1,18 +1,20 @@
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
+import { INVALID_MOVE } from "boardgame.io/core";
 
 const visibleEnergyBallsLimit = 6;
 
-export function pick(
+function pick(
   G: GameState,
   ctx: GameContext,
   energyIndex: number
-): GameState | void {
-  if (energyIndex < 0 || energyIndex > visibleEnergyBallsLimit) return;
+): GameState | string {
+  if (energyIndex < 0 || energyIndex > visibleEnergyBallsLimit)
+    return INVALID_MOVE;
 
   const playerState = ctx.player.get();
   if (playerState.energyStorage.length >= playerState.energyStorageCapacity)
-    return;
+    return INVALID_MOVE;
 
   let dispenser = [...G.dispenser];
   let energy = dispenser[energyIndex];
@@ -28,3 +30,8 @@ export function pick(
     ctx.random.Shuffle(dispenser.slice(energyIndex + 1, dispenser.length));
   return { ...G, dispenser };
 }
+
+export const pickAction = {
+  move: pick,
+  undoable: false
+};

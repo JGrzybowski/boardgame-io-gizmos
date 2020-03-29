@@ -1,11 +1,12 @@
 import { Card } from "./cards/card";
-import { PluginPlayer } from "boardgame.io/dist/esm/plugins";
+import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
 import { GameState, InitialGameState } from "./gameState";
 import { GameContext } from "./gameContext";
-import { archive } from "./moves/archive";
-import { pick } from "./moves/pick";
-import { buildFromArchive, buildFromCommon } from "./moves/build";
+import { archiveAction } from "./moves/archive";
+import { pickAction } from "./moves/pick";
+import { buildFromArchiveAction, buildFromCommonAction } from "./moves/build";
+import { activateCard } from "./moves/activateCard";
 
 function SomeoneHas16Machines(ctx: GameContext) {
   return ctx.player.get().machines.length == 16;
@@ -26,18 +27,25 @@ const Gizmos = {
     plugins: [PluginPlayer]
   }),
 
-  moves: {
-    archive,
-    pick,
-
-    buildFromArchive,
-    buildFromCommon,
-
-    research(G: GameState, ctx: GameContext) {}
-  },
-
   turn: {
-    moveLimit: 1
+    stages: {
+      preActionStage: { moves: { activateCard } },
+      actionStage: {
+        moves: {
+          archiveAction,
+          pickAction,
+
+          buildFromArchiveAction,
+          buildFromCommonAction,
+
+          research: {
+            move: (G: GameState, ctx: GameContext, cardId: number) => {},
+            undoable: false
+          }
+        }
+      },
+      postActionStage: { moves: { activateCard } }
+    }
   },
 
   endIf: (G: GameState, ctx: GameContext) => {

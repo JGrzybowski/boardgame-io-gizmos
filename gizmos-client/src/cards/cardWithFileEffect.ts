@@ -1,6 +1,6 @@
 import { Card, CardEffect, TriggerType, CostColor, CardLevel } from "./card";
 import { GameState } from "../gameState";
-import { archive } from "../moves/archive";
+import { archiveAction } from "../moves/archive";
 
 export class CardWithFileEffect extends Card<FileActionEffect> {
   constructor(
@@ -24,8 +24,8 @@ class FileActionEffect extends CardEffect {
     G: import("../gameState").GameState,
     ctx: any,
     cardId: number = -1
-  ): GameState | void {
-    return archive(G, ctx, cardId);
+  ): GameState | string {
+    return archiveAction.move(G, ctx, cardId);
   }
 }
 export const fileEffect: FileActionEffect = new FileActionEffect();

@@ -1,22 +1,29 @@
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
+import { INVALID_MOVE } from "boardgame.io/core";
 
-export function archive(
+function archive(
   G: GameState,
   ctx: GameContext,
   cardId: number
-): GameState | void {
+): GameState | string {
   const playerState = ctx.player.get();
-  if (playerState.archive.length < playerState.archiveLimit) {
-    const selectedCard = G.findCardOnTheTable(cardId);
-    if (selectedCard === null) return;
+  if (playerState.archive.length >= playerState.archiveLimit)
+    return INVALID_MOVE;
 
-    // add card to player's archive
-    let archive = playerState.archiveWith(selectedCard);
-    ctx.player.set({ ...playerState, archive });
+  const selectedCard = G.findCardOnTheTable(cardId);
+  if (selectedCard === null) return INVALID_MOVE;
 
-    // remove card from common area
-    let cards = G.cardsWithout(cardId);
-    return { ...G, cards };
-  }
+  // add card to player's archive
+  let archive = playerState.archiveWith(selectedCard);
+  ctx.player.set({ ...playerState, archive });
+
+  // remove card from common area
+  let cards = G.cardsWithout(cardId);
+  return { ...G, cards };
 }
+
+export const archiveAction = {
+  move: archive,
+  undoable: false
+};

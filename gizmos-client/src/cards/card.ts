@@ -47,5 +47,5 @@ export abstract class CardEffect {
   abstract gameStateAfterEffect(
     G: GameState,
     ctx: GameContext
-  ): GameState | void;
+  ): GameState | string;
 }

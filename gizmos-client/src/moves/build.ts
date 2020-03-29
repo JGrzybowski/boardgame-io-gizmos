@@ -2,19 +2,30 @@ import { EnergyType } from "../basicGameElements";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { Card, CostColor } from "../cards/card";
+import { INVALID_MOVE } from "boardgame.io/core";
 
-export function buildFromCommon(
+export const buildFromCommonAction = {
+  move: buildFromCommon,
+  undoable: false
+};
+
+export const buildFromArchiveAction = {
+  move: buildFromArchive,
+  undoable: false
+};
+
+function buildFromCommon(
   G: GameState,
   ctx: GameContext,
   cardId: number,
   paidEnergy: Array<EnergyType>
-): GameState | void {
+): GameState | string {
   const selectedCard = G.findCardOnTheTable(cardId);
   const playerState = ctx.player.get();
 
-  if (selectedCard === null) return;
-  if (!playerState.hasDeclaredEnergy(paidEnergy)) return;
-  if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return;
+  if (selectedCard === null) return INVALID_MOVE;
+  if (!playerState.hasDeclaredEnergy(paidEnergy)) return INVALID_MOVE;
+  if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return INVALID_MOVE;
 
   // add card to player's machines
   let machines = playerState.machinesWith(selectedCard);
@@ -28,18 +39,18 @@ export function buildFromCommon(
   return { ...G, cards };
 }
 
-export function buildFromArchive(
+function buildFromArchive(
   G: GameState,
   ctx: GameContext,
   cardId: number,
   paidEnergy: Array<EnergyType>
-): GameState | void {
+): GameState | string {
   const playerState = ctx.player.get();
   const selectedCard = playerState.findCardInTheArchive(cardId);
 
-  if (selectedCard === null) return;
-  if (!playerState.hasDeclaredEnergy(paidEnergy)) return;
-  if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return;
+  if (selectedCard === null) return INVALID_MOVE;
+  if (!playerState.hasDeclaredEnergy(paidEnergy)) return INVALID_MOVE;
+  if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return INVALID_MOVE;
 
   // add card to player's machines
   let energyStorage = playerState.energyStorageWithout(paidEnergy);
