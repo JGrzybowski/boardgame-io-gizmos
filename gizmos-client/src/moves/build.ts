@@ -1,8 +1,8 @@
 import { EnergyType } from "../basicGameElements";
 import { GameState } from "../gameState";
-import { GameContext } from "../gameContext";
 import { Card, CostColor } from "../cards/card";
 import { INVALID_MOVE } from "boardgame.io/core";
+import { GameContext } from "../gameContext";
 
 export const buildFromCommonAction = {
   move: buildFromCommon,
@@ -16,7 +16,7 @@ export const buildFromArchiveAction = {
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEnergy: EnergyType[]): GameState | string {
   const selectedCard = G.findCardOnTheTable(cardId);
-  const playerState = ctx.player.get();
+  const playerState = ctx.player?.get();
 
   if (selectedCard === null) return INVALID_MOVE;
   if (!playerState.hasDeclaredEnergy(paidEnergy)) return INVALID_MOVE;
@@ -27,7 +27,7 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEne
   const energyStorage = playerState.energyStorageWithout(paidEnergy);
 
   // TODO REWRITE USING CLASS & INTERFACES
-  ctx.player.set({ ...playerState, machines, energyStorage });
+  ctx.player?.set({ ...playerState, machines, energyStorage });
 
   // TODO REWRITE USING CLASS & INTERFACES
   const cards = G.cardsWithout(cardId);
@@ -40,7 +40,7 @@ function buildFromArchive(
   cardId: number,
   paidEnergy: ReadonlyArray<EnergyType>
 ): GameState | string {
-  const playerState = ctx.player.get();
+  const playerState = ctx.player?.get();
   const selectedCard = playerState.findCardInTheArchive(cardId);
 
   if (selectedCard === null) return INVALID_MOVE;
@@ -53,7 +53,7 @@ function buildFromArchive(
   const archive = playerState.archiveWithout(selectedCard.cardId);
 
   // TODO REWRITE USING CLASS & INTERFACES
-  ctx.player.set({ ...playerState, machines, archive, energyStorage });
+  ctx.player?.set({ ...playerState, machines, archive, energyStorage });
   return G;
 }
 

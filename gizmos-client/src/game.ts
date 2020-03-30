@@ -10,11 +10,11 @@ import { activateCard } from "./moves/activateCard";
 import { INVALID_MOVE } from "boardgame.io/dist/types/packages/core";
 
 function SomeoneHas16Machines(ctx: GameContext) {
-  return ctx.player.get().machines.length === 16;
+  return ctx.player?.get().machines.length === 16;
 }
 
 function SomeoneHas4MachinesOf_III_Level(ctx: GameContext) {
-  return ctx.player.get().machines.filter((c: Card) => c.level === 3).length === 4;
+  return ctx.player?.get().machines.filter((c: Card) => c.level === 3).length === 4;
 }
 
 const Gizmos = {

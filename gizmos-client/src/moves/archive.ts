@@ -3,7 +3,7 @@ import { GameContext } from "../gameContext";
 import { INVALID_MOVE } from "boardgame.io/core";
 
 function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState | string {
-  const playerState = ctx.player.get();
+  const playerState = ctx.player?.get();
   if (playerState.archive.length >= playerState.archiveLimit) return INVALID_MOVE;
 
   const selectedCard = G.findCardOnTheTable(cardId);
@@ -11,7 +11,7 @@ function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState 
 
   // add card to player's archive
   const archive = playerState.archiveWith(selectedCard);
-  ctx.player.set({ ...playerState, archive });
+  ctx.player?.set({ ...playerState, archive });
 
   // remove card from common area
   const cards = G.cardsWithout(cardId);

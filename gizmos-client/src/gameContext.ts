@@ -1,11 +1,3 @@
-import { PlayerState } from "./playerState";
+import { Ctx } from "boardgame.io";
 
-export interface GameContext {
-  player: PlayerPluginInterface;
-  random: any;
-}
-
-interface PlayerPluginInterface {
-  get(): PlayerState;
-  set(playerState: PlayerState | any): void;
-}
+export type GameContext = Ctx;

@@ -19,7 +19,7 @@ export class CardWithFileEffect extends Card<FileActionEffect> {
 
 class FileActionEffect extends CardEffect {
   canBeResolved(G: import("../gameState").GameState, ctx: GameContext): boolean {
-    return ctx.player.get().canArchiveAnotherCard();
+    return ctx.player?.get().canArchiveAnotherCard();
   }
   gameStateAfterEffect(G: import("../gameState").GameState, ctx: GameContext, cardId: number = -1): GameState | string {
     return archiveAction.move(G, ctx, cardId);

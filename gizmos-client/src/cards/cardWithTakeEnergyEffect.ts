@@ -22,11 +22,11 @@ const dispenserVisibilityLimit = 6;
 
 export class TakeEnergyEffect extends CardEffect {
   canBeResolved(G: GameState, ctx: GameContext): boolean {
-    return ctx.player.get().canAddEnergy();
+    return ctx.player?.get().canAddEnergy();
   }
   gameStateAfterEffect(G: GameState, ctx: GameContext) {
     const numberOfEnergyToSelectFrom = G.dispenser.length - dispenserVisibilityLimit;
-    const takenIndex = ctx.random.Die(numberOfEnergyToSelectFrom) + dispenserVisibilityLimit - 1;
+    const takenIndex = (ctx.random?.Die(numberOfEnergyToSelectFrom) ?? 1) + dispenserVisibilityLimit - 1;
     const dispenser = G.dispenser.filter((e, idx) => idx !== takenIndex);
 
     return { ...G, dispenser };
