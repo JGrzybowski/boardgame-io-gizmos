@@ -9,11 +9,11 @@ import { buildFromArchiveAction, buildFromCommonAction } from "./moves/build";
 import { activateCard } from "./moves/activateCard";
 import { INVALID_MOVE } from "boardgame.io/dist/types/packages/core";
 
-function SomeoneHas16Machines(ctx: GameContext) {
+function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
 }
 
-function SomeoneHas4MachinesOf_III_Level(ctx: GameContext) {
+function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
   return ctx.player?.get().machines.filter((c: Card) => c.level === 3).length === 4;
 }
 
@@ -22,7 +22,7 @@ const Gizmos = {
 
   setup: () => ({
     ...InitialGameState,
-    playerSetup: (playerID: unknown) => new PlayerState(playerID),
+    playerSetup: (playerId: string) => new PlayerState(playerId),
     plugins: [PluginPlayer]
   }),
 
