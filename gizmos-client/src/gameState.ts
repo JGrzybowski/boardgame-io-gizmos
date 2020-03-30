@@ -3,12 +3,12 @@ import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 
 export interface GameState {
-  readonly dispenser: Array<EnergyType>;
-  readonly cards: Array<Card>;
+  readonly dispenser: ReadonlyArray<EnergyType>;
+  readonly cards: ReadonlyArray<Card>;
   findCardOnTheTable(cardId: number): Card | null;
-  cardsWithout(cardId: number): Array<Card>;
-  dispenserWithout(energy: EnergyType): Array<EnergyType>;
-  dispenserWithoutInternal(index: number): [EnergyType, Array<EnergyType>];
+  cardsWithout(cardId: number): ReadonlyArray<Card>;
+  dispenserWithout(energy: EnergyType): ReadonlyArray<EnergyType>;
+  dispenserWithoutInternal(index: number): [EnergyType, ReadonlyArray<EnergyType>];
 }
 
 export const InitialGameState: GameState = {
@@ -17,27 +17,22 @@ export const InitialGameState: GameState = {
 
   findCardOnTheTable(cardId: number): Card | null {
     const card = this.cards.find(c => c.cardId === cardId);
-    return typeof card === "undefined" ? null : card;
+    return !card ? null : card;
   },
 
-  cardsWithout(cardId: number): Array<Card> {
-    let cards = [...this.cards];
-    cards = cards.filter((c: Card) => c.cardId != cardId);
+  cardsWithout(cardId: number): ReadonlyArray<Card> {
+    const cards = this.cards.filter((c: Card) => c.cardId !== cardId);
     return cards;
   },
 
-  dispenserWithout(energy: EnergyType): Array<EnergyType> {
-    let i = this.dispenser.indexOf(energy);
+  dispenserWithout(energy: EnergyType): ReadonlyArray<EnergyType> {
+    const i = this.dispenser.indexOf(energy);
     return this.dispenserWithoutInternal(i)[1];
   },
 
-  dispenserWithoutInternal(index: number): [EnergyType, Array<EnergyType>] {
-    let dispenser = [...this.dispenser];
-    let energy = dispenser[index];
-    dispenser = dispenser
-      .slice(0, index)
-      .concat(dispenser.slice(index + 1, dispenser.length));
-
+  dispenserWithoutInternal(index: number): [EnergyType, ReadonlyArray<EnergyType>] {
+    const energy = this.dispenser[index];
+    const dispenser = this.dispenser.filter((e, idx) => idx !== index);
     return [energy, dispenser];
   }
 };

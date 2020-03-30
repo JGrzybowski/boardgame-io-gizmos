@@ -7,15 +7,14 @@ import { archiveAction } from "./moves/archive";
 import { pickAction } from "./moves/pick";
 import { buildFromArchiveAction, buildFromCommonAction } from "./moves/build";
 import { activateCard } from "./moves/activateCard";
+import { INVALID_MOVE } from "boardgame.io/dist/types/packages/core";
 
 function SomeoneHas16Machines(ctx: GameContext) {
-  return ctx.player.get().machines.length == 16;
+  return ctx.player.get().machines.length === 16;
 }
 
 function SomeoneHas4MachinesOf_III_Level(ctx: GameContext) {
-  return (
-    ctx.player.get().machines.filter((c: Card) => c.level === 3).length === 4
-  );
+  return ctx.player.get().machines.filter((c: Card) => c.level === 3).length === 4;
 }
 
 const Gizmos = {
@@ -39,7 +38,9 @@ const Gizmos = {
           buildFromCommonAction,
 
           research: {
-            move: (G: GameState, ctx: GameContext, cardId: number) => {},
+            move: (G: GameState, ctx: GameContext, cardId: number): GameState | string => {
+              return INVALID_MOVE;
+            },
             undoable: false
           }
         }
@@ -50,8 +51,8 @@ const Gizmos = {
 
   endIf: (G: GameState, ctx: GameContext) => {
     if (SomeoneHas16Machines(ctx) || SomeoneHas4MachinesOf_III_Level(ctx)) {
-      //TODO count victory points
-      //const winerIndex = G.victoryPoints.indexOf(Math.max(...arr));
+      // TODO count victory points
+      // const winerIndex = G.victoryPoints.indexOf(Math.max(...arr));
       return { winner: 0 };
     }
   }

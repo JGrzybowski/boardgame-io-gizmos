@@ -14,12 +14,7 @@ export const buildFromArchiveAction = {
   undoable: false
 };
 
-function buildFromCommon(
-  G: GameState,
-  ctx: GameContext,
-  cardId: number,
-  paidEnergy: Array<EnergyType>
-): GameState | string {
+function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEnergy: EnergyType[]): GameState | string {
   const selectedCard = G.findCardOnTheTable(cardId);
   const playerState = ctx.player.get();
 
@@ -28,14 +23,14 @@ function buildFromCommon(
   if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return INVALID_MOVE;
 
   // add card to player's machines
-  let machines = playerState.machinesWith(selectedCard);
-  let energyStorage = playerState.energyStorageWithout(paidEnergy);
+  const machines = playerState.machinesWith(selectedCard);
+  const energyStorage = playerState.energyStorageWithout(paidEnergy);
 
-  //TODO REWRITE USING CLASS & INTERFACES
+  // TODO REWRITE USING CLASS & INTERFACES
   ctx.player.set({ ...playerState, machines, energyStorage });
 
-  //TODO REWRITE USING CLASS & INTERFACES
-  let cards = G.cardsWithout(cardId);
+  // TODO REWRITE USING CLASS & INTERFACES
+  const cards = G.cardsWithout(cardId);
   return { ...G, cards };
 }
 
@@ -43,7 +38,7 @@ function buildFromArchive(
   G: GameState,
   ctx: GameContext,
   cardId: number,
-  paidEnergy: Array<EnergyType>
+  paidEnergy: ReadonlyArray<EnergyType>
 ): GameState | string {
   const playerState = ctx.player.get();
   const selectedCard = playerState.findCardInTheArchive(cardId);
@@ -53,23 +48,20 @@ function buildFromArchive(
   if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return INVALID_MOVE;
 
   // add card to player's machines
-  let energyStorage = playerState.energyStorageWithout(paidEnergy);
-  let machines = playerState.machinesWith(selectedCard);
-  let archive = playerState.archiveWithout(selectedCard.cardId);
+  const energyStorage = playerState.energyStorageWithout(paidEnergy);
+  const machines = playerState.machinesWith(selectedCard);
+  const archive = playerState.archiveWithout(selectedCard.cardId);
 
-  //TODO REWRITE USING CLASS & INTERFACES
+  // TODO REWRITE USING CLASS & INTERFACES
   ctx.player.set({ ...playerState, machines, archive, energyStorage });
-  return { ...G };
+  return G;
 }
 
-function declaredEnergyCanPay(
-  selectedCard: Card,
-  paidEnergy: Array<EnergyType>
-) {
+function declaredEnergyCanPay(selectedCard: Card, paidEnergy: ReadonlyArray<EnergyType>): boolean {
   // declared energy can pay
-  let payment = paidEnergy.reduce(countOcurrences, zeroCounter());
-  let costColor = selectedCard.color;
-  let amountToPay = selectedCard.cost;
+  const payment = paidEnergy.reduce(countOcurrences, zeroCounter());
+  const costColor = selectedCard.color;
+  const amountToPay = selectedCard.cost;
   return payment[costColor] === amountToPay;
 }
 
@@ -80,7 +72,7 @@ function countOcurrences(counters: any, energy: EnergyType) {
 }
 
 function zeroCounter() {
-  let counter: any = {};
+  const counter: any = {};
   counter[CostColor.Any] = 0;
   counter[CostColor.Black] = 0;
   counter[CostColor.Blue] = 0;

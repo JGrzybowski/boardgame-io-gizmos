@@ -4,30 +4,20 @@ import { INVALID_MOVE } from "boardgame.io/core";
 
 const visibleEnergyBallsLimit = 6;
 
-function pick(
-  G: GameState,
-  ctx: GameContext,
-  energyIndex: number
-): GameState | string {
-  if (energyIndex < 0 || energyIndex > visibleEnergyBallsLimit)
-    return INVALID_MOVE;
+function pick(G: GameState, ctx: GameContext, energyIndex: number): GameState | string {
+  if (energyIndex < 0 || energyIndex > visibleEnergyBallsLimit) return INVALID_MOVE;
 
   const playerState = ctx.player.get();
-  if (playerState.energyStorage.length >= playerState.energyStorageCapacity)
-    return INVALID_MOVE;
+  if (playerState.energyStorage.length >= playerState.energyStorageCapacity) return INVALID_MOVE;
 
-  let dispenser = [...G.dispenser];
-  let energy = dispenser[energyIndex];
+  const energy = G.dispenser[energyIndex];
 
   // add energy to player's storage
-  let energyStorage = [...playerState.energyStorage];
-  energyStorage.push(energy);
+  const energyStorage = [...playerState.energyStorage, energy];
   ctx.player.set({ ...playerState, energyStorage });
 
   // remove energy from dispenser
-  dispenser =
-    dispenser.slice(0, energyIndex) +
-    ctx.random.Shuffle(dispenser.slice(energyIndex + 1, dispenser.length));
+  const dispenser = G.dispenser.filter((e, idx) => idx !== energyIndex);
   return { ...G, dispenser };
 }
 

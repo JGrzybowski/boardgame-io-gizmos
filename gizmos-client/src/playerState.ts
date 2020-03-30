@@ -10,86 +10,79 @@ export class PlayerState {
   constructor(public readonly playerId: unknown) {}
   victoryPoints: number = 0;
 
-  energyStorage: Array<EnergyType> = [];
-  archivesLimit: Array<Card> = [];
+  energyStorage: ReadonlyArray<EnergyType> = [];
+  archivesLimit: ReadonlyArray<Card> = [];
 
   energyStorageCapacity: number = initialEnergyStorageCapacity;
   archiveLimit: number = initialArchiveLimit;
   researchLimit: number = initialResearchLimit;
 
-  machines: Array<Card> = [InitialCard];
-  archive: Array<Card> = [];
+  machines: ReadonlyArray<Card> = [InitialCard];
+  archive: ReadonlyArray<Card> = [];
 
-  activeCards: Array<number> = [];
+  activeCards: ReadonlyArray<number> = [];
 
   findCardInTheArchive(cardId: number): Card | null {
-    const selectedCard = this.archive.find((c: Card) => c.cardId == cardId);
-    return typeof selectedCard === "undefined" ? null : selectedCard;
+    const selectedCard = this.archive.find(c => c.cardId === cardId);
+    return !selectedCard ? null : selectedCard;
   }
 
   findCardInMachines(cardId: number): Card | null {
-    const selectedCard = this.machines.find((c: Card) => c.cardId == cardId);
-    return typeof selectedCard === "undefined" ? null : selectedCard;
+    const selectedCard = this.machines.find(c => c.cardId === cardId);
+    return !selectedCard ? null : selectedCard;
   }
 
-  hasDeclaredEnergy(declaredEnergy: Array<EnergyType>): boolean {
-    function countEnergy(energyArray: Array<EnergyType>): any {
-      var count: any = {};
+  hasDeclaredEnergy(declaredEnergy: ReadonlyArray<EnergyType>): boolean {
+    function countEnergy(energyArray: ReadonlyArray<EnergyType>): any {
+      const count: any = {};
       energyArray.forEach(energy => (count[energy] = (count[energy] || 0) + 1));
       return count;
     }
 
-    let declaredEnergyCount = countEnergy(declaredEnergy);
-    let playerEnergyCount = countEnergy(this.energyStorage);
+    const declaredEnergyCount = countEnergy(declaredEnergy);
+    const playerEnergyCount = countEnergy(this.energyStorage);
 
     let playerHasDeclaredEnergy = true;
-    for (let energy in declaredEnergyCount) {
-      playerHasDeclaredEnergy =
-        playerHasDeclaredEnergy &&
-        declaredEnergyCount[energy] <= playerEnergyCount[energy];
+    for (const energy in declaredEnergyCount) {
+      playerHasDeclaredEnergy = playerHasDeclaredEnergy && declaredEnergyCount[energy] <= playerEnergyCount[energy];
     }
 
     return playerHasDeclaredEnergy;
   }
 
-  energyStorageWith(energy: EnergyType): Array<EnergyType> {
-    let energyStorage = [...this.energyStorage];
-    //TODO Check limits
-    energyStorage.push(energy);
-    return energyStorage;
+  canAddEnergy(): boolean {
+    throw new Error("Method not implemented.");
   }
 
-  energyStorageWithout(energySet: Array<EnergyType>): Array<EnergyType> {
-    let energyStorage = [...this.energyStorage];
+  canArchiveAnotherCard(): boolean {
+    throw new Error("Method not implemented");
+  }
 
-    let removeOneEnergy = function(
-      storage: Array<EnergyType>,
-      energy: EnergyType
-    ): Array<EnergyType> {
-      let i = storage.indexOf(energy);
-      return storage.slice(0, i).concat(storage.slice(i + 1, storage.length));
+  energyStorageWith(energy: EnergyType): ReadonlyArray<EnergyType> {
+    // TODO Check limits
+    return [...this.energyStorage, energy];
+  }
+
+  energyStorageWithout(energySet: ReadonlyArray<EnergyType>): ReadonlyArray<EnergyType> {
+    const removeOneEnergy = (storage: ReadonlyArray<EnergyType>, energy: EnergyType): ReadonlyArray<EnergyType> => {
+      const i = storage.indexOf(energy);
+      return storage.filter((e, idx) => idx !== i);
     };
 
-    energyStorage = energyStorage.reduce(removeOneEnergy, energyStorage);
+    const energyStorage = this.energyStorage.reduce(removeOneEnergy, this.energyStorage);
     return energyStorage;
   }
 
-  archiveWith(card: Card): Array<Card> {
-    let archive = [...this.archive];
-    //TODO Check limits
-    archive.push(card);
-    return archive;
+  archiveWith(card: Card): ReadonlyArray<Card> {
+    // TODO Check limits
+    return [...this.archive, card];
   }
 
-  archiveWithout(cardId: number): Array<Card> {
-    let archive = [...this.archive];
-    archive = archive.filter(c => c.cardId != cardId);
-    return archive;
+  archiveWithout(cardId: number): ReadonlyArray<Card> {
+    return this.archive.filter(c => c.cardId !== cardId);
   }
 
-  machinesWith(card: Card): Array<Card> {
-    let machines = [...this.machines];
-    machines.push(card);
-    return machines;
+  machinesWith(card: Card): ReadonlyArray<Card> {
+    return [...this.machines, card];
   }
 }

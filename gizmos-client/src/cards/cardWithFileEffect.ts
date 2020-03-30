@@ -1,6 +1,7 @@
 import { Card, CardEffect, TriggerType, CostColor, CardLevel } from "./card";
 import { GameState } from "../gameState";
 import { archiveAction } from "../moves/archive";
+import { GameContext } from "../gameContext";
 
 export class CardWithFileEffect extends Card<FileActionEffect> {
   constructor(
@@ -17,14 +18,10 @@ export class CardWithFileEffect extends Card<FileActionEffect> {
 }
 
 class FileActionEffect extends CardEffect {
-  canBeResolved(G: import("../gameState").GameState, ctx: any): boolean {
-    return ctx.player.get().CanArchiveAnotherCard();
+  canBeResolved(G: import("../gameState").GameState, ctx: GameContext): boolean {
+    return ctx.player.get().canArchiveAnotherCard();
   }
-  gameStateAfterEffect(
-    G: import("../gameState").GameState,
-    ctx: any,
-    cardId: number = -1
-  ): GameState | string {
+  gameStateAfterEffect(G: import("../gameState").GameState, ctx: GameContext, cardId: number = -1): GameState | string {
     return archiveAction.move(G, ctx, cardId);
   }
 }

@@ -1,4 +1,4 @@
-//R - Red, B - Black, U - Blue, Y - Yellow
+// R - Red, B - Black, U - Blue, Y - Yellow
 export const initialDispenser = Array(52)
   .fill("R", 0, 14)
   .fill("B", 13, 27)
