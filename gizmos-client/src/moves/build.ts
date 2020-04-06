@@ -1,20 +1,17 @@
 import { EnergyType } from "../basicGameElements";
 import { GameState } from "../gameState";
-import { Card, CostColor } from "../cards/card";
+import { Card } from "../cards/card";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { GameContext } from "../gameContext";
+import {CardCost} from "../cards/cardCost";
 
-export const buildFromCommonAction = {
-  move: buildFromCommon,
-  undoable: false
-};
+function declaredEnergyCanPay(selectedCard: Card, paidEnergy: ReadonlyArray<EnergyType>): boolean {
+  // declared energy can pay
+  const payment = CardCost.fromArray(paidEnergy);
+  return payment[selectedCard.color] === amountToPay;
+}
 
-export const buildFromArchiveAction = {
-  move: buildFromArchive,
-  undoable: false
-};
-
-function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEnergy: EnergyType[]): GameState | string {
+function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEnergy: ReadonlyArray<EnergyType>): GameState | string {
   const selectedCard = G.findCardOnTheTable(cardId);
   const playerState = ctx.player?.get();
 
@@ -26,10 +23,8 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEne
   const machines = playerState.machinesWith(selectedCard);
   const energyStorage = playerState.energyStorageWithout(paidEnergy);
 
-  // TODO REWRITE USING CLASS & INTERFACES
   ctx.player?.set({ ...playerState, machines, energyStorage });
 
-  // TODO REWRITE USING CLASS & INTERFACES
   const cards = G.cardsWithout(cardId);
   return { ...G, cards };
 }
@@ -57,26 +52,12 @@ function buildFromArchive(
   return G;
 }
 
-function declaredEnergyCanPay(selectedCard: Card, paidEnergy: ReadonlyArray<EnergyType>): boolean {
-  // declared energy can pay
-  const payment = paidEnergy.reduce(countOcurrences, zeroCounter());
-  const costColor = selectedCard.color;
-  const amountToPay = selectedCard.cost;
-  return payment[costColor] === amountToPay;
-}
+export const buildFromCommonAction = {
+  move: buildFromCommon,
+  undoable: false
+};
 
-function countOcurrences(counters: any, energy: EnergyType) {
-  counters[energy] += 1;
-  counters[CostColor.Any] += 1;
-  return counters;
-}
-
-function zeroCounter() {
-  const counter: any = {};
-  counter[CostColor.Any] = 0;
-  counter[CostColor.Black] = 0;
-  counter[CostColor.Blue] = 0;
-  counter[CostColor.Red] = 0;
-  counter[CostColor.Yellow] = 0;
-  return counter;
-}
+export const buildFromArchiveAction = {
+  move: buildFromArchive,
+  undoable: false
+};

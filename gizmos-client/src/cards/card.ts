@@ -1,5 +1,6 @@
-import { GameState } from "../gameState";
-import { GameContext } from "../gameContext";
+import {GameState} from "../gameState";
+import {GameContext} from "../gameContext";
+import {EnergyType} from "../basicGameElements";
 
 export const enum TriggerType {
   Upgrade = "U",
@@ -9,19 +10,12 @@ export const enum TriggerType {
   File = "F"
 }
 
-export const enum CostColor {
-  Any = 0,
-  Red = 1 << 0,
-  Black = 1 << 1,
-  Blue = 1 << 2,
-  Yellow = 1 << 3
-  // Any = Red | Black | Blue | Yellow
-}
+export type CostColor = EnergyType | "Any";
 
 export type CardLevel = 0 | 1 | 2 | 3;
 
 export abstract class Card<T extends CardEffect = any> {
-  constructor(
+  protected constructor(
     public readonly cardId: number,
     public readonly type: TriggerType,
     public readonly effect: T, // (G, ctx) => G
@@ -29,16 +23,6 @@ export abstract class Card<T extends CardEffect = any> {
     public readonly color: CostColor,
     public readonly cost: number,
     public readonly level: CardLevel
-  ) {}
-}
-
-export class CardCost {
-  constructor(
-    public readonly R: number = 0,
-    public readonly U: number = 0,
-    public readonly B: number = 0,
-    public readonly Y: number = 0,
-    public readonly Any: number = 0
   ) {}
 }
 

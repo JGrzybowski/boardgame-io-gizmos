@@ -8,6 +8,7 @@ import { pickAction } from "./moves/pick";
 import { buildFromArchiveAction, buildFromCommonAction } from "./moves/build";
 import { activateCard } from "./moves/activateCard";
 import { INVALID_MOVE } from "boardgame.io/dist/types/packages/core";
+import {Ctx, GameConfig} from "boardgame.io";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
@@ -17,7 +18,7 @@ function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
   return ctx.player?.get().machines.filter((c: Card) => c.level === 3).length === 4;
 }
 
-const Gizmos = {
+const Gizmos: GameConfig = {
   name: "gizmos",
 
   setup: () => ({
