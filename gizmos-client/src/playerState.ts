@@ -22,6 +22,19 @@ export class PlayerState {
 
   activeCards: ReadonlyArray<number> = [];
 
+  isArchivingBlocked = false;
+  isResearchBlocked = false;
+
+  canArchiveAnotherCard(): boolean {
+    if (this.isArchivingBlocked) return false;
+    return this.archive.length < this.archiveLimit;
+  }
+
+  canResearch(): boolean {
+    if (this.isResearchBlocked) return false;
+    return this.researchLimit > 0;
+  }
+
   findCardInTheArchive(cardId: number): Card | null {
     const selectedCard = this.archive.find(c => c.cardId === cardId);
     return !selectedCard ? null : selectedCard;
@@ -52,10 +65,6 @@ export class PlayerState {
 
   canAddEnergy(): boolean {
     throw new Error("Method not implemented.");
-  }
-
-  canArchiveAnotherCard(): boolean {
-    throw new Error("Method not implemented");
   }
 
   energyStorageWith(energy: EnergyType): ReadonlyArray<EnergyType> {
