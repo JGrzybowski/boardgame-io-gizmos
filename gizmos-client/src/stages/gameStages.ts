@@ -4,6 +4,7 @@ import {buildFromArchiveAction, buildFromCommonAction, buildFromResearchedAction
 import {pickAction} from "../moves/pick";
 import {researchAction} from "../moves/research";
 import {failResearchAction} from "../moves/failResearch";
+import {confirmBuild} from "../moves/confirmBuild";
 
 interface GameStages extends StageConfig{
     readonly name: string;
@@ -25,7 +26,10 @@ export const activationStage: GameStages = {
 };
 
 export const paymentStage: GameStages = {
-    name: "Payment"
+    name: "Payment",
+    moves: {
+        confirmBuild
+    }
 };
 
 export const researchStage: GameStages = {

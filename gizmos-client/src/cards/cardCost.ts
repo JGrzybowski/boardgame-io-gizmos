@@ -10,6 +10,10 @@ export class CardCost {
     ) {
     }
 
+    isPaid(): boolean{
+        return this.R === 0 && this.U === 0 && this.B === 0 && this.Y === 0 && this.Any === 0;
+    }
+
     static fromArray(energyTypes: ReadonlyArray<EnergyType>): CardCost {
         return new CardCost(
             energyTypes.filter(x => x === EnergyType.Red).length,

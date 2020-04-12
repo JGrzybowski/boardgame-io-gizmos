@@ -21,6 +21,7 @@ export interface GameState {
   withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<Card>): GameState;
   revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>];
+  withCardToBeBuiltCleared(): GameState;
 }
 
 export const InitialGameState: GameState = {
@@ -82,4 +83,8 @@ export const InitialGameState: GameState = {
     const cards: ReadonlyArray<Card> = this.cards.filter(c => revealedCards.find(r => c.cardId === r.cardId));
     return [{...this, cards}, revealedCards];
   },
+
+  withCardToBeBuiltCleared(): GameState {
+    return {...this, cardToBeBuilt: null, cardToBeBuiltCost: null};
+  }
 };

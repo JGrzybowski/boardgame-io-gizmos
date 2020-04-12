@@ -113,6 +113,11 @@ export class PlayerState {
     return {...this, archive};
   }
 
+  withAddedCardToMachines(card: Card): PlayerState {
+    const machines = this.machinesWith(card);
+    return {...this, machines};
+  }
+
   withRemovedCardFromArchive(cardId: number): PlayerState{
     const card = this.findCardInTheArchive(cardId);
     if (!card)
