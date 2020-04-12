@@ -3,25 +3,25 @@ import { GameContext } from "../gameContext";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { PlayerMove } from "./playerMove";
 import {activationsStage} from "../stages/activationsStage";
+import {PlayerState} from "../playerState";
 
 function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState | string {
-  const playerState = ctx.player?.get();
-  if (!playerState.canArchiveAnotherCard) return INVALID_MOVE;
+  const playerState: PlayerState = ctx.player?.get();
+  if (!playerState.canArchiveAnotherCard()) return INVALID_MOVE;
 
   const selectedCard = G.findCardOnTheTable(cardId);
-  if (selectedCard === null) return INVALID_MOVE;
-
-  // add card to player's archive
-  const archive = playerState.archiveWith(selectedCard);
-  ctx.player?.set({ ...playerState, archive });
+  if (!selectedCard) return INVALID_MOVE;
 
   // remove card from common area
-  const cards = G.cardsWithout(cardId);
-
+  const newGameState = G.withCardRemovedFromTable(cardId);
+  // add card to player's archive
+  const newPlayerState = playerState.withAddedCardToArchive(selectedCard);
   //TODO activate all cards that activate on archive trigger
+  //.withCardsActivated(new TriggerCriteria("Archive", selectedCard);
 
+  ctx.player?.set(newPlayerState);
   ctx.events?.endPhase?.(activationsStage.name);
-  return { ...G, cards };
+  return newGameState;
 }
 
 export const archiveAction: PlayerMove = {

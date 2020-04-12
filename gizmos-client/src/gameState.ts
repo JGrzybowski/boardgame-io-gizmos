@@ -5,15 +5,20 @@ import { CardsList } from "./cards/cardsList";
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
   readonly cards: ReadonlyArray<Card>;
+  readonly visibleEnergyBallsLimit: number;
   findCardOnTheTable(cardId: number): Card | null;
   cardsWithout(cardId: number): ReadonlyArray<Card>;
-  dispenserWithout(energy: EnergyType): ReadonlyArray<EnergyType>;
-  dispenserWithoutInternal(index: number): [EnergyType, ReadonlyArray<EnergyType>];
+  energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
+  dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType>;
+  dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType];
+  withCardRemovedFromTable(cardId: number): GameState;
+  withDispenserWithout(index: number): [GameState, EnergyType]
 }
 
 export const InitialGameState: GameState = {
   dispenser: initialDispenser,
   cards: CardsList,
+  visibleEnergyBallsLimit: 6,
 
   findCardOnTheTable(cardId: number): Card | null {
     const card = this.cards.find(c => c.cardId === cardId);
@@ -21,18 +26,31 @@ export const InitialGameState: GameState = {
   },
 
   cardsWithout(cardId: number): ReadonlyArray<Card> {
-    const cards = this.cards.filter((c: Card) => c.cardId !== cardId);
-    return cards;
+    return this.cards.filter((c: Card) => c.cardId !== cardId);
   },
 
-  dispenserWithout(energy: EnergyType): ReadonlyArray<EnergyType> {
+  energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean{
+    return (index >= 0 && index < this.visibleEnergyBallsLimit);
+  },
+
+  dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType> {
     const i = this.dispenser.indexOf(energy);
-    return this.dispenserWithoutInternal(i)[1];
+    return this.dispenserWithout(i)[0];
   },
 
-  dispenserWithoutInternal(index: number): [EnergyType, ReadonlyArray<EnergyType>] {
+  dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType,] {
     const energy = this.dispenser[index];
     const dispenser = this.dispenser.filter((e, idx) => idx !== index);
-    return [energy, dispenser];
+    return [dispenser, energy];
+  },
+
+  withCardRemovedFromTable(cardId: number): GameState{
+    const cards = this.cardsWithout(cardId);
+    return { ...this, cards };
+  },
+
+  withDispenserWithout(index: number): [GameState, EnergyType]{
+    const [dispenser, energy] = this.dispenserWithout(index);
+    return [{...this, dispenser}, energy]
   }
 };

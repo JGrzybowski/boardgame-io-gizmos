@@ -1,6 +1,7 @@
 import { EnergyType } from "./basicGameElements";
 import { Card } from "./cards/card";
 import { InitialCard } from "./cards/cardsList";
+import {Simulate} from "react-dom/test-utils";
 
 const initialEnergyStorageCapacity = 5;
 const initialArchiveLimit = 1;
@@ -35,6 +36,10 @@ export class PlayerState {
     return this.researchLimit > 0;
   }
 
+  canAddEnergy(): boolean {
+    return this.energyStorage.length >= this.energyStorageCapacity;
+  }
+
   findCardInTheArchive(cardId: number): Card | null {
     const selectedCard = this.archive.find(c => c.cardId === cardId);
     return !selectedCard ? null : selectedCard;
@@ -63,12 +68,7 @@ export class PlayerState {
     return playerHasDeclaredEnergy;
   }
 
-  canAddEnergy(): boolean {
-    throw new Error("Method not implemented.");
-  }
-
   energyStorageWith(energy: EnergyType): ReadonlyArray<EnergyType> {
-    // TODO Check limits
     return [...this.energyStorage, energy];
   }
 
@@ -82,8 +82,7 @@ export class PlayerState {
     return energyStorage;
   }
 
-  archiveWith(card: Card): ReadonlyArray<Card> {
-    // TODO Check limits
+  private archiveWith(card: Card): ReadonlyArray<Card> {
     return [...this.archive, card];
   }
 
@@ -93,5 +92,24 @@ export class PlayerState {
 
   machinesWith(card: Card): ReadonlyArray<Card> {
     return [...this.machines, card];
+  }
+
+  withAddedEnergy(energy: EnergyType): PlayerState {
+    const energyStorage = [...this.energyStorage, energy];
+    return {...this, energyStorage};
+  }
+
+  withAddedCardToArchive(card: Card): PlayerState{
+    const archive = this.archiveWith(card);
+    return {...this, archive};
+  }
+
+  withRemovedCardFromArchiveAndAddedToMachines(cardId: number): PlayerState{
+    const card = this.findCardInTheArchive(cardId);
+    if (!card)
+      throw new Error("Card was not found");
+    const archive = this.archiveWithout(cardId);
+    const machines = this.machinesWith(card);
+    return {...this, archive, machines};
   }
 }

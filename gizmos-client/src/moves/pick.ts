@@ -1,27 +1,28 @@
 import { GameState } from "../gameState";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { Ctx } from "boardgame.io";
+import {PlayerState} from "../playerState";
+import {PlayerMove} from "./playerMove";
 
-const visibleEnergyBallsLimit = 6;
+function pickMove(G: GameState, ctx: Ctx, energyIndex: number): GameState | string {
+  if (!G.energyWithIndexCanBeTakenFromEnergyRow(energyIndex)) return INVALID_MOVE;
 
-function pick(G: GameState, ctx: Ctx, energyIndex: number): GameState | string {
-  if (energyIndex < 0 || energyIndex > visibleEnergyBallsLimit) return INVALID_MOVE;
-
-  const playerState = ctx.player?.get();
-  if (playerState.energyStorage.length >= playerState.energyStorageCapacity) return INVALID_MOVE;
-
-  const energy = G.dispenser[energyIndex];
-
-  // add energy to player's storage
-  const energyStorage = [...playerState.energyStorage, energy];
-  ctx.player?.set({ ...playerState, energyStorage });
+  const playerState: PlayerState = ctx.player?.get();
+  if (!playerState.canAddEnergy()) return INVALID_MOVE;
 
   // remove energy from dispenser
-  const dispenser = G.dispenser.filter((e, idx) => idx !== energyIndex);
-  return { ...G, dispenser };
+  const [newGameState, energy] = G.withDispenserWithout(energyIndex);
+  // add energy to player's storage
+  const newPlayerState = playerState.withAddedEnergy(energy);
+  //TODO activate all cards that activate on pick trigger
+  //.withCardsActivated(new TriggerCriteria("Pick", energy);
+
+  ctx.player?.set(newPlayerState);
+  return newGameState;
 }
 
-export const pickAction = {
-  move: pick,
+export const pickAction: PlayerMove= {
+  move: pickMove,
+  client: false,
   undoable: false
 };
