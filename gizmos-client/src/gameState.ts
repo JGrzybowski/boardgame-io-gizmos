@@ -2,14 +2,20 @@ import { Card } from "./cards/card";
 import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import {CardCost} from "./cards/cardCost";
+import {PlayerState} from "./playerState";
+import {Ctx} from "boardgame.io";
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
   readonly cards: ReadonlyArray<Card>;
   readonly visibleEnergyBallsLimit: number;
-  cardToBeBuilt: Card | null;
-  cardToBeBuiltCost: CardCost | null;
-  visibleCardsLimits: ReadonlyArray<number>;
+  readonly cardToBeBuilt: Card | null;
+  readonly cardToBeBuiltCost: CardCost | null;
+  readonly visibleCardsLimits: ReadonlyArray<number>;
+
+  readonly previousStageName: string | null;
+  readonly playerStateBeforeBuild: PlayerState | null;
+  readonly gameStateBeforeBuild: GameState | null;
 
   findCardOnTheTable(cardId: number): Card | null;
   cardsWithout(cardId: number): ReadonlyArray<Card>;
@@ -24,6 +30,8 @@ export interface GameState {
   withCardToBeBuiltCleared(): GameState;
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
+
+  withPlayerAndGameStateSaved(ctx: Ctx): GameState;
 }
 
 export const InitialGameState: GameState = {
@@ -34,6 +42,10 @@ export const InitialGameState: GameState = {
 
   cardToBeBuilt: null,
   cardToBeBuiltCost: null,
+
+  previousStageName: null,
+  playerStateBeforeBuild: null,
+  gameStateBeforeBuild: null,
 
   findCardOnTheTable(cardId: number): Card | null {
     const card = this.cards.find(c => c.cardId === cardId);
@@ -98,5 +110,14 @@ export const InitialGameState: GameState = {
     const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, reducedAmount);
 
     return {...this, cardToBeBuiltCost};
+  },
+
+  withPlayerAndGameStateSaved(ctx: Ctx): GameState {
+    return {
+      ...this,
+      gameStateBeforeBuild: this,
+      playerStateBeforeBuild: ctx.player?.get(),
+      previousStageName: ctx.activePlayers?.[ctx.currentPlayer] ?? null
+    }
   }
 };

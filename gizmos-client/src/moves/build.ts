@@ -10,7 +10,9 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameSt
   const selectedCard: Card | null = G.findCardOnTheTable(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
-  const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  const newGameState = G
+      .withPlayerAndGameStateSaved(ctx)
+      .withCardToBeBuilt(selectedCard, selectedCard?.cost);
   ctx.events?.endPhase?.(paymentStage.name);
   return newGameState;
 }
@@ -21,7 +23,9 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
   if (!selectedCard) return INVALID_MOVE;
 
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
-  const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  const newGameState = G
+      .withPlayerAndGameStateSaved(ctx)
+      .withCardToBeBuilt(selectedCard, selectedCard?.cost);
 
   ctx.player?.set(newPlayerState);
   ctx.events?.endStage?.(paymentStage.name);
@@ -34,7 +38,9 @@ function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): Ga
   if (!selectedCard) return INVALID_MOVE;
 
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
-  const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  const newGameState = G
+      .withPlayerAndGameStateSaved(ctx)
+      .withCardToBeBuilt(selectedCard, selectedCard?.cost);
 
   ctx.player?.set(newPlayerState);
   ctx.events?.endStage?.(paymentStage.name);

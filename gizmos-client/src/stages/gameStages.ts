@@ -6,6 +6,7 @@ import {researchAction} from "../moves/research";
 import {failResearchAction} from "../moves/failResearch";
 import {confirmBuildAction} from "../moves/confirmBuild";
 import {payAction} from "../moves/pay";
+import {cancelBuildAction} from "../moves/cancelBuild";
 
 interface GameStages extends StageConfig{
     readonly name: string;
@@ -30,7 +31,8 @@ export const paymentStage: GameStages = {
     name: "Payment",
     moves: {
         confirmBuildAction,
-        payAction
+        payAction,
+        cancelBuildAction
     }
 };
 
