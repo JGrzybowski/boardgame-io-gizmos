@@ -1,7 +1,6 @@
 import { EnergyType } from "./basicGameElements";
 import { Card } from "./cards/card";
 import { InitialCard } from "./cards/cardsList";
-import {Simulate} from "react-dom/test-utils";
 
 const initialEnergyStorageCapacity = 5;
 const initialArchiveLimit = 1;
@@ -20,6 +19,7 @@ export class PlayerState {
 
   machines: ReadonlyArray<Card> = [InitialCard];
   archive: ReadonlyArray<Card> = [];
+  researched: ReadonlyArray<Card> = [];
 
   activeCards: ReadonlyArray<number> = [];
 
@@ -47,6 +47,11 @@ export class PlayerState {
 
   findCardInMachines(cardId: number): Card | null {
     const selectedCard = this.machines.find(c => c.cardId === cardId);
+    return !selectedCard ? null : selectedCard;
+  }
+
+  findCardInTheResearched(cardId: number): Card | null {
+    const selectedCard = this.researched.find(c => c.cardId === cardId);
     return !selectedCard ? null : selectedCard;
   }
 
@@ -104,12 +109,12 @@ export class PlayerState {
     return {...this, archive};
   }
 
-  withRemovedCardFromArchiveAndAddedToMachines(cardId: number): PlayerState{
+  withRemovedCardFromArchive(cardId: number): PlayerState{
     const card = this.findCardInTheArchive(cardId);
     if (!card)
       throw new Error("Card was not found");
     const archive = this.archiveWithout(cardId);
-    const machines = this.machinesWith(card);
-    return {...this, archive, machines};
+    return {...this, archive};
   }
+
 }

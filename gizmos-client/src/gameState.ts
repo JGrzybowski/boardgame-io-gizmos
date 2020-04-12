@@ -1,24 +1,32 @@
 import { Card } from "./cards/card";
 import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
+import {CardCost} from "./cards/cardCost";
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
   readonly cards: ReadonlyArray<Card>;
   readonly visibleEnergyBallsLimit: number;
+  cardToBeBuilt: Card | null;
+  cardToBeBuiltCost: CardCost | null;
+
   findCardOnTheTable(cardId: number): Card | null;
   cardsWithout(cardId: number): ReadonlyArray<Card>;
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
   dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType>;
   dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType];
   withCardRemovedFromTable(cardId: number): GameState;
-  withDispenserWithout(index: number): [GameState, EnergyType]
+  withDispenserWithout(index: number): [GameState, EnergyType];
+  withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState;
 }
 
 export const InitialGameState: GameState = {
   dispenser: initialDispenser,
   cards: CardsList,
   visibleEnergyBallsLimit: 6,
+
+  cardToBeBuilt: null,
+  cardToBeBuiltCost: null,
 
   findCardOnTheTable(cardId: number): Card | null {
     const card = this.cards.find(c => c.cardId === cardId);
@@ -52,5 +60,9 @@ export const InitialGameState: GameState = {
   withDispenserWithout(index: number): [GameState, EnergyType]{
     const [dispenser, energy] = this.dispenserWithout(index);
     return [{...this, dispenser}, energy]
+  },
+
+  withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState{
+    return {...this, cardToBeBuilt, cardToBeBuiltCost};
   }
 };

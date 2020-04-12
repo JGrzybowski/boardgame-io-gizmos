@@ -1,6 +1,7 @@
 import {GameState} from "../gameState";
 import {GameContext} from "../gameContext";
 import {EnergyType} from "../basicGameElements";
+import {CardCost} from "./cardCost";
 
 export const enum TriggerType {
   Upgrade = "U",
@@ -21,7 +22,7 @@ export abstract class Card<T extends CardEffect = any> {
     public readonly effect: T, // (G, ctx) => G
     public readonly victoryPoints: number,
     public readonly color: CostColor,
-    public readonly cost: number,
+    public readonly cost: CardCost,
     public readonly level: CardLevel
   ) {}
 }

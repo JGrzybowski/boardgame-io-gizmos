@@ -1,63 +1,59 @@
-import { EnergyType } from "../basicGameElements";
 import { GameState } from "../gameState";
 import { Card } from "../cards/card";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { GameContext } from "../gameContext";
-import {CardCost} from "../cards/cardCost";
+import {PlayerState} from "../playerState";
+import {PlayerMove} from "./playerMove";
+import {paymentStage} from "../stages/gameStages";
 
-function declaredEnergyCanPay(selectedCard: Card, paidEnergy: ReadonlyArray<EnergyType>): boolean {
-  // declared energy can pay
-  const payment = CardCost.fromArray(paidEnergy);
-  return payment[selectedCard.color] === amountToPay;
+function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
+  const selectedCard: Card | null = G.findCardOnTheTable(cardId);
+  if (!selectedCard) return INVALID_MOVE;
+
+  const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  ctx.events?.endPhase?.(paymentStage.name);
+  return newGameState;
 }
 
-function buildFromCommon(G: GameState, ctx: GameContext, cardId: number, paidEnergy: ReadonlyArray<EnergyType>): GameState | string {
-  const selectedCard = G.findCardOnTheTable(cardId);
-  const playerState = ctx.player?.get();
+function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameState | string {
+  const playerState: PlayerState = ctx.player?.get();
+  const selectedCard: Card | null = playerState.findCardInTheArchive(cardId);
+  if (!selectedCard) return INVALID_MOVE;
 
-  if (selectedCard === null) return INVALID_MOVE;
-  if (!playerState.hasDeclaredEnergy(paidEnergy)) return INVALID_MOVE;
-  if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return INVALID_MOVE;
+  const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
+  const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
 
-  // add card to player's machines
-  const machines = playerState.machinesWith(selectedCard);
-  const energyStorage = playerState.energyStorageWithout(paidEnergy);
+  ctx.player?.set(newPlayerState);
+  ctx.events?.endPhase?.(paymentStage.name);
+  return newGameState;
+}
+function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): GameState | string {
+  const playerState: PlayerState = ctx.player?.get();
+  const selectedCard: Card | null = playerState.findCardInTheResearched(cardId);
+  if (!selectedCard) return INVALID_MOVE;
 
-  ctx.player?.set({ ...playerState, machines, energyStorage });
+  const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
+  const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
 
-  const cards = G.cardsWithout(cardId);
-  return { ...G, cards };
+  ctx.player?.set(newPlayerState);
+  ctx.events?.endPhase?.(paymentStage.name);
+  return newGameState;
 }
 
-function buildFromArchive(
-  G: GameState,
-  ctx: GameContext,
-  cardId: number,
-  paidEnergy: ReadonlyArray<EnergyType>
-): GameState | string {
-  const playerState = ctx.player?.get();
-  const selectedCard = playerState.findCardInTheArchive(cardId);
-
-  if (selectedCard === null) return INVALID_MOVE;
-  if (!playerState.hasDeclaredEnergy(paidEnergy)) return INVALID_MOVE;
-  if (!declaredEnergyCanPay(selectedCard, paidEnergy)) return INVALID_MOVE;
-
-  // add card to player's machines
-  const energyStorage = playerState.energyStorageWithout(paidEnergy);
-  const machines = playerState.machinesWith(selectedCard);
-  const archive = playerState.archiveWithout(selectedCard.cardId);
-
-  // TODO REWRITE USING CLASS & INTERFACES
-  ctx.player?.set({ ...playerState, machines, archive, energyStorage });
-  return G;
-}
-
-export const buildFromCommonAction = {
+export const buildFromCommonAction: PlayerMove = {
   move: buildFromCommon,
-  undoable: false
+  undoable: true,
+  client: false
 };
 
-export const buildFromArchiveAction = {
+export const buildFromArchiveAction: PlayerMove = {
   move: buildFromArchive,
-  undoable: false
+  undoable: true,
+  client: false
+};
+
+export const buildFromResearchedAction: PlayerMove = {
+  move: buildFromResearched,
+  undoable: true,
+  client: false
 };
