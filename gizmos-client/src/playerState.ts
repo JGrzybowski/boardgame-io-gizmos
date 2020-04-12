@@ -99,6 +99,10 @@ export class PlayerState {
     return [...this.machines, card];
   }
 
+  researchedWithout(cardId: number): ReadonlyArray<Card> {
+    return this.researched.filter(c => c.cardId !== cardId);
+  }
+
   withAddedEnergy(energy: EnergyType): PlayerState {
     const energyStorage = [...this.energyStorage, energy];
     return {...this, energyStorage};
@@ -117,4 +121,13 @@ export class PlayerState {
     return {...this, archive};
   }
 
+  withResearchedCleared(): PlayerState{
+    const researched: ReadonlyArray<Card> = [];
+    return {...this, researched};
+  }
+
+  withCardsAddedToResearched(cards: ReadonlyArray<Card>): PlayerState {
+    const researched = [...this.researched, ...cards];
+    return {...this, researched};
+  }
 }

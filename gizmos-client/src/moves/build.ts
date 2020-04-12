@@ -24,9 +24,10 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
   const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endPhase?.(paymentStage.name);
+  ctx.events?.endStage?.(paymentStage.name);
   return newGameState;
 }
+
 function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const playerState: PlayerState = ctx.player?.get();
   const selectedCard: Card | null = playerState.findCardInTheResearched(cardId);
@@ -36,7 +37,7 @@ function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): Ga
   const newGameState = G.withCardToBeBuilt(selectedCard, selectedCard?.cost);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endPhase?.(paymentStage.name);
+  ctx.events?.endStage?.(paymentStage.name);
   return newGameState;
 }
 

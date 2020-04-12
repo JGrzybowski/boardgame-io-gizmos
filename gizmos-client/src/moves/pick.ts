@@ -3,7 +3,7 @@ import { INVALID_MOVE } from "boardgame.io/core";
 import { Ctx } from "boardgame.io";
 import {PlayerState} from "../playerState";
 import {PlayerMove} from "./playerMove";
-import {activationsStage} from "../stages/gameStages";
+import {activationStage} from "../stages/gameStages";
 
 function pickMove(G: GameState, ctx: Ctx, energyIndex: number): GameState | string {
   if (!G.energyWithIndexCanBeTakenFromEnergyRow(energyIndex)) return INVALID_MOVE;
@@ -19,7 +19,7 @@ function pickMove(G: GameState, ctx: Ctx, energyIndex: number): GameState | stri
   //.withCardsActivated(new TriggerCriteria("Pick", energy);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endPhase?.(activationsStage.name);
+  ctx.events?.endStage?.(activationStage.name);
   return newGameState;
 }
 

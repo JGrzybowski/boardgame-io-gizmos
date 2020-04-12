@@ -9,6 +9,7 @@ export interface GameState {
   readonly visibleEnergyBallsLimit: number;
   cardToBeBuilt: Card | null;
   cardToBeBuiltCost: CardCost | null;
+  visibleCardsLimits: ReadonlyArray<number>;
 
   findCardOnTheTable(cardId: number): Card | null;
   cardsWithout(cardId: number): ReadonlyArray<Card>;
@@ -18,12 +19,15 @@ export interface GameState {
   withCardRemovedFromTable(cardId: number): GameState;
   withDispenserWithout(index: number): [GameState, EnergyType];
   withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState;
+  withCardsPutOnBottom(cards: ReadonlyArray<Card>): GameState;
+  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>];
 }
 
 export const InitialGameState: GameState = {
   dispenser: initialDispenser,
   cards: CardsList,
   visibleEnergyBallsLimit: 6,
+  visibleCardsLimits: [0,4,3,2],
 
   cardToBeBuilt: null,
   cardToBeBuiltCost: null,
@@ -64,5 +68,18 @@ export const InitialGameState: GameState = {
 
   withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState{
     return {...this, cardToBeBuilt, cardToBeBuiltCost};
-  }
+  },
+
+  withCardsPutOnBottom(returnedCards: ReadonlyArray<Card>): GameState {
+    const cards = [...this.cards, ...returnedCards];
+    return {...this, cards};
+  },
+
+  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>] {
+    const revealedCards: ReadonlyArray<Card> = this.cards
+        .filter(c => c.level === cardLevel)
+        .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel]+researchLimit);
+    const cards: ReadonlyArray<Card> = this.cards.filter(c => revealedCards.find(r => c.cardId === r.cardId));
+    return [{...this, cards}, revealedCards];
+  },
 };
