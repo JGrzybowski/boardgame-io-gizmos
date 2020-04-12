@@ -11,7 +11,31 @@ export class CardCost {
     }
 
     isPaid(): boolean{
-        return this.R === 0 && this.U === 0 && this.B === 0 && this.Y === 0 && this.Any === 0;
+        return this.R === 0
+            && this.U === 0
+            && this.B === 0
+            && this.Y === 0
+            && this.Any === 0;
+    }
+
+    amountToPayWithEnergyType(energyType: EnergyType): number{
+        switch (energyType) {
+            case EnergyType.Red: return this.R;
+            case EnergyType.Blue: return this.U;
+            case EnergyType.Black: return this.B;
+            case EnergyType.Yellow: return this.Y;
+            case EnergyType.Any: return this.Any;
+        }
+    }
+
+    withAmountToPayWithEnergyTypeSetTo(energyType: EnergyType, amount: number): CardCost{
+        switch (energyType) {
+            case EnergyType.Red: return {...this, R: amount};
+            case EnergyType.Blue: return {...this, U: amount};
+            case EnergyType.Black: return {...this, B: amount};
+            case EnergyType.Yellow: return {...this, Y: amount};
+            case EnergyType.Any: return {...this, Any: amount};
+        }
     }
 
     static fromArray(energyTypes: ReadonlyArray<EnergyType>): CardCost {
@@ -22,5 +46,10 @@ export class CardCost {
             energyTypes.filter(x => x === EnergyType.Yellow).length,
             energyTypes.length,
         );
+    }
+
+    static canPayFor(payment: EnergyType, price: EnergyType): boolean{
+        if (payment === EnergyType.Any || price === EnergyType.Any) return true;
+        return payment === price;
     }
 }

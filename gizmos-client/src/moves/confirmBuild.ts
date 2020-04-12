@@ -20,7 +20,7 @@ function confirmBuildMove(G: GameState, ctx: GameContext): GameState | string {
     return newGameState;
 }
 
-export const confirmBuild: PlayerMove = {
+export const confirmBuildAction: PlayerMove = {
     move: confirmBuildMove,
     undoable: false,
     client: false

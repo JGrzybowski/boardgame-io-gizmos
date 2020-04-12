@@ -22,6 +22,8 @@ export interface GameState {
   withCardsPutOnBottom(cards: ReadonlyArray<Card>): GameState;
   revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>];
   withCardToBeBuiltCleared(): GameState;
+
+  withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
 }
 
 export const InitialGameState: GameState = {
@@ -86,5 +88,15 @@ export const InitialGameState: GameState = {
 
   withCardToBeBuiltCleared(): GameState {
     return {...this, cardToBeBuilt: null, cardToBeBuiltCost: null};
+  },
+
+  withEnergyRemovedFromCost(paidFor: EnergyType): GameState
+  {
+    if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
+
+    const reducedAmount = this.cardToBeBuiltCost?.amountToPayWithEnergyType(paidFor) - 1;
+    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, reducedAmount);
+
+    return {...this, cardToBeBuiltCost};
   }
 };

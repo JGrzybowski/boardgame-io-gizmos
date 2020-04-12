@@ -55,22 +55,8 @@ export class PlayerState {
     return !selectedCard ? null : selectedCard;
   }
 
-  hasDeclaredEnergy(declaredEnergy: ReadonlyArray<EnergyType>): boolean {
-    function countEnergy(energyArray: ReadonlyArray<EnergyType>): any {
-      const count: any = {};
-      energyArray.forEach(energy => (count[energy] = (count[energy] || 0) + 1));
-      return count;
-    }
-
-    const declaredEnergyCount = countEnergy(declaredEnergy);
-    const playerEnergyCount = countEnergy(this.energyStorage);
-
-    let playerHasDeclaredEnergy = true;
-    for (const energy in declaredEnergyCount) {
-      playerHasDeclaredEnergy = playerHasDeclaredEnergy && declaredEnergyCount[energy] <= playerEnergyCount[energy];
-    }
-
-    return playerHasDeclaredEnergy;
+  hasDeclaredEnergy(energy: EnergyType): boolean {
+    return (this.energyStorage.find(e => e === energy) !== undefined);
   }
 
   energyStorageWith(energy: EnergyType): ReadonlyArray<EnergyType> {
@@ -134,5 +120,11 @@ export class PlayerState {
   withCardsAddedToResearched(cards: ReadonlyArray<Card>): PlayerState {
     const researched = [...this.researched, ...cards];
     return {...this, researched};
+  }
+
+  withRemovedEnergy(payment: EnergyType): PlayerState {
+    const skippedIndex = this.energyStorage.indexOf(payment);
+    const energyStorage = this.energyStorage.filter((e,i) => i === skippedIndex);
+    return {...this, energyStorage};
   }
 }

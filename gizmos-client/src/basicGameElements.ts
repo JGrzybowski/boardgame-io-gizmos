@@ -1,7 +1,8 @@
 export enum EnergyType {
+  Any= "RUBY" ,
   Red = "R",
-  Black = "B",
   Blue = "U",
+  Black = "B",
   Yellow = "Y"
 }
 
@@ -13,7 +14,7 @@ function* repeat<T>(x: T , n: number): Generator<T> {
 
 export const initialDispenser: ReadonlyArray<EnergyType> = [
     ...repeat(EnergyType.Red,13),
-    ...repeat(EnergyType.Black,13),
     ...repeat(EnergyType.Blue,13),
+    ...repeat(EnergyType.Black,13),
     ...repeat(EnergyType.Yellow,13)
 ];
