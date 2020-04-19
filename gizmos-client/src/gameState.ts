@@ -1,4 +1,4 @@
-import { Card } from "./cards/card";
+import { CardInfo } from "./cards/card";
 import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { CardCost } from "./cards/cardCost";
@@ -8,9 +8,9 @@ import { GameContext } from "./gameContext";
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
-  readonly cards: ReadonlyArray<Card>;
+  readonly cards: ReadonlyArray<CardInfo>;
   readonly visibleEnergyBallsLimit: number;
-  readonly cardToBeBuilt: Card | null;
+  readonly cardToBeBuilt: CardInfo | null;
   readonly cardToBeBuiltCost: CardCost | null;
   readonly visibleCardsLimits: ReadonlyArray<number>;
 
@@ -18,16 +18,16 @@ export interface GameState {
   readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
 
-  findCardOnTheTable(cardId: number): Card | null;
-  cardsWithout(cardId: number): ReadonlyArray<Card>;
+  findCardOnTheTable(cardId: number): CardInfo | null;
+  cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
   dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType>;
   dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType];
   withCardRemovedFromTable(cardId: number): GameState;
   withDispenserWithout(index: number): [GameState, EnergyType];
-  withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState;
-  withCardsPutOnBottom(cards: ReadonlyArray<Card>): GameState;
-  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>];
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: CardCost): GameState;
+  withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
+  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>];
   withCardToBeBuiltCleared(): GameState;
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
@@ -50,13 +50,13 @@ export const InitialGameState: GameState = {
   playerStateBeforeBuild: null,
   gameStateBeforeBuild: null,
 
-  findCardOnTheTable(cardId: number): Card | null {
+  findCardOnTheTable(cardId: number): CardInfo | null {
     const card = this.cards.find((c) => c.cardId === cardId);
     return !card ? null : card;
   },
 
-  cardsWithout(cardId: number): ReadonlyArray<Card> {
-    return this.cards.filter((c: Card) => c.cardId !== cardId);
+  cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
+    return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
   },
 
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean {
@@ -84,20 +84,20 @@ export const InitialGameState: GameState = {
     return [{ ...this, dispenser }, energy];
   },
 
-  withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState {
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: CardCost): GameState {
     return { ...this, cardToBeBuilt, cardToBeBuiltCost };
   },
 
-  withCardsPutOnBottom(returnedCards: ReadonlyArray<Card>): GameState {
+  withCardsPutOnBottom(returnedCards: ReadonlyArray<CardInfo>): GameState {
     const cards = [...this.cards, ...returnedCards];
     return { ...this, cards };
   },
 
-  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>] {
-    const revealedCards: ReadonlyArray<Card> = this.cards
+  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>] {
+    const revealedCards: ReadonlyArray<CardInfo> = this.cards
       .filter((c) => c.level === cardLevel)
       .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel] + researchLimit);
-    const cards: ReadonlyArray<Card> = this.cards.filter((c) => revealedCards.find((r) => c.cardId === r.cardId));
+    const cards: ReadonlyArray<CardInfo> = this.cards.filter((c) => revealedCards.find((r) => c.cardId === r.cardId));
     return [{ ...this, cards }, revealedCards];
   },
 

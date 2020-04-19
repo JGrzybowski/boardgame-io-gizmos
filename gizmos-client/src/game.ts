@@ -1,4 +1,4 @@
-import { Card } from "./cards/card";
+import { CardInfo } from "./cards/card";
 import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
 import { GameState, InitialGameState } from "./gameState";
@@ -14,7 +14,7 @@ function SomeoneHas16Machines(ctx: GameContext): boolean {
 }
 
 function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
-  return ctx.player?.get().machines.filter((c: Card) => c.level === 3).length === 4;
+  return ctx.player?.get().machines.filter((c: CardInfo) => c.level === 3).length === 4;
 }
 
 const Gizmos: Game<GameState, GameContext> = {

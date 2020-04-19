@@ -1,7 +1,6 @@
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
-import { CardCost } from "./cardCost";
 
 export enum TriggerType {
   Upgrade = "U",
@@ -13,14 +12,14 @@ export enum TriggerType {
 
 export type CardLevel = 0 | 1 | 2 | 3;
 
-export abstract class Card<T extends CardEffect = any> {
+export abstract class CardInfo<T extends CardEffect = any> {
   protected constructor(
     public readonly cardId: number,
     public readonly type: TriggerType,
     public readonly effect: T, // (G, ctx) => G
     public readonly victoryPoints: number,
     public readonly color: EnergyType,
-    public readonly cost: CardCost,
+    public readonly cost: number,
     public readonly level: CardLevel
   ) {}
 }

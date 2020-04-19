@@ -1,7 +1,7 @@
-import { Card, TriggerType } from "./card";
+import { CardInfo, TriggerType } from "./card";
 import { CardWithFileEffect, fileEffect } from "./cardWithFileEffect";
 import { CardWithTakeEnergyEffect } from "./cardWithTakeEnergyEffect";
-import {EnergyType} from "../basicGameElements";
+import { EnergyType } from "../basicGameElements";
 
 export const InitialCard = new CardWithTakeEnergyEffect(
   /*CardId */ 1,
@@ -13,8 +13,8 @@ export const InitialCard = new CardWithTakeEnergyEffect(
   /*Card level*/ 0
 );
 
-const Level_I_cards: ReadonlyArray<Card> = [
-  new CardWithFileEffect(1, TriggerType.File, fileEffect, 2, EnergyType.Red, 2, 1)
+const Level_I_cards: ReadonlyArray<CardInfo> = [
+  new CardWithFileEffect(1, TriggerType.File, fileEffect, 2, EnergyType.Red, 2, 1),
 ];
 // const Level_II_cards = Array(36).fill(Card());
 // const Level_III_cards = Array(36).fill(Card());

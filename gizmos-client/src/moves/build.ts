@@ -1,27 +1,34 @@
 import { GameState } from "../gameState";
-import { Card } from "../cards/card";
+import { CardInfo } from "../cards/card";
 import { INVALID_MOVE } from "../basicGameElements";
 import { GameContext } from "../gameContext";
 import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";
 import { paymentStage } from "../stages/paymentStage";
+import { CardCost } from "../cards/cardCost";
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
-  const selectedCard: Card | null = G.findCardOnTheTable(cardId);
+  const selectedCard: CardInfo | null = G.findCardOnTheTable(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
-  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
+    selectedCard,
+    CardCost.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+  );
   ctx.events?.endPhase?.(paymentStage.name);
   return newGameState;
 }
 
 function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const playerState: PlayerState = ctx.player?.get();
-  const selectedCard: Card | null = playerState.findCardInTheArchive(cardId);
+  const selectedCard: CardInfo | null = playerState.findCardInTheArchive(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
-  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
+    selectedCard,
+    CardCost.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+  );
 
   ctx.player?.set(newPlayerState);
   ctx.events?.endStage?.(paymentStage.name);
@@ -30,11 +37,14 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
 
 function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const playerState: PlayerState = ctx.player?.get();
-  const selectedCard: Card | null = playerState.findCardInTheResearched(cardId);
+  const selectedCard: CardInfo | null = playerState.findCardInTheResearched(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
-  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(selectedCard, selectedCard?.cost);
+  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
+    selectedCard,
+    CardCost.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+  );
 
   ctx.player?.set(newPlayerState);
   ctx.events?.endStage?.(paymentStage.name);

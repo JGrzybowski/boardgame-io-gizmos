@@ -1,11 +1,11 @@
-import { Card, CardEffect, TriggerType, CardLevel } from "./card";
+import { CardInfo, CardEffect, TriggerType, CardLevel } from "./card";
 import { GameState } from "../gameState";
 import { archiveAction } from "../moves/archive";
 import { GameContext } from "../gameContext";
-import {EnergyType} from "../basicGameElements";
-import {CardCost} from "./cardCost";
+import { EnergyType } from "../basicGameElements";
+import { CardCost } from "./cardCost";
 
-export class CardWithFileEffect extends Card<FileActionEffect> {
+export class CardWithFileEffect extends CardInfo<FileActionEffect> {
   constructor(
     cardId: number,
     type: TriggerType,
@@ -15,8 +15,7 @@ export class CardWithFileEffect extends Card<FileActionEffect> {
     cost: number,
     level: CardLevel
   ) {
-    const cardCost = CardCost.fromTypeAndAmount(color, cost);
-    super(cardId, type, effect, victoryPoints, color, cardCost, level);
+    super(cardId, type, effect, victoryPoints, color, cost, level);
   }
 }
 

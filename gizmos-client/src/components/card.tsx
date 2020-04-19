@@ -1,5 +1,5 @@
 import React from "react";
-import { Card as CardInfo } from "../cards/card";
+import { CardInfo } from "../cards/card";
 
 export const Card: React.FC<{ CardInfo: CardInfo }> = (cardInfo) => {
   const colors = {
@@ -59,13 +59,13 @@ export const Card: React.FC<{ CardInfo: CardInfo }> = (cardInfo) => {
         </g>
 
         <text x="20" y="30" style={numbersStyle}>
-          Ar
+          {cardInfo.CardInfo.type}
         </text>
         <text x="130" y="30" style={numbersStyle}>
-          4V
+          {cardInfo.CardInfo.victoryPoints}V
         </text>
         <text x="27.5" y="136.25" style={numbersStyle}>
-          8
+          {cardInfo.CardInfo.cost}
         </text>
         <text x="25.3" y="115.3" fill="pink">
           O

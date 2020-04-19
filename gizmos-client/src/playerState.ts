@@ -1,5 +1,5 @@
 import { EnergyType } from "./basicGameElements";
-import { Card } from "./cards/card";
+import { CardInfo } from "./cards/card";
 import { InitialCard } from "./cards/cardsList";
 
 const initialEnergyStorageCapacity = 5;
@@ -11,15 +11,15 @@ export class PlayerState {
   victoryPoints = 0;
 
   energyStorage: ReadonlyArray<EnergyType> = [];
-  archivesLimit: ReadonlyArray<Card> = [];
+  archivesLimit: ReadonlyArray<CardInfo> = [];
 
   energyStorageCapacity: number = initialEnergyStorageCapacity;
   archiveLimit: number = initialArchiveLimit;
   researchLimit: number = initialResearchLimit;
 
-  machines: ReadonlyArray<Card> = [InitialCard];
-  archive: ReadonlyArray<Card> = [];
-  researched: ReadonlyArray<Card> = [];
+  machines: ReadonlyArray<CardInfo> = [InitialCard];
+  archive: ReadonlyArray<CardInfo> = [];
+  researched: ReadonlyArray<CardInfo> = [];
 
   activeCards: ReadonlyArray<number> = [];
 
@@ -40,23 +40,23 @@ export class PlayerState {
     return this.energyStorage.length >= this.energyStorageCapacity;
   }
 
-  findCardInTheArchive(cardId: number): Card | null {
-    const selectedCard = this.archive.find(c => c.cardId === cardId);
+  findCardInTheArchive(cardId: number): CardInfo | null {
+    const selectedCard = this.archive.find((c) => c.cardId === cardId);
     return !selectedCard ? null : selectedCard;
   }
 
-  findCardInMachines(cardId: number): Card | null {
-    const selectedCard = this.machines.find(c => c.cardId === cardId);
+  findCardInMachines(cardId: number): CardInfo | null {
+    const selectedCard = this.machines.find((c) => c.cardId === cardId);
     return !selectedCard ? null : selectedCard;
   }
 
-  findCardInTheResearched(cardId: number): Card | null {
-    const selectedCard = this.researched.find(c => c.cardId === cardId);
+  findCardInTheResearched(cardId: number): CardInfo | null {
+    const selectedCard = this.researched.find((c) => c.cardId === cardId);
     return !selectedCard ? null : selectedCard;
   }
 
   hasDeclaredEnergy(energy: EnergyType): boolean {
-    return (this.energyStorage.find(e => e === energy) !== undefined);
+    return this.energyStorage.find((e) => e === energy) !== undefined;
   }
 
   energyStorageWith(energy: EnergyType): ReadonlyArray<EnergyType> {
@@ -73,58 +73,57 @@ export class PlayerState {
     return energyStorage;
   }
 
-  private archiveWith(card: Card): ReadonlyArray<Card> {
+  private archiveWith(card: CardInfo): ReadonlyArray<CardInfo> {
     return [...this.archive, card];
   }
 
-  archiveWithout(cardId: number): ReadonlyArray<Card> {
-    return this.archive.filter(c => c.cardId !== cardId);
+  archiveWithout(cardId: number): ReadonlyArray<CardInfo> {
+    return this.archive.filter((c) => c.cardId !== cardId);
   }
 
-  machinesWith(card: Card): ReadonlyArray<Card> {
+  machinesWith(card: CardInfo): ReadonlyArray<CardInfo> {
     return [...this.machines, card];
   }
 
-  researchedWithout(cardId: number): ReadonlyArray<Card> {
-    return this.researched.filter(c => c.cardId !== cardId);
+  researchedWithout(cardId: number): ReadonlyArray<CardInfo> {
+    return this.researched.filter((c) => c.cardId !== cardId);
   }
 
   withAddedEnergy(energy: EnergyType): PlayerState {
     const energyStorage = [...this.energyStorage, energy];
-    return {...this, energyStorage};
+    return { ...this, energyStorage };
   }
 
-  withAddedCardToArchive(card: Card): PlayerState{
+  withAddedCardToArchive(card: CardInfo): PlayerState {
     const archive = this.archiveWith(card);
-    return {...this, archive};
+    return { ...this, archive };
   }
 
-  withAddedCardToMachines(card: Card): PlayerState {
+  withAddedCardToMachines(card: CardInfo): PlayerState {
     const machines = this.machinesWith(card);
-    return {...this, machines};
+    return { ...this, machines };
   }
 
-  withRemovedCardFromArchive(cardId: number): PlayerState{
+  withRemovedCardFromArchive(cardId: number): PlayerState {
     const card = this.findCardInTheArchive(cardId);
-    if (!card)
-      throw new Error("Card was not found");
+    if (!card) throw new Error("Card was not found");
     const archive = this.archiveWithout(cardId);
-    return {...this, archive};
+    return { ...this, archive };
   }
 
-  withResearchedCleared(): PlayerState{
-    const researched: ReadonlyArray<Card> = [];
-    return {...this, researched};
+  withResearchedCleared(): PlayerState {
+    const researched: ReadonlyArray<CardInfo> = [];
+    return { ...this, researched };
   }
 
-  withCardsAddedToResearched(cards: ReadonlyArray<Card>): PlayerState {
+  withCardsAddedToResearched(cards: ReadonlyArray<CardInfo>): PlayerState {
     const researched = [...this.researched, ...cards];
-    return {...this, researched};
+    return { ...this, researched };
   }
 
   withRemovedEnergy(payment: EnergyType): PlayerState {
     const skippedIndex = this.energyStorage.indexOf(payment);
-    const energyStorage = this.energyStorage.filter((e,i) => i === skippedIndex);
-    return {...this, energyStorage};
+    const energyStorage = this.energyStorage.filter((e, i) => i === skippedIndex);
+    return { ...this, energyStorage };
   }
 }

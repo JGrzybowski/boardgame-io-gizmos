@@ -1,8 +1,7 @@
-import { Card, CardEffect, TriggerType, CardLevel } from "./card";
+import { CardInfo, CardEffect, TriggerType, CardLevel } from "./card";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
-import {EnergyType} from "../basicGameElements";
-import {CardCost} from "./cardCost";
+import { EnergyType } from "../basicGameElements";
 
 type TakeEnergyLimit = 1 | 2 | 3;
 
@@ -26,7 +25,7 @@ export class TakeEnergyEffect extends CardEffect {
   }
 }
 
-export class CardWithTakeEnergyEffect extends Card<TakeEnergyEffect> {
+export class CardWithTakeEnergyEffect extends CardInfo<TakeEnergyEffect> {
   constructor(
     cardId: number,
     type: TriggerType,
@@ -36,7 +35,6 @@ export class CardWithTakeEnergyEffect extends Card<TakeEnergyEffect> {
     cost: number,
     level: CardLevel
   ) {
-    const cardCost = CardCost.fromTypeAndAmount(color, cost);
-    super(cardId, type, new TakeEnergyEffect(howMany), victoryPoints, color, cardCost, level);
+    super(cardId, type, new TakeEnergyEffect(howMany), victoryPoints, color, cost, level);
   }
 }
