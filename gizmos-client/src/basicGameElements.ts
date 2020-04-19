@@ -1,20 +1,20 @@
 export enum EnergyType {
-  Any= "RUBY" ,
+  Any = "RUBY",
   Red = "R",
   Blue = "U",
   Black = "B",
-  Yellow = "Y"
+  Yellow = "Y",
 }
 
-function* repeat<T>(x: T , n: number): Generator<T> {
-  // eslint-disable-next-line functional/no-loop-statement
-  while (n-- > 0)
-    yield x;
+function* repeat<T>(x: T, n: number): Generator<T> {
+  while (n-- > 0) yield x;
 }
+
+export const INVALID_MOVE = "INVALID_MOVE";
 
 export const initialDispenser: ReadonlyArray<EnergyType> = [
-    ...repeat(EnergyType.Red,13),
-    ...repeat(EnergyType.Blue,13),
-    ...repeat(EnergyType.Black,13),
-    ...repeat(EnergyType.Yellow,13)
+  ...repeat(EnergyType.Red, 13),
+  ...repeat(EnergyType.Blue, 13),
+  ...repeat(EnergyType.Black, 13),
+  ...repeat(EnergyType.Yellow, 13),
 ];

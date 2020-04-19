@@ -1,11 +1,11 @@
 import { GameState } from "../gameState";
-import { INVALID_MOVE } from "boardgame.io/core";
-import { Ctx } from "boardgame.io";
-import {PlayerState} from "../playerState";
-import {PlayerMove} from "./playerMove";
-import {activationStage} from "../stages/gameStages";
+import { INVALID_MOVE } from "../basicGameElements";
+import { PlayerState } from "../playerState";
+import { PlayerMove } from "./playerMove";
+import { activationStage } from "../stages/activationStage";
+import { GameContext } from "../gameContext";
 
-function pickMove(G: GameState, ctx: Ctx, energyIndex: number): GameState | string {
+function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameState | string {
   if (!G.energyWithIndexCanBeTakenFromEnergyRow(energyIndex)) return INVALID_MOVE;
 
   const playerState: PlayerState = ctx.player?.get();
@@ -23,8 +23,8 @@ function pickMove(G: GameState, ctx: Ctx, energyIndex: number): GameState | stri
   return newGameState;
 }
 
-export const pickAction: PlayerMove= {
+export const pickAction: PlayerMove = {
   move: pickMove,
   client: false,
-  undoable: false
+  undoable: false,
 };

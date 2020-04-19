@@ -1,5 +1,5 @@
 import { GameState } from "../gameState";
-import { INVALID_MOVE } from "boardgame.io/core";
+import { INVALID_MOVE } from "../basicGameElements";
 import { GameContext } from "../gameContext";
 
 export function activateCard(G: GameState, ctx: GameContext, cardId: number): GameState | string {

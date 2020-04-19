@@ -3,8 +3,11 @@ import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
 import { GameState, InitialGameState } from "./gameState";
 import { GameContext } from "./gameContext";
-import { GameConfig } from "boardgame.io";
-import { actionStage, activationStage, paymentStage, researchStage } from "./stages/gameStages";
+import { Game } from "boardgame.io";
+import { actionStage } from "./stages/actionStage";
+import { activationStage } from "./stages/activationStage";
+import { paymentStage } from "./stages/paymentStage";
+import { researchStage } from "./stages/researchStage";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
@@ -14,13 +17,13 @@ function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
   return ctx.player?.get().machines.filter((c: Card) => c.level === 3).length === 4;
 }
 
-const Gizmos: GameConfig = {
+const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
   setup: () => ({
     ...InitialGameState,
     playerSetup: (playerId: string): PlayerState => new PlayerState(playerId),
-    plugins: [PluginPlayer]
+    plugins: [PluginPlayer],
   }),
 
   turn: {
@@ -29,7 +32,7 @@ const Gizmos: GameConfig = {
       paymentStage,
       researchStage,
       activationStage,
-    }
+    },
   },
 
   endIf: (G: GameState, ctx: GameContext) => {
@@ -38,7 +41,7 @@ const Gizmos: GameConfig = {
       // const winnerIndex = G.victoryPoints.indexOf(Math.max(...arr));
       return { winner: 0 };
     }
-  }
+  },
 };
 
 export default Gizmos;

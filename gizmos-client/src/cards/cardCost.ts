@@ -38,6 +38,26 @@ export class CardCost {
         }
     }
 
+    add(anotherCost: CardCost): CardCost{
+        return new CardCost(
+            this.R + anotherCost.R,
+            this.U + anotherCost.U,
+            this.B + anotherCost.B,
+            this.Y + anotherCost.Y,
+            this.Any + anotherCost.Any
+            )
+    }
+
+    subtract(anotherCost: CardCost): CardCost{
+        return new CardCost(
+            this.R - anotherCost.R,
+            this.U - anotherCost.U,
+            this.B - anotherCost.B,
+            this.Y - anotherCost.Y,
+            this.Any - anotherCost.Any
+        )
+    }
+
     static fromArray(energyTypes: ReadonlyArray<EnergyType>): CardCost {
         return new CardCost(
             energyTypes.filter(x => x === EnergyType.Red).length,
@@ -45,6 +65,16 @@ export class CardCost {
             energyTypes.filter(x => x === EnergyType.Black).length,
             energyTypes.filter(x => x === EnergyType.Yellow).length,
             energyTypes.length,
+        );
+    }
+
+    static fromTypeAndAmount(energyType: EnergyType, amount: number): CardCost{
+        return new CardCost(
+            energyType === EnergyType.Red ? amount : 0,
+            energyType === EnergyType.Blue ? amount : 0,
+            energyType === EnergyType.Black ? amount : 0,
+            energyType === EnergyType.Yellow ? amount : 0,
+            energyType === EnergyType.Any  ? amount : 0
         );
     }
 

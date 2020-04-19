@@ -1,9 +1,10 @@
 import { Card } from "./cards/card";
 import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
-import {CardCost} from "./cards/cardCost";
-import {PlayerState} from "./playerState";
-import {Ctx} from "boardgame.io";
+import { CardCost } from "./cards/cardCost";
+import { PlayerState } from "./playerState";
+import { Ctx } from "boardgame.io";
+import { GameContext } from "./gameContext";
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
@@ -32,13 +33,15 @@ export interface GameState {
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
 
   withPlayerAndGameStateSaved(ctx: Ctx): GameState;
+
+  withEnergyAddedToCost(changeTo: EnergyType): GameState;
 }
 
 export const InitialGameState: GameState = {
   dispenser: initialDispenser,
   cards: CardsList,
   visibleEnergyBallsLimit: 6,
-  visibleCardsLimits: [0,4,3,2],
+  visibleCardsLimits: [0, 4, 3, 2],
 
   cardToBeBuilt: null,
   cardToBeBuiltCost: null,
@@ -48,7 +51,7 @@ export const InitialGameState: GameState = {
   gameStateBeforeBuild: null,
 
   findCardOnTheTable(cardId: number): Card | null {
-    const card = this.cards.find(c => c.cardId === cardId);
+    const card = this.cards.find((c) => c.cardId === cardId);
     return !card ? null : card;
   },
 
@@ -56,8 +59,8 @@ export const InitialGameState: GameState = {
     return this.cards.filter((c: Card) => c.cardId !== cardId);
   },
 
-  energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean{
-    return (index >= 0 && index < this.visibleEnergyBallsLimit);
+  energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean {
+    return index >= 0 && index < this.visibleEnergyBallsLimit;
   },
 
   dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType> {
@@ -65,59 +68,67 @@ export const InitialGameState: GameState = {
     return this.dispenserWithout(i)[0];
   },
 
-  dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType,] {
+  dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
     const energy = this.dispenser[index];
     const dispenser = this.dispenser.filter((e, idx) => idx !== index);
     return [dispenser, energy];
   },
 
-  withCardRemovedFromTable(cardId: number): GameState{
+  withCardRemovedFromTable(cardId: number): GameState {
     const cards = this.cardsWithout(cardId);
     return { ...this, cards };
   },
 
-  withDispenserWithout(index: number): [GameState, EnergyType]{
+  withDispenserWithout(index: number): [GameState, EnergyType] {
     const [dispenser, energy] = this.dispenserWithout(index);
-    return [{...this, dispenser}, energy]
+    return [{ ...this, dispenser }, energy];
   },
 
-  withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState{
-    return {...this, cardToBeBuilt, cardToBeBuiltCost};
+  withCardToBeBuilt(cardToBeBuilt: Card, cardToBeBuiltCost: CardCost): GameState {
+    return { ...this, cardToBeBuilt, cardToBeBuiltCost };
   },
 
   withCardsPutOnBottom(returnedCards: ReadonlyArray<Card>): GameState {
     const cards = [...this.cards, ...returnedCards];
-    return {...this, cards};
+    return { ...this, cards };
   },
 
   revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<Card>] {
     const revealedCards: ReadonlyArray<Card> = this.cards
-        .filter(c => c.level === cardLevel)
-        .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel]+researchLimit);
-    const cards: ReadonlyArray<Card> = this.cards.filter(c => revealedCards.find(r => c.cardId === r.cardId));
-    return [{...this, cards}, revealedCards];
+      .filter((c) => c.level === cardLevel)
+      .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel] + researchLimit);
+    const cards: ReadonlyArray<Card> = this.cards.filter((c) => revealedCards.find((r) => c.cardId === r.cardId));
+    return [{ ...this, cards }, revealedCards];
   },
 
   withCardToBeBuiltCleared(): GameState {
-    return {...this, cardToBeBuilt: null, cardToBeBuiltCost: null};
+    return { ...this, cardToBeBuilt: null, cardToBeBuiltCost: null };
   },
 
-  withEnergyRemovedFromCost(paidFor: EnergyType): GameState
-  {
+  withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
     if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
 
     const reducedAmount = this.cardToBeBuiltCost?.amountToPayWithEnergyType(paidFor) - 1;
     const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, reducedAmount);
 
-    return {...this, cardToBeBuiltCost};
+    return { ...this, cardToBeBuiltCost };
   },
 
-  withPlayerAndGameStateSaved(ctx: Ctx): GameState {
+  withEnergyAddedToCost(paidFor: EnergyType): GameState {
+    if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
+
+    const increasedAmount = this.cardToBeBuiltCost?.amountToPayWithEnergyType(paidFor) + 1;
+    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, increasedAmount);
+
+    return { ...this, cardToBeBuiltCost };
+  },
+
+  withPlayerAndGameStateSaved(ctx: GameContext): GameState {
     return {
       ...this,
       gameStateBeforeBuild: this,
       playerStateBeforeBuild: ctx.player?.get(),
-      previousStageName: ctx.activePlayers?.[ctx.currentPlayer] ?? null
-    }
-  }
+      previousStageName: ctx.activePlayers?.[ctx.currentPlayer] ?? null,
+    };
+  },
 };

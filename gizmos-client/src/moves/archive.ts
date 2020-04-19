@@ -1,9 +1,9 @@
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
-import { INVALID_MOVE } from "boardgame.io/core";
 import { PlayerMove } from "./playerMove";
-import {PlayerState} from "../playerState";
-import {activationStage} from "../stages/gameStages";
+import { PlayerState } from "../playerState";
+import { activationStage } from "../stages/activationStage";
+import { INVALID_MOVE } from "../basicGameElements";
 
 function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const playerState: PlayerState = ctx.player?.get();
@@ -34,9 +34,7 @@ function archiveFromResearchedMove(G: GameState, ctx: GameContext, cardId: numbe
   // move not archived cards to the bottom of deck from revealed cards
   const newGameState = G.withCardsPutOnBottom(playerState.researchedWithout(cardId));
   // add card to player's archive
-  const newPlayerState: PlayerState = playerState
-      .withAddedCardToArchive(selectedCard)
-      .withResearchedCleared();
+  const newPlayerState: PlayerState = playerState.withAddedCardToArchive(selectedCard).withResearchedCleared();
   //TODO activate all cards that activate on archive trigger
   //.withCardsActivated(new TriggerCriteria("Archive", selectedCard);
 
@@ -48,11 +46,11 @@ function archiveFromResearchedMove(G: GameState, ctx: GameContext, cardId: numbe
 export const archiveAction: PlayerMove = {
   move: archiveMove,
   client: false,
-  undoable: false
+  undoable: false,
 };
 
 export const archiveFromResearchedAction: PlayerMove = {
   move: archiveFromResearchedMove,
   client: false,
-  undoable: false
+  undoable: false,
 };
