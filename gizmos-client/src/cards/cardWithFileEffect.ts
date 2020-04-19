@@ -3,7 +3,6 @@ import { GameState } from "../gameState";
 import { archiveAction } from "../moves/archive";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
-import { CardCost } from "./cardCost";
 
 export class CardWithFileEffect extends CardInfo<FileActionEffect> {
   constructor(

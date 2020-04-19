@@ -1,7 +1,7 @@
 import React from "react";
 import { CardInfo } from "../cards/card";
 
-export const Card: React.FC<{ CardInfo: CardInfo }> = (cardInfo) => {
+export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, cost, cardId }) => {
   const colors = {
     "frame-general": "#a4a4a3", //gray, can also be beige for III lvl cards
     "frame-accent": "#be1f23", //red can be also one of RUBY or Any (mixed)
@@ -19,8 +19,14 @@ export const Card: React.FC<{ CardInfo: CardInfo }> = (cardInfo) => {
     fill: "black",
   };
 
+  const cardIdStyle = {
+    "font-size": "0.4em",
+    "font-family": "source-code-pro,monospace",
+    fill: "black",
+  };
+
   return (
-    <div style={{ height: "200px", width: "200px", margin: "auto" }}>
+    <div style={{ height: "100%", width: "100%", margin: "auto" }}>
       <svg viewBox="15 12.5 136.63 136.63">
         <defs>
           <clipPath id="clip-path">
@@ -59,16 +65,19 @@ export const Card: React.FC<{ CardInfo: CardInfo }> = (cardInfo) => {
         </g>
 
         <text x="20" y="30" style={numbersStyle}>
-          {cardInfo.CardInfo.type}
+          {type}
         </text>
         <text x="130" y="30" style={numbersStyle}>
-          {cardInfo.CardInfo.victoryPoints}V
+          {victoryPoints}V
         </text>
         <text x="27.5" y="136.25" style={numbersStyle}>
-          {cardInfo.CardInfo.cost}
+          {cost}
         </text>
         <text x="25.3" y="115.3" fill="pink">
           O
+        </text>
+        <text x="136.8" y="138.5" style={cardIdStyle}>
+          {cardId.toString().padStart(3, "0")}
         </text>
       </svg>
     </div>

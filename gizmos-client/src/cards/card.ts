@@ -7,7 +7,7 @@ export enum TriggerType {
   Converter = "C",
   Pick = "P",
   Build = "B",
-  File = "F",
+  Archive = "A",
 }
 
 export type CardLevel = 0 | 1 | 2 | 3;
