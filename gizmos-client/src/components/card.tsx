@@ -67,8 +67,8 @@ export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, co
         <text x="20" y="30" style={numbersStyle}>
           {type}
         </text>
-        <text x="130" y="30" style={numbersStyle}>
-          {victoryPoints}V
+        <text x="133" y="30" style={numbersStyle}>
+          {victoryPoints}
         </text>
         <text x="27.5" y="136.25" style={numbersStyle}>
           {cost}

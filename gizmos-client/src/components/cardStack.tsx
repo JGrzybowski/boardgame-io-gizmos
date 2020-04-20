@@ -2,11 +2,12 @@ import React from "react";
 import { CardInfo } from "../cards/card";
 import { Card } from "./card";
 
-export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo> }> = ({ cards }) => {
+export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boolean }> = ({ cards, flipped }) => {
   const gridStyle = {
     display: "grid",
-    "grid-template-rows": "repeat(5, 47px)",
-    width: "200px",
+    gridTemplateRows: `repeat(${cards.length - 1}, 47px)`,
+    width: "75%",
+    transform: flipped ? "rotate(180deg)" : "",
   };
 
   const renderedCards = cards.map((c: CardInfo) => <Card key={c.cardId} {...c} />);
