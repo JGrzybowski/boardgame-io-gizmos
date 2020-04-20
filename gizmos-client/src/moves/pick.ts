@@ -1,5 +1,5 @@
 import { GameState } from "../gameState";
-import { INVALID_MOVE } from "../basicGameElements";
+import { INVALID_MOVE } from "boardgame.io/core";
 import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";
 import { activationStage } from "../stages/activationStage";

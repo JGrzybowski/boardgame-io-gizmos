@@ -1,23 +1,46 @@
 import React from "react";
 import "./App.css";
-import { CardWithFileEffect, fileEffect } from "./cards/cardWithFileEffect";
-import { TriggerType } from "./cards/card";
-import { EnergyType } from "./basicGameElements";
-import { CardStack } from "./components/cardStack";
+import { PlayerBar } from "./components/playerBar";
+import { OpponentBar } from "./components/playerBar";
 
-function App() {
-  const collection = [
-    new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 7, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(2, TriggerType.Build, fileEffect, 4, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(3, TriggerType.Archive, fileEffect, 2, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(4, TriggerType.Pick, fileEffect, 1, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(738, TriggerType.Upgrade, fileEffect, 8, EnergyType.Red, 7, 2),
-  ];
+export const App: React.FC = () => {
+  const styles2players = {
+    display: "grid",
+    height: "100vh",
+    gridTemplateColumns: "50vw 50vw",
+    gridTemplateRows: "30vh 40vh 30vh",
+    gridTemplateAreas: `
+    "op1 op1"
+     ". ." 
+     "localPlayer localPlayer"`,
+  };
+
+  const styles3players = {
+    display: "grid",
+    gridTemplateColumns: "50vw 50vw",
+    gridTemplateRows: "30vh 40vh 30vh",
+    gridTemplateAreas: `"op1 op2"
+                        ". ." 
+                        "localPlayer localPlayer"`,
+  };
+
+  const styles4players = {
+    display: "grid",
+    gridTemplateColumns: "50vw 50vw",
+    gridTemplateRows: "30vh 40vh 30vh",
+    gridTemplateAreas: `"op1 op2"
+                        ". ."  
+                        "op3 localPlayer"`,
+  };
+
   return (
-    <div className="App">
-      <CardStack cards={collection} />
+    <div className="App" style={styles4players}>
+      <OpponentBar styles={{ gridArea: "op1", alignSelf: "top" }} flipped={true} />
+      <OpponentBar styles={{ gridArea: "op2", alignSelf: "top" }} flipped={true} />
+      <OpponentBar styles={{ gridArea: "op3", alignSelf: "bottom" }} />
+      <PlayerBar styles={{ gridArea: "localPlayer" }} />
     </div>
   );
-}
+};
 
 export default App;

@@ -3,7 +3,7 @@ import { GameContext } from "../gameContext";
 import { PlayerMove } from "./playerMove";
 import { PlayerState } from "../playerState";
 import { activationStage } from "../stages/activationStage";
-import { INVALID_MOVE } from "../basicGameElements";
+import { INVALID_MOVE } from "boardgame.io/core";
 
 function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const playerState: PlayerState = ctx.player?.get();

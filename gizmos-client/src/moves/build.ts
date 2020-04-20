@@ -1,6 +1,6 @@
 import { GameState } from "../gameState";
 import { CardInfo } from "../cards/card";
-import { INVALID_MOVE } from "../basicGameElements";
+import { INVALID_MOVE } from "boardgame.io/core";
 import { GameContext } from "../gameContext";
 import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";

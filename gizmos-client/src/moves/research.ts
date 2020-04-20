@@ -1,7 +1,7 @@
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { PlayerState } from "../playerState";
-import { INVALID_MOVE } from "../basicGameElements";
+import { INVALID_MOVE } from "boardgame.io/core";
 import { CardLevel } from "../cards/card";
 import { PlayerMove } from "./playerMove";
 import { researchStage } from "../stages/researchStage";
