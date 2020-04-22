@@ -7,10 +7,11 @@ import { ActionButton } from "./actionButton";
 
 export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles = {} }) => {
   const collection = [
-    new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 7, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(2, TriggerType.Build, fileEffect, 4, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(3, TriggerType.Archive, fileEffect, 2, EnergyType.Red, 7, 2),
-    new CardWithFileEffect(4, TriggerType.Pick, fileEffect, 1, EnergyType.Red, 7, 2),
+    new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 7, EnergyType.Blue, 2, 2),
+    new CardWithFileEffect(2, TriggerType.Build, fileEffect, 4, EnergyType.Yellow, 4, 3),
+    new CardWithFileEffect(3, TriggerType.Archive, fileEffect, 2, EnergyType.Red, 3, 1),
+    new CardWithFileEffect(4, TriggerType.Pick, fileEffect, 1, EnergyType.Black, 6, 1),
+    new CardWithFileEffect(4, TriggerType.Upgrade, fileEffect, 0, EnergyType.Any, 1, 3),
   ];
 
   return (
