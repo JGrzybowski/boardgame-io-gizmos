@@ -1,6 +1,7 @@
 import React from "react";
 import { CardInfo } from "../cards/card";
 import { Card } from "./card";
+import { MiniCard } from "./minicard";
 
 export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boolean }> = ({ cards, flipped }) => {
   const gridStyle = {
@@ -10,7 +11,7 @@ export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boo
     transform: flipped ? "rotate(180deg)" : "",
   };
 
-  const renderedCards = cards.map((c: CardInfo) => <Card key={c.cardId} {...c} />);
+  const renderedCards = cards.map((c: CardInfo) => <MiniCard key={c.cardId} {...c} />);
 
   return <div style={gridStyle}>{renderedCards}</div>;
 };
