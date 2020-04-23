@@ -133,34 +133,41 @@ export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, co
             />
           </clipPath>
         </defs>
+
         <path
           d="M9.19,0H127.43a9.19,9.19,0,0,1,9.19,9.19V127.44a9.19,9.19,0,0,1-9.19,9.19H9.19A9.19,9.19,0,0,1,0,127.44V9.19A9.19,9.19,0,0,1,9.19,0"
           style={{ fill: colors["frame-general"] }}
         />
+
         {frame}
+
         {/* Ilustration */}
         <path
           style={{ fill: "#fff" }}
           d="M12.75,36.25h112V118.5h-6V124l-86.66.66c.38-1.32,2.82-10.41-2.39-16.15a12,12,0,0,0-2.78-2.24c3-6.65,1.72-14.09-3-18.27-4.39-3.91-10-3.46-11.21-3.34Z"
         />
+
         {/* Color Symbol */}
         {energySymbol(color)}
         {costCircle(cost)}
+
+        {/* Trigger Box */}
         <polygon
           points="12.75 32.5 68.75 32.5 74.25 20.5 59.5 5.75 12.75 5.75 12.75 32.5"
           style={{ fill: colors["trigger-filter-box"], stroke: colors["trigger-filter-box-border"] }}
           stroke-miterlimit="10"
           stroke-width="0.75"
         />
+
         {/* Trigger Corners */}
         <path
           style={{ fill: level === 3 ? corners.brown : corners.gray }}
           d="M31.5,8a17.88,17.88,0,0,0-1.89-8H9.19A9.2,9.2,0,0,0,0,9.19V26.93a26.17,26.17,0,0,0,8.25,1.32C21.09,28.25,31.5,19.18,31.5,8Z"
         />
         {triggerIcon(type)}
-        {/* Victory points corner */}
+
         {victoryPointsCount({ level, victoryPoints })}
-        {/* Card Id number */}
+
         {cardIdCount(cardId)}
       </svg>
     </div>
