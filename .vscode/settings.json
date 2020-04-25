@@ -1,0 +1,5 @@
+{
+  "eslint.workingDirectories": [{ "directory": "gizmos-client", "changeProcessCWD": true }],
+  "eslint.lintTask.enable": true,
+  "eslint.alwaysShowStatus": true
+}

@@ -1,10 +1,16 @@
 import React from "react";
 import { CardInfo } from "../cards/card";
-import { Card } from "./card";
-import { MiniCard } from "./minicard";
+import { Card, MiniCard } from "./card";
 
 export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boolean }> = ({ cards, flipped }) => {
-  const gridStyle = {
+  const gridStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    width: "75%",
+    justifyContent: "center",
+  };
+
+  const gridStyleOld = {
     display: "grid",
     gridTemplateRows: `repeat(${cards.length - 1}, 47px)`,
     width: "75%",
