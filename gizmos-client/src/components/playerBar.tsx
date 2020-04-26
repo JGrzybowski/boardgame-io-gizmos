@@ -22,6 +22,7 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
         gridTemplateColumns: "repeat(4, minmax(150px, 1fr))",
         columnGap: "5px",
         justifyItems: "center",
+        alignItems: "end",
       }}
     >
       <CardStack cards={collection} />
@@ -61,6 +62,7 @@ export const OpponentBar: React.FC<{ styles?: React.CSSProperties; flipped?: boo
         gridTemplateColumns: "repeat(4, minmax(150px, 1fr))",
         columnGap: "5px",
         justifyItems: "center",
+        alignItems: flipped ? "start" : "end",
       }}
     >
       <CardStack cards={collection} flipped={flipped} />

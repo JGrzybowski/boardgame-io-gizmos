@@ -182,7 +182,7 @@ export const MiniCard: React.FC<CardInfo> = ({ type, victoryPoints, level, cardI
   };
 
   return (
-    <div style={{ height: "100%", width: "100%", margin: "auto" }}>
+    <div style={{ height: "100%", width: "100%" }}>
       <svg viewBox="0 0 136.63 36.25" xmlnsXlink="http://www.w3.org/1999/xlink">
         <defs>
           <clipPath id="clip-path">
