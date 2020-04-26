@@ -2,8 +2,9 @@ import React from "react";
 import { CardWithFileEffect, fileEffect } from "../cards/cardWithFileEffect";
 import { TriggerType } from "../cards/card";
 import { EnergyType } from "../basicGameElements";
-import { CardStack } from "./cardStack";
+import { CardStack, MiniCardStack } from "./cardStack";
 import { ActionButton } from "./actionButton";
+import { MiniCard } from "./card";
 
 export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles = {} }) => {
   const collection = [
@@ -19,16 +20,17 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
       style={{
         ...styles,
         display: "grid",
-        gridTemplateColumns: "repeat(4, minmax(150px, 1fr))",
+        gridTemplateColumns: "repeat(5, minmax(150px, 1fr))",
         columnGap: "5px",
         justifyItems: "center",
         alignItems: "end",
       }}
     >
-      <CardStack cards={collection} />
-      <CardStack cards={collection} />
-      <CardStack cards={collection} />
-      <CardStack cards={collection} />
+      <MiniCardStack cards={collection} />
+      <MiniCardStack cards={collection} />
+      <MiniCardStack cards={collection} />
+      <MiniCardStack cards={collection} />
+      <CardStack cards={[collection[0], collection[1]]} />
 
       <ActionButton actionName="File" desctiption="Take a card and put it into archive." />
       <ActionButton actionName="Pick" desctiption="Take an energy from the rail." />
@@ -59,16 +61,17 @@ export const OpponentBar: React.FC<{ styles?: React.CSSProperties; flipped?: boo
       style={{
         ...styles,
         display: "grid",
-        gridTemplateColumns: "repeat(4, minmax(150px, 1fr))",
+        gridTemplateColumns: "repeat(5, minmax(150px, 1fr))",
         columnGap: "5px",
         justifyItems: "center",
         alignItems: flipped ? "start" : "end",
       }}
     >
-      <CardStack cards={collection} flipped={flipped} />
-      <CardStack cards={collection} flipped={flipped} />
-      <CardStack cards={collection} flipped={flipped} />
-      <CardStack cards={collection} flipped={flipped} />
+      <MiniCardStack cards={collection} flipped={flipped} />
+      <MiniCardStack cards={collection} flipped={flipped} />
+      <MiniCardStack cards={collection} flipped={flipped} />
+      <MiniCardStack cards={collection} flipped={flipped} />
+      <CardStack cards={[collection[0], collection[1]]} />
     </div>
   );
 };

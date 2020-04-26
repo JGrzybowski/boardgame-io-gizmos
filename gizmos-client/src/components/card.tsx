@@ -1,5 +1,5 @@
 import React, { SVGProps } from "react";
-import { CardInfo, TriggerType } from "../cards/card";
+import { CardInfo, TriggerType, CardLevel } from "../cards/card";
 import { upperFrame, corners, accentBorder, triggerBoxBorder, triggerBox } from "./colorDictionary";
 import { EnergyType } from "../basicGameElements";
 
@@ -222,6 +222,25 @@ export const MiniCard: React.FC<CardInfo> = ({ type, victoryPoints, level, cardI
         {triggerIcon(type)}
         {victoryPointsCount({ level, victoryPoints })}
         {cardIdCount}
+      </svg>
+    </div>
+  );
+};
+
+export const CardBack: React.FC<{ level: CardLevel }> = ({ level }) => {
+  const colors = ["LightGray", "chocolate", "oliveDrab", "RebeccaPurple"];
+  const text = ["0", "I", "II", "III"];
+
+  return (
+    <div style={{ height: "100%", width: "100%", margin: "auto" }}>
+      <svg viewBox="0 0 136.63 136.63" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <path
+          d="M9.19,0H127.43a9.19,9.19,0,0,1,9.19,9.19V127.44a9.19,9.19,0,0,1-9.19,9.19H9.19A9.19,9.19,0,0,1,0,127.44V9.19A9.19,9.19,0,0,1,9.19,0"
+          style={{ fill: colors[level] }}
+        />
+        <text x="10" y="20" style={numbersStyle}>
+          {text[level]}
+        </text>
       </svg>
     </div>
   );
