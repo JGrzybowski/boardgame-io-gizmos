@@ -37,6 +37,15 @@ export const App: React.FC = () => {
     "op3 localPlayer"`,
   };
 
+  const styles4players2 = {
+    display: "grid",
+    gridTemplateColumns: "50vw 50vw",
+    gridTemplateRows: "30vh 30vh 30vh",
+    gridTemplateAreas: `"op1 commonArea"
+    "op2 commonArea" 
+    "op3 localPlayer"`,
+  };
+
   const collection = [
     new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 1, EnergyType.Blue, 1, 1),
     new CardWithFileEffect(2, TriggerType.Build, fileEffect, 1, EnergyType.Yellow, 1, 1),
@@ -49,12 +58,18 @@ export const App: React.FC = () => {
     new CardWithFileEffect(82, TriggerType.Build, fileEffect, 4, EnergyType.Yellow, 6, 3),
   ];
 
+  const commonAreaGridStyle: React.CSSProperties = {
+    display: "grid",
+    gridTemplateRows: "33% 34% 33%",
+    margin: "40px",
+  };
+
   return (
-    <div className="App" style={styles4players}>
+    <div className="App" style={styles4players2}>
       <OpponentBar styles={{ gridArea: "op1", alignSelf: "top" }} flipped={true} />
       <OpponentBar styles={{ gridArea: "op2", alignSelf: "top" }} flipped={true} />
 
-      <div style={{ display: "flex", flexDirection: "row", gridArea: "commonArea" }}>
+      <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
         <CardsPile cards={collection} />
       </div>
 

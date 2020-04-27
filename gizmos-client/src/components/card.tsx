@@ -123,7 +123,7 @@ export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, co
   const frame = color === EnergyType.Any ? multiColorFrame : singleColorFrame(color);
 
   return (
-    <div style={{ height: "100%", width: "100%", margin: "auto" }}>
+    <div className="card">
       <svg viewBox="0 0 136.63 136.63" xmlnsXlink="http://www.w3.org/1999/xlink">
         <defs>
           <clipPath id="clip-path">
@@ -182,7 +182,7 @@ export const MiniCard: React.FC<CardInfo> = ({ type, victoryPoints, level, cardI
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div className="mini-card">
       <svg viewBox="0 0 136.63 36.25" xmlnsXlink="http://www.w3.org/1999/xlink">
         <defs>
           <clipPath id="clip-path">
@@ -232,13 +232,13 @@ export const CardBack: React.FC<{ level: CardLevel }> = ({ level }) => {
   const text = ["0", "I", "II", "III"];
 
   return (
-    <div style={{ height: "100%", width: "100%", margin: "auto" }}>
+    <div className="card">
       <svg viewBox="0 0 136.63 136.63" xmlnsXlink="http://www.w3.org/1999/xlink">
         <path
           d="M9.19,0H127.43a9.19,9.19,0,0,1,9.19,9.19V127.44a9.19,9.19,0,0,1-9.19,9.19H9.19A9.19,9.19,0,0,1,0,127.44V9.19A9.19,9.19,0,0,1,9.19,0"
           style={{ fill: colors[level] }}
         />
-        <text x="10" y="20" style={numbersStyle}>
+        <text x="10" y="35" style={{ ...numbersStyle, fontSize: "xx-large" }}>
           {text[level]}
         </text>
       </svg>
