@@ -1,21 +1,16 @@
 import React from "react";
 import { EnergyType } from "../basicGameElements";
-import { ReactComponent as EnergyImgR } from "../images/energy-red.svg";
-import { ReactComponent as EnergyImgU } from "../images/energy-blue.svg";
-import { ReactComponent as EnergyImgB } from "../images/energy-black.svg";
-import { ReactComponent as EnergyImgY } from "../images/energy-yellow.svg";
-import { ReactComponent as EnergyImgAny } from "../images/energy-any.svg";
 
 export const EnergyOrb: React.FC<{ energyType: EnergyType }> = ({ energyType }) => {
-  const svg =
+  const svgSrc =
     energyType === EnergyType.Red
-      ? EnergyImgR
+      ? "images/energy-red.svg"
       : energyType === EnergyType.Blue
-      ? EnergyImgU
+      ? "images/energy-blue.svg"
       : energyType === EnergyType.Black
-      ? EnergyImgB
+      ? "images/energy-black.svg"
       : energyType === EnergyType.Yellow
-      ? EnergyImgY
-      : EnergyImgAny;
-  return <>{svg}</>;
+      ? "images/energy-yellow.svg"
+      : "images/energy-any.svg";
+  return <img src={svgSrc} />;
 };

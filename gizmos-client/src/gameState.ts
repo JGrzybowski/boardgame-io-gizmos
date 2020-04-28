@@ -1,7 +1,7 @@
 import { CardInfo } from "./cards/card";
 import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
-import { CardCost } from "./cards/cardCost";
+import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
 import { Ctx } from "boardgame.io";
 import { GameContext } from "./gameContext";
@@ -11,7 +11,7 @@ export interface GameState {
   readonly cards: ReadonlyArray<CardInfo>;
   readonly visibleEnergyBallsLimit: number;
   readonly cardToBeBuilt: CardInfo | null;
-  readonly cardToBeBuiltCost: CardCost | null;
+  readonly cardToBeBuiltCost: EnergyTypeDictionary | null;
   readonly visibleCardsLimits: ReadonlyArray<number>;
 
   readonly previousStageName: string | null;
@@ -25,7 +25,7 @@ export interface GameState {
   dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType];
   withCardRemovedFromTable(cardId: number): GameState;
   withDispenserWithout(index: number): [GameState, EnergyType];
-  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: CardCost): GameState;
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
   revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>];
   withCardToBeBuiltCleared(): GameState;
@@ -84,7 +84,7 @@ export const InitialGameState: GameState = {
     return [{ ...this, dispenser }, energy];
   },
 
-  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: CardCost): GameState {
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
     return { ...this, cardToBeBuilt, cardToBeBuiltCost };
   },
 
@@ -108,7 +108,7 @@ export const InitialGameState: GameState = {
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
     if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
 
-    const reducedAmount = this.cardToBeBuiltCost?.amountToPayWithEnergyType(paidFor) - 1;
+    const reducedAmount = this.cardToBeBuiltCost?.get(paidFor) - 1;
     const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, reducedAmount);
 
     return { ...this, cardToBeBuiltCost };
@@ -117,7 +117,7 @@ export const InitialGameState: GameState = {
   withEnergyAddedToCost(paidFor: EnergyType): GameState {
     if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
 
-    const increasedAmount = this.cardToBeBuiltCost?.amountToPayWithEnergyType(paidFor) + 1;
+    const increasedAmount = this.cardToBeBuiltCost?.get(paidFor) + 1;
     const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, increasedAmount);
 
     return { ...this, cardToBeBuiltCost };

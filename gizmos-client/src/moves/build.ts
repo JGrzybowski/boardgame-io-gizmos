@@ -5,7 +5,7 @@ import { GameContext } from "../gameContext";
 import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";
 import { paymentStage } from "../stages/paymentStage";
-import { CardCost } from "../cards/cardCost";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const selectedCard: CardInfo | null = G.findCardOnTheTable(cardId);
@@ -13,7 +13,7 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameSt
 
   const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
     selectedCard,
-    CardCost.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+    EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
   );
   ctx.events?.endPhase?.(paymentStage.name);
   return newGameState;
@@ -27,7 +27,7 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
   const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
     selectedCard,
-    CardCost.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+    EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
   );
 
   ctx.player?.set(newPlayerState);
@@ -43,7 +43,7 @@ function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): Ga
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
   const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
     selectedCard,
-    CardCost.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+    EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
   );
 
   ctx.player?.set(newPlayerState);

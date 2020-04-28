@@ -6,7 +6,7 @@ import { CardStack, MiniCardStack } from "./cardStack";
 import { ActionButton } from "./actionButton";
 import { MiniCard } from "./card";
 import { EnergyCounter } from "./energyCounter";
-import { CardCost } from "../cards/cardCost";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 
 export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles = {} }) => {
   const collection = [
@@ -42,7 +42,7 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
         desctiption="Take a peek at top cards from one of the piles and build or archive one of them."
       />
 
-      <EnergyCounter energyCount={new CardCost(2, 5, 1, 5)} />
+      <EnergyCounter energyCount={new EnergyTypeDictionary(2, 5, 1, 5)} />
     </div>
   );
 };
