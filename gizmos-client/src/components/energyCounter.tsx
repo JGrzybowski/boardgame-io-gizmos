@@ -5,7 +5,7 @@ import { EnergyOrb } from "./energyOrb";
 
 export const EnergyCounter: React.FC<{ energyCount: EnergyTypeDictionary }> = ({ energyCount }) => {
   const numbersStyle = {
-    "font-size": "large",
+    "font-size": "x-large",
     "font-family": "source-code-pro,monospace",
     "font-weight": "bold",
     fill: "black",

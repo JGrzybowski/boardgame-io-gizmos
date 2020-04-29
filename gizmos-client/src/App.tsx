@@ -12,36 +12,31 @@ export const App: React.FC = () => {
     display: "grid",
     height: "100vh",
     gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "30vh 40vh 30vh",
+    gridTemplateRows: "33vh 34vh 33vh",
     gridTemplateAreas: `
-    "op1 op1"
-     "commonArea commonArea" 
-     "localPlayer localPlayer"`,
+    "op1 commonArea"
+    " .  commonArea" 
+    " .  localPlayer"`,
   };
 
   const styles3players = {
     display: "grid",
+    height: "100vh",
     gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "30vh 40vh 30vh",
-    gridTemplateAreas: `"op1 op2"
-    "commonArea commonArea" 
-    "localPlayer localPlayer"`,
+    gridTemplateRows: "33vh 34vh 33vh",
+    gridTemplateAreas: `
+    "op1 commonArea"
+    " .  commonArea" 
+    "op2 localPlayer"`,
   };
 
   const styles4players = {
     display: "grid",
+    height: "100vh",
     gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "30vh 30vh 30vh",
-    gridTemplateAreas: `"op1 op2"
-    "commonArea commonArea" 
-    "op3 localPlayer"`,
-  };
-
-  const styles4players2 = {
-    display: "grid",
-    gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "30vh 30vh 30vh",
-    gridTemplateAreas: `"op1 commonArea"
+    gridTemplateRows: "33vh 34vh 33vh",
+    gridTemplateAreas: `
+    "op1 commonArea"
     "op2 commonArea" 
     "op3 localPlayer"`,
   };
@@ -65,15 +60,15 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="App" style={styles4players2}>
-      <OpponentBar styles={{ gridArea: "op1", alignSelf: "top" }} flipped={true} />
-      <OpponentBar styles={{ gridArea: "op2", alignSelf: "top" }} flipped={true} />
+    <div className="App" style={styles4players}>
+      <OpponentBar styles={{ gridArea: "op1", alignSelf: "top" }} />
+      <OpponentBar styles={{ gridArea: "op2", alignSelf: "top" }} />
+      <OpponentBar styles={{ gridArea: "op3", alignSelf: "bottom" }} />
 
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
         <CardsPile cards={collection} />
       </div>
 
-      <OpponentBar styles={{ gridArea: "op3", alignSelf: "bottom" }} />
       <PlayerBar styles={{ gridArea: "localPlayer" }} />
     </div>
   );

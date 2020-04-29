@@ -21,6 +21,7 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
     <div
       style={{
         ...styles,
+        borderBottom: "1px solid black",
         display: "grid",
         gridTemplateColumns: "repeat(5, minmax(150px, 1fr))",
         columnGap: "5px",
@@ -47,10 +48,7 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
   );
 };
 
-export const OpponentBar: React.FC<{ styles?: React.CSSProperties; flipped?: boolean }> = ({
-  styles = {},
-  flipped = false,
-}) => {
+export const OpponentBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles = {} }) => {
   const collection = [
     new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 7, EnergyType.Red, 7, 2),
     new CardWithFileEffect(2, TriggerType.Build, fileEffect, 4, EnergyType.Red, 7, 2),
@@ -58,23 +56,22 @@ export const OpponentBar: React.FC<{ styles?: React.CSSProperties; flipped?: boo
     new CardWithFileEffect(4, TriggerType.Pick, fileEffect, 1, EnergyType.Red, 7, 2),
   ];
 
-  const flipStyle = flipped ? { transform: "rotate(180deg)" } : {};
-
   return (
     <div
       style={{
         ...styles,
+        borderBottom: "1px solid black",
         display: "grid",
         gridTemplateColumns: "repeat(5, minmax(150px, 1fr))",
         columnGap: "5px",
         justifyItems: "center",
-        alignItems: flipped ? "start" : "end",
+        alignItems: "center",
       }}
     >
-      <MiniCardStack cards={collection} flipped={flipped} />
-      <MiniCardStack cards={collection} flipped={flipped} />
-      <MiniCardStack cards={collection} flipped={flipped} />
-      <MiniCardStack cards={collection} flipped={flipped} />
+      <MiniCardStack cards={collection} />
+      <MiniCardStack cards={collection} />
+      <MiniCardStack cards={collection} />
+      <MiniCardStack cards={collection} />
       <CardStack cards={[collection[0], collection[1]]} />
     </div>
   );
