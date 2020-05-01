@@ -27,12 +27,12 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ actionName, desctipt
     fontSize: "xx-large",
   };
 
-  const descriptionStyle = {
-    margin: "0 4px",
-    "text-align": "justify",
-    gridArea: "text",
-    fontSize: "smaller",
-  };
+  // const descriptionStyle = {
+  //   margin: "0 4px",
+  //   "text-align": "justify",
+  //   gridArea: "text",
+  //   fontSize: "smaller",
+  // };
 
   return (
     <div style={buttonStyle}>

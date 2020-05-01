@@ -12,5 +12,5 @@ export const EnergyOrb: React.FC<{ energyType: EnergyType }> = ({ energyType }) 
       : energyType === EnergyType.Yellow
       ? "images/energy-yellow.svg"
       : "images/energy-any.svg";
-  return <img src={svgSrc} />;
+  return <img src={svgSrc} alt={`energy ${energyType}`} />;
 };

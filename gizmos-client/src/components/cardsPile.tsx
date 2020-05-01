@@ -1,6 +1,7 @@
 import React from "react";
-import { CardInfo, CardLevel } from "../cards/card";
-import { MiniCard, CardBack, Card } from "./card";
+import { CardInfo } from "../cards/card";
+import { Card } from "./card";
+import { CardBack } from "./cardBack";
 
 export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo> }> = ({ cards }) => {
   const flexStyle: React.CSSProperties = {

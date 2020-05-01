@@ -1,44 +1,19 @@
 import React from "react";
 import "./App.css";
 import { PlayerBar } from "./components/playerBar";
-import { OpponentBar } from "./components/playerBar";
 import { CardsPile } from "./components/cardsPile";
 import { TriggerType } from "./cards/card";
 import { CardWithFileEffect, fileEffect } from "./cards/cardWithFileEffect";
 import { EnergyType } from "./basicGameElements";
 
 export const App: React.FC = () => {
-  const styles2players = {
+  const styles1players = {
     display: "grid",
     height: "100vh",
-    gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "33vh 34vh 33vh",
+    gridTemplateColumns: "50vw",
+    gridTemplateRows: "100vh",
     gridTemplateAreas: `
-    "op1 commonArea"
-    " .  commonArea" 
-    " .  localPlayer"`,
-  };
-
-  const styles3players = {
-    display: "grid",
-    height: "100vh",
-    gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "33vh 34vh 33vh",
-    gridTemplateAreas: `
-    "op1 commonArea"
-    " .  commonArea" 
-    "op2 localPlayer"`,
-  };
-
-  const styles4players = {
-    display: "grid",
-    height: "100vh",
-    gridTemplateColumns: "50vw 50vw",
-    gridTemplateRows: "33vh 34vh 33vh",
-    gridTemplateAreas: `
-    "op1 commonArea"
-    "op2 commonArea" 
-    "op3 localPlayer"`,
+    "commonArea localPlayer"`,
   };
 
   const collection = [
@@ -60,11 +35,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="App" style={styles4players}>
-      <OpponentBar styles={{ gridArea: "op1", alignSelf: "top" }} />
-      <OpponentBar styles={{ gridArea: "op2", alignSelf: "top" }} />
-      <OpponentBar styles={{ gridArea: "op3", alignSelf: "bottom" }} />
-
+    <div className="App" style={styles1players}>
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
         <CardsPile cards={collection} />
       </div>
