@@ -1,4 +1,4 @@
-import { CardInfo } from "./cards/card";
+import { CardInfo } from "./cards/cardInfo";
 import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
 import { GameState, InitialGameState } from "./gameState";

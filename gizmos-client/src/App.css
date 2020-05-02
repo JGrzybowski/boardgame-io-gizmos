@@ -1,0 +1,17 @@
+.card {
+    display: grid;
+}
+
+#commonArea .card {
+    width: 19%;
+    margin: 1px;
+}
+
+.card .cardAction {
+    display: none;
+}
+
+.card:hover>.cardAction,
+.cardAction:hover {
+    display: flex;
+}

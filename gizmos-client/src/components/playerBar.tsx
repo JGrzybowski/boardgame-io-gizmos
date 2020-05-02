@@ -1,6 +1,6 @@
 import React from "react";
 import { CardWithFileEffect, fileEffect } from "../cards/cardWithFileEffect";
-import { TriggerType } from "../cards/card";
+import { TriggerType } from "../cards/cardInfo";
 import { EnergyType } from "../basicGameElements";
 import { CardStack, MiniCardStack } from "./cardStack";
 import { ActionButton } from "./actionButton";

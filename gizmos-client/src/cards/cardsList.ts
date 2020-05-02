@@ -1,4 +1,4 @@
-import { CardInfo, TriggerType } from "./card";
+import { CardInfo, TriggerType } from "./cardInfo";
 import { CardWithFileEffect, fileEffect } from "./cardWithFileEffect";
 import { CardWithTakeEnergyEffect } from "./cardWithTakeEnergyEffect";
 import { EnergyType } from "../basicGameElements";

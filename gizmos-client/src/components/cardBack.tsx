@@ -1,5 +1,5 @@
 import React from "react";
-import { CardLevel } from "../cards/card";
+import { CardLevel } from "../cards/cardInfo";
 
 export const CardBack: React.FC<{ level: CardLevel }> = ({ level }) => {
   return (

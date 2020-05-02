@@ -1,4 +1,4 @@
-import { CardInfo } from "./cards/card";
+import { CardInfo } from "./cards/cardInfo";
 import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";

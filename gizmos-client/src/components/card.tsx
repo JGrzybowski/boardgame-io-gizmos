@@ -1,5 +1,5 @@
 import React, { SVGProps } from "react";
-import { CardInfo, TriggerType, CardLevel } from "../cards/card";
+import { CardInfo, TriggerType, CardLevel } from "../cards/cardInfo";
 import { upperFrame, corners, accentBorder, triggerBoxBorder, triggerBox } from "./colorDictionary";
 import { EnergyType } from "../basicGameElements";
 
@@ -8,6 +8,8 @@ const numbersStyle = {
   "font-family": "source-code-pro,monospace",
   "font-weight": "bold",
   fill: "black",
+  // "pointer-events": "none",
+  "user-select": "none",
 };
 
 const energySymbol: React.FC<EnergyType> = (energyType) => {
@@ -131,61 +133,97 @@ const CardImage: React.FC<CardInfo & { viewBoxHeight: string | number }> = ({
   const frame = color === EnergyType.Any ? multiColorFrame : singleColorFrame(color);
 
   return (
-    <div className="card">
-      <svg viewBox={`0 0 136.63 ${viewBoxHeight}`} xmlnsXlink="http://www.w3.org/1999/xlink">
-        <defs>
-          <clipPath id="clip-path">
-            <path
-              fill="none"
-              d="M128.25,120.9h-6.37v5.84H28.67c.28-.55,4.43-9,0-15.75a13,13,0,0,0-4.75-4.25c3.32-5.67,2.4-12.65-1.88-16.66-5.11-4.8-12.32-2.86-12.67-2.76V67.63H0v59.8a9.22,9.22,0,0,0,9.19,9.19H127.44a9.22,9.22,0,0,0,9.19-9.19V67.64h-8.38Z"
-            />
-          </clipPath>
-        </defs>
+    <svg
+      viewBox={`0 0 136.63 ${viewBoxHeight}`}
+      style={{ gridRow: "1/2", gridColumn: "1/2" }}
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+      <defs>
+        <clipPath id="clip-path">
+          <path
+            fill="none"
+            d="M128.25,120.9h-6.37v5.84H28.67c.28-.55,4.43-9,0-15.75a13,13,0,0,0-4.75-4.25c3.32-5.67,2.4-12.65-1.88-16.66-5.11-4.8-12.32-2.86-12.67-2.76V67.63H0v59.8a9.22,9.22,0,0,0,9.19,9.19H127.44a9.22,9.22,0,0,0,9.19-9.19V67.64h-8.38Z"
+          />
+        </clipPath>
+      </defs>
 
-        <path
-          d="M9.19,0H127.43a9.19,9.19,0,0,1,9.19,9.19V127.44a9.19,9.19,0,0,1-9.19,9.19H9.19A9.19,9.19,0,0,1,0,127.44V9.19A9.19,9.19,0,0,1,9.19,0"
-          style={{ fill: colors["frame-general"] }}
-        />
+      <path
+        d="M9.19,0H127.43a9.19,9.19,0,0,1,9.19,9.19V127.44a9.19,9.19,0,0,1-9.19,9.19H9.19A9.19,9.19,0,0,1,0,127.44V9.19A9.19,9.19,0,0,1,9.19,0"
+        style={{ fill: colors["frame-general"] }}
+      />
 
-        {frame}
+      {frame}
 
-        {/* Ilustration */}
-        <path
-          style={{ fill: "#fff" }}
-          d="M12.75,36.25h112V118.5h-6V124l-86.66.66c.38-1.32,2.82-10.41-2.39-16.15a12,12,0,0,0-2.78-2.24c3-6.65,1.72-14.09-3-18.27-4.39-3.91-10-3.46-11.21-3.34Z"
-        />
+      {/* Ilustration */}
+      <path
+        style={{ fill: "#fff" }}
+        d="M12.75,36.25h112V118.5h-6V124l-86.66.66c.38-1.32,2.82-10.41-2.39-16.15a12,12,0,0,0-2.78-2.24c3-6.65,1.72-14.09-3-18.27-4.39-3.91-10-3.46-11.21-3.34Z"
+      />
 
-        {/* Color Symbol */}
-        {energySymbol(color)}
-        {costCircle(cost)}
+      {/* Color Symbol */}
+      {energySymbol(color)}
+      {costCircle(cost)}
 
-        {/* Trigger Box */}
-        <polygon
-          points="12.75 32.5 68.75 32.5 74.25 20.5 59.5 5.75 12.75 5.75 12.75 32.5"
-          style={{ fill: colors["trigger-filter-box"], stroke: colors["trigger-filter-box-border"] }}
-          stroke-miterlimit="10"
-          stroke-width="0.75"
-        />
+      {/* Trigger Box */}
+      <polygon
+        points="12.75 32.5 68.75 32.5 74.25 20.5 59.5 5.75 12.75 5.75 12.75 32.5"
+        style={{ fill: colors["trigger-filter-box"], stroke: colors["trigger-filter-box-border"] }}
+        stroke-miterlimit="10"
+        stroke-width="0.75"
+      />
 
-        {/* Trigger Corners */}
-        <path
-          style={{ fill: level === 3 ? corners.brown : corners.gray }}
-          d="M31.5,8a17.88,17.88,0,0,0-1.89-8H9.19A9.2,9.2,0,0,0,0,9.19V26.93a26.17,26.17,0,0,0,8.25,1.32C21.09,28.25,31.5,19.18,31.5,8Z"
-        />
-        {triggerIcon(type)}
+      {/* Trigger Corners */}
+      <path
+        style={{ fill: level === 3 ? corners.brown : corners.gray }}
+        d="M31.5,8a17.88,17.88,0,0,0-1.89-8H9.19A9.2,9.2,0,0,0,0,9.19V26.93a26.17,26.17,0,0,0,8.25,1.32C21.09,28.25,31.5,19.18,31.5,8Z"
+      />
+      {triggerIcon(type)}
 
-        {victoryPointsCount({ level, victoryPoints })}
+      {victoryPointsCount({ level, victoryPoints })}
 
-        {cardIdCount(cardId)}
-      </svg>
-    </div>
+      {cardIdCount(cardId)}
+    </svg>
   );
 };
 
 export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, cost, cardId, effect }) => (
-  <CardImage viewBoxHeight="136.83" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
+  <div className="card">
+    <CardImage viewBoxHeight="136.83" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
+    <div
+      className="cardAction"
+      style={{
+        height: "100%",
+        width: "100%",
+        gridRow: "1/2",
+        gridColumn: "1/2",
+        justifyContent: "center",
+        alignContent: "center",
+        background: "rgba(1,1,1,0.4)",
+      }}
+    >
+      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" />
+      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" />
+    </div>
+  </div>
 );
 
 export const MiniCard: React.FC<CardInfo> = ({ type, victoryPoints, level, color, cost, cardId, effect }) => (
-  <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
+  <div className="card">
+    <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
+    <div
+      className="cardAction"
+      style={{
+        height: "100%",
+        width: "100%",
+        gridRow: "1/2",
+        gridColumn: "1/2",
+        justifyContent: "center",
+        alignContent: "center",
+        background: "rgba(1,1,1,0.4)",
+      }}
+    >
+      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" />
+      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" />
+    </div>
+  </div>
 );

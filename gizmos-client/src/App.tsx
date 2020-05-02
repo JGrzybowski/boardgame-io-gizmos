@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { PlayerBar } from "./components/playerBar";
 import { CardsPile } from "./components/cardsPile";
-import { TriggerType } from "./cards/card";
+import { TriggerType } from "./cards/cardInfo";
 import { CardWithFileEffect, fileEffect } from "./cards/cardWithFileEffect";
 import { EnergyType } from "./basicGameElements";
 import { Local } from "boardgame.io/multiplayer";
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     gridTemplateRows: "50vh 50vh",
     gridTemplateAreas: `
     "commonArea localPlayer"
-    "commonArea actions"`,
+    "commonArea actionzs"`,
   };
 
   const commonAreaGridStyle: React.CSSProperties = {

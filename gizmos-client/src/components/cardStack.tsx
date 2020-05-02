@@ -1,5 +1,5 @@
 import React from "react";
-import { CardInfo } from "../cards/card";
+import { CardInfo } from "../cards/cardInfo";
 import { Card, MiniCard } from "./card";
 
 export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boolean }> = ({ cards, flipped }) => {

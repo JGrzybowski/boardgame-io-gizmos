@@ -1,5 +1,5 @@
 import { EnergyType } from "./basicGameElements";
-import { CardInfo } from "./cards/card";
+import { CardInfo } from "./cards/cardInfo";
 import { InitialCard } from "./cards/cardsList";
 
 const initialEnergyStorageCapacity = 5;
