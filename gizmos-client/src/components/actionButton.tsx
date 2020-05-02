@@ -36,7 +36,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ actionName, desctipt
 
   return (
     <div style={buttonStyle}>
-      <Logo style={{ marginLeft: "10px", width: "100%", placeSelf: "center", gridArea: "icon-area" }} />
+      <div style={{ marginLeft: "10px", width: "100%", placeSelf: "center", gridArea: "icon-area" }} />
       <h1 style={headerStyle}>{actionName}</h1>
       {/* <p style={descriptionStyle}>{desctiption}</p> */}
     </div>

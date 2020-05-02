@@ -34,14 +34,6 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
       <MiniCardStack cards={collection} />
       <CardStack cards={[collection[0], collection[1]]} />
 
-      <ActionButton actionName="File" desctiption="Take a card and put it into archive." />
-      <ActionButton actionName="Pick" desctiption="Take an energy from the rail." />
-      <ActionButton actionName="Build" desctiption="Spend energy to build a machine." />
-      <ActionButton
-        actionName="Research"
-        desctiption="Take a peek at top cards from one of the piles and build or archive one of them."
-      />
-
       <EnergyCounter energyCount={new EnergyTypeDictionary(2, 5, 1, 5)} />
     </div>
   );
