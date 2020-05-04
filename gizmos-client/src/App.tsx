@@ -5,10 +5,10 @@ import { CardsPile } from "./components/cardsPile";
 import { TriggerType } from "./cards/cardInfo";
 import { CardWithFileEffect, fileEffect } from "./cards/cardWithFileEffect";
 import { EnergyType } from "./basicGameElements";
-import { Local } from "boardgame.io/multiplayer";
-import { ActionButton } from "./components/actionButton";
-import Gizmos from "./game";
 import { Client } from "boardgame.io/client";
+import Gizmos from "./game";
+import { Local } from "boardgame.io/multiplayer";
+import { GizmosBoard } from "./components/gizmosBoard";
 
 const collection = [
   new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 1, EnergyType.Blue, 1, 1),
@@ -22,54 +22,20 @@ const collection = [
   new CardWithFileEffect(82, TriggerType.Build, fileEffect, 4, EnergyType.Yellow, 6, 3),
 ];
 
-const client = new Client({
+const GizmosClient = new Client({
   game: Gizmos,
   gameID: "default",
+  board: GizmosBoard,
   playerId: "Player",
-  debug: false,
+  // debug: false,
   numPlayers: 1,
   multiplayer: Local(),
 });
-client.start();
 
 export const App: React.FC = () => {
-  const styles1players = {
-    display: "grid",
-    height: "100vh",
-    gridTemplateColumns: "50vw",
-    gridTemplateRows: "50vh 50vh",
-    gridTemplateAreas: `
-    "commonArea localPlayer"
-    "commonArea actionzs"`,
-  };
-
-  const commonAreaGridStyle: React.CSSProperties = {
-    display: "grid",
-    gridTemplateRows: "33% 34% 33%",
-    margin: "40px",
-  };
-
   return (
-    <div className="App" style={styles1players}>
-      <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
-        <CardsPile cards={collection} />
-      </div>
-
-      <PlayerBar styles={{ gridArea: "localPlayer" }} />
-
-      <div style={{ gridArea: "actions" }}>
-        {/* <button onClick="selectCardForArchive">File</button> */}
-        {/* <button onClick="selectOrbToPick">File</button> */}
-        {/* <button onClick="selectCardToPick">File</button> */}
-        {/* <button onClick="selectPileToResearch">File</button> */}
-        {/* <ActionButton actionName="File"   desctiption="Take a card and put it into archive." />
-        <ActionButton actionName="Pick"   desctiption="Take an energy from the rail." />
-        <ActionButton actionName="Build"  desctiption="Spend energy to build a machine." />
-        <ActionButton
-          actionName="Research"
-          desctiption="Take a peek at top cards from one of the piles and build or archive one of them."
-        /> */}
-      </div>
+    <div className="App">
+      <GizmosClient playerID="0" />
     </div>
   );
 };
