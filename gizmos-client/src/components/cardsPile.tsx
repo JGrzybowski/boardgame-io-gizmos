@@ -12,9 +12,18 @@ export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo> }> = ({ cards 
   };
 
   const renderCard = (c: CardInfo): JSX.Element => <Card key={c.cardId} {...c} />;
-  const level1Cards = cards.filter((c) => c.level === 1).map(renderCard);
-  const level2Cards = cards.filter((c) => c.level === 2).map(renderCard);
-  const level3Cards = cards.filter((c) => c.level === 3).map(renderCard);
+  const level1Cards = cards
+    .filter((c: CardInfo) => c.level === 1)
+    .slice(0, 4)
+    .map(renderCard);
+  const level2Cards = cards
+    .filter((c: CardInfo) => c.level === 2)
+    .slice(0, 3)
+    .map(renderCard);
+  const level3Cards = cards
+    .filter((c: CardInfo) => c.level === 3)
+    .slice(0, 2)
+    .map(renderCard);
 
   return (
     <>
