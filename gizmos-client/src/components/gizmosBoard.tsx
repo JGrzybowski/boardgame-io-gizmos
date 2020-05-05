@@ -1,7 +1,6 @@
 import React from "react";
 import { CardsPile } from "./cardsPile";
 import { PlayerBar } from "./playerBar";
-import { Client } from "boardgame.io/client";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyOrb } from "./energyOrb";

@@ -4,10 +4,10 @@ import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { EnergyOrb } from "./energyOrb";
 
 export const EnergyCounter: React.FC<{ energyCount: EnergyTypeDictionary }> = ({ energyCount }) => {
-  const numbersStyle = {
-    "font-size": "x-large",
-    "font-family": "source-code-pro,monospace",
-    "font-weight": "bold",
+  const numbersStyle: React.CSSProperties = {
+    fontSize: "x-large",
+    fontFamily: "source-code-pro,monospace",
+    fontWeight: "bold",
     fill: "black",
   };
 

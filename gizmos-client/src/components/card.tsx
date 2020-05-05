@@ -1,15 +1,15 @@
-import React, { SVGProps } from "react";
-import { CardInfo, TriggerType, CardLevel } from "../cards/cardInfo";
+import React from "react";
+import { CardInfo, TriggerType } from "../cards/cardInfo";
 import { upperFrame, corners, accentBorder, triggerBoxBorder, triggerBox } from "./colorDictionary";
 import { EnergyType } from "../basicGameElements";
 
-const numbersStyle = {
-  "font-size": "large",
-  "font-family": "source-code-pro,monospace",
-  "font-weight": "bold",
+const numbersStyle: React.CSSProperties = {
+  fontSize: "large",
+  fontFamily: "source-code-pro,monospace",
+  fontWeight: "bold",
   fill: "black",
   // "pointer-events": "none",
-  "user-select": "none",
+  userSelect: "none",
 };
 
 const energySymbol: React.FC<EnergyType> = (energyType) => {
@@ -53,8 +53,8 @@ const victoryPointsCount: React.FC<{ level: number; victoryPoints: number }> = (
 
 const cardIdCount: React.FC<number> = (cardId) => {
   const cardIdStyle = {
-    "font-size": "0.4em",
-    "font-family": "source-code-pro,monospace",
+    fontSize: "0.4em",
+    fontFamily: "source-code-pro,monospace",
     fill: "gray",
   };
   return (
@@ -168,8 +168,8 @@ const CardImage: React.FC<CardInfo & { viewBoxHeight: string | number }> = ({
       <polygon
         points="12.75 32.5 68.75 32.5 74.25 20.5 59.5 5.75 12.75 5.75 12.75 32.5"
         style={{ fill: colors["trigger-filter-box"], stroke: colors["trigger-filter-box-border"] }}
-        stroke-miterlimit="10"
-        stroke-width="0.75"
+        strokeMiterlimit="10"
+        strokeWidth="0.75"
       />
 
       {/* Trigger Corners */}
@@ -201,8 +201,8 @@ export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, co
         background: "rgba(1,1,1,0.4)",
       }}
     >
-      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" />
-      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" />
+      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" alt="File Action Button" />
+      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" alt="Build Action Button" />
     </div>
   </div>
 );
@@ -222,8 +222,8 @@ export const MiniCard: React.FC<CardInfo> = ({ type, victoryPoints, level, color
         background: "rgba(1,1,1,0.4)",
       }}
     >
-      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" />
-      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" />
+      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" alt="File Action Button" />
+      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" alt="Build Action Button" />
     </div>
   </div>
 );
