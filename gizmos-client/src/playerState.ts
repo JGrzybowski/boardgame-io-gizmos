@@ -1,6 +1,7 @@
 import { EnergyType } from "./basicGameElements";
 import { CardInfo } from "./cards/cardInfo";
 import { InitialCard } from "./cards/cardsList";
+import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 
 const initialEnergyStorageCapacity = 5;
 const initialArchiveLimit = 1;
@@ -10,8 +11,8 @@ export class PlayerState {
   constructor(public readonly playerId: number | string) {}
   readonly victoryPoints = 0;
 
-  readonly energyStorage: ReadonlyArray<EnergyType> = [];
-  readonlyarchivesLimit: ReadonlyArray<CardInfo> = [];
+  readonly energyStorage: EnergyTypeDictionary = new EnergyTypeDictionary();
+  readonly archivesLimit: ReadonlyArray<CardInfo> = [];
 
   readonly energyStorageCapacity: number = initialEnergyStorageCapacity;
   readonly archiveLimit: number = initialArchiveLimit;
@@ -37,7 +38,13 @@ export class PlayerState {
   }
 
   canAddEnergy(): boolean {
-    return this.energyStorage.length >= this.energyStorageCapacity;
+    const sum =
+      this.energyStorage.R +
+      this.energyStorage.U +
+      this.energyStorage.B +
+      this.energyStorage.Y +
+      this.energyStorage.Any;
+    return sum >= this.energyStorageCapacity;
   }
 
   findCardInTheArchive(cardId: number): CardInfo | null {
@@ -56,21 +63,11 @@ export class PlayerState {
   }
 
   hasDeclaredEnergy(energy: EnergyType): boolean {
-    return this.energyStorage.find((e) => e === energy) !== undefined;
+    return this.energyStorage.get(energy) > 0;
   }
 
-  energyStorageWith(energy: EnergyType): ReadonlyArray<EnergyType> {
-    return [...this.energyStorage, energy];
-  }
-
-  energyStorageWithout(energySet: ReadonlyArray<EnergyType>): ReadonlyArray<EnergyType> {
-    const removeOneEnergy = (storage: ReadonlyArray<EnergyType>, energy: EnergyType): ReadonlyArray<EnergyType> => {
-      const i = storage.indexOf(energy);
-      return storage.filter((e, idx) => idx !== i);
-    };
-
-    const energyStorage = this.energyStorage.reduce(removeOneEnergy, this.energyStorage);
-    return energyStorage;
+  energyStorageWith(energy: EnergyType): EnergyTypeDictionary {
+    return this.energyStorage.withAmountToPayWithEnergyTypeSetTo(energy, this.energyStorage.get(energy) + 1);
   }
 
   private archiveWith(card: CardInfo): ReadonlyArray<CardInfo> {
@@ -90,7 +87,7 @@ export class PlayerState {
   }
 
   withAddedEnergy(energy: EnergyType): PlayerState {
-    const energyStorage = [...this.energyStorage, energy];
+    const energyStorage = this.energyStorageWith(energy);
     return { ...this, energyStorage };
   }
 
@@ -122,8 +119,8 @@ export class PlayerState {
   }
 
   withRemovedEnergy(payment: EnergyType): PlayerState {
-    const skippedIndex = this.energyStorage.indexOf(payment);
-    const energyStorage = this.energyStorage.filter((e, i) => i === skippedIndex);
+    const newValue = this.energyStorage.get(payment) - 1;
+    const energyStorage = this.energyStorage.withAmountToPayWithEnergyTypeSetTo(payment, newValue);
     return { ...this, energyStorage };
   }
 }

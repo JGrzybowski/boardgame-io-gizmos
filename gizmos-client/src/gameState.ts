@@ -18,8 +18,6 @@ export interface GameState {
   readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
 
-  readonly players: { [playerId: string]: PlayerState };
-
   findCardOnTheTable(cardId: number): CardInfo | null;
   cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
@@ -51,8 +49,6 @@ export const InitialGameState: GameState = {
   previousStageName: null,
   playerStateBeforeBuild: null,
   gameStateBeforeBuild: null,
-
-  players: {},
 
   findCardOnTheTable(cardId: number): CardInfo | null {
     const card = this.cards.find((c) => c.cardId === cardId);

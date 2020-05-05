@@ -9,8 +9,9 @@ import { EnergyType } from "../basicGameElements";
 interface BoardProps {
   G: GameState;
   ctx: GameContext;
-  moves: unknown;
+  moves: any;
   events: unknown; //An object containing functions to dispatch various game events like endTurn and endPhase.
+  plugins: any;
   reset: () => void;
   undo: () => void; //Function that undoes the last move.
   redo: () => void; //Function that redoes the previously undone move.
@@ -22,25 +23,13 @@ interface BoardProps {
 }
 
 export const GizmosBoard: React.FC<BoardProps> = (props) => {
-  const { G, ctx, moves, events } = props;
+  const { G, ctx, moves, events, plugins } = props;
 
   const commonAreaGridStyle: React.CSSProperties = {
     display: "grid",
     gridTemplateRows: "33% 34% 33%",
     margin: "40px",
   };
-
-  //   const collection = [
-  //     new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 1, EnergyType.Blue, 1, 1),
-  //     new CardWithFileEffect(2, TriggerType.Build, fileEffect, 1, EnergyType.Yellow, 1, 1),
-  //     new CardWithFileEffect(2, TriggerType.Upgrade, fileEffect, 1, EnergyType.Black, 1, 1),
-  //     new CardWithFileEffect(3, TriggerType.Archive, fileEffect, 2, EnergyType.Red, 1, 1),
-  //     new CardWithFileEffect(42, TriggerType.Converter, fileEffect, 7, EnergyType.Blue, 2, 2),
-  //     new CardWithFileEffect(21, TriggerType.Archive, fileEffect, 4, EnergyType.Yellow, 3, 2),
-  //     new CardWithFileEffect(23, TriggerType.Archive, fileEffect, 2, EnergyType.Red, 2, 2),
-  //     new CardWithFileEffect(71, TriggerType.Converter, fileEffect, 7, EnergyType.Blue, 4, 3),
-  //     new CardWithFileEffect(82, TriggerType.Build, fileEffect, 4, EnergyType.Yellow, 6, 3),
-  //   ];
 
   const styles1players = {
     display: "grid",
@@ -54,11 +43,12 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
 
   const energyRail = G.dispenser
     .slice(0, G.visibleEnergyBallsLimit)
-    .map((energy: EnergyType) => <EnergyOrb energyType={energy} />);
+    .map((energy, index) => (
+      <EnergyOrb energyType={energy} key={`${index}${energy}`} OnClick={() => moves.pickAction(index)} />
+    ));
 
-  console.log(G);
-
-  const playerState = G.players[ctx.currentPlayer];
+  const playerState = plugins.player.data.players[ctx.currentPlayer];
+  console.log(plugins.player.data.players[ctx.currentPlayer]);
 
   return (
     <div style={styles1players}>

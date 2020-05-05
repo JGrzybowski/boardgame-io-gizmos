@@ -17,7 +17,7 @@ export const PlayerBar: React.FC<{ style?: React.CSSProperties; playerState: Pla
     new CardWithFileEffect(2, TriggerType.Build, fileEffect, 4, EnergyType.Yellow, 4, 3),
     new CardWithFileEffect(3, TriggerType.Archive, fileEffect, 2, EnergyType.Red, 3, 1),
     new CardWithFileEffect(4, TriggerType.Pick, fileEffect, 1, EnergyType.Black, 6, 1),
-    new CardWithFileEffect(4, TriggerType.Upgrade, fileEffect, 0, EnergyType.Any, 1, 3),
+    new CardWithFileEffect(7, TriggerType.Upgrade, fileEffect, 0, EnergyType.Any, 1, 3),
   ];
 
   return (
@@ -38,7 +38,7 @@ export const PlayerBar: React.FC<{ style?: React.CSSProperties; playerState: Pla
       <MiniCardStack cards={collection} />
       <CardStack cards={[...(playerState?.archive ?? [])]} />
 
-      <EnergyCounter energyCount={new EnergyTypeDictionary(2, 5, 1, 5)} />
+      <EnergyCounter energyCount={playerState.energyStorage} />
     </div>
   );
 };

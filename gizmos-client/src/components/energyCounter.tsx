@@ -14,7 +14,7 @@ export const EnergyCounter: React.FC<{ energyCount: EnergyTypeDictionary }> = ({
   const counters = Object.values(EnergyType)
     .filter((et) => et !== EnergyType.Any)
     .map((e) => (
-      <div style={{ ...numbersStyle, margin: "3px", flexGrow: 1 }}>
+      <div key={e} style={{ ...numbersStyle, margin: "3px", flexGrow: 1 }}>
         <EnergyOrb energyType={e} /> {energyCount.get(e)}
       </div>
     ));
