@@ -4,6 +4,8 @@ import { PlayerBar } from "./playerBar";
 import { Client } from "boardgame.io/client";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
+import { EnergyOrb } from "./energyOrb";
+import { EnergyType } from "../basicGameElements";
 
 interface BoardProps {
   G: GameState;
@@ -45,16 +47,24 @@ export const GizmosBoard: React.FC<BoardProps> = ({ G, ctx, moves, events }) => 
     gridTemplateColumns: "50vw",
     gridTemplateRows: "50vh 50vh",
     gridTemplateAreas: `
-        "commonArea ."
+        "commonArea energy"
         "commonArea localPlayer"`,
   };
+
+  const energyRail = G.dispenser
+    .slice(0, G.visibleEnergyBallsLimit)
+    .map((energy: EnergyType) => <EnergyOrb energyType={energy} />);
+
+  console.log(ctx);
+  const playerState = ctx.player?.get();
 
   return (
     <div style={styles1players}>
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
         <CardsPile cards={G.cards} />
       </div>
-      <PlayerBar styles={{ gridArea: "localPlayer" }} />
+      <div style={{ display: "flex", flexWrap: "wrap", gridArea: "energy" }}>{energyRail}</div>
+      <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} />
     </div>
   );
 };

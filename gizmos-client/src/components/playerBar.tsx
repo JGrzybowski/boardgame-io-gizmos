@@ -6,8 +6,12 @@ import { CardStack, MiniCardStack } from "./cardStack";
 import { ActionButton } from "./actionButton";
 import { EnergyCounter } from "./energyCounter";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
+import { PlayerState } from "../playerState";
 
-export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles = {} }) => {
+export const PlayerBar: React.FC<{ style?: React.CSSProperties; playerState: PlayerState }> = ({
+  style = {},
+  playerState,
+}) => {
   const collection = [
     new CardWithFileEffect(1, TriggerType.Converter, fileEffect, 7, EnergyType.Blue, 2, 2),
     new CardWithFileEffect(2, TriggerType.Build, fileEffect, 4, EnergyType.Yellow, 4, 3),
@@ -19,7 +23,7 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
   return (
     <div
       style={{
-        ...styles,
+        ...style,
         borderBottom: "1px solid black",
         display: "grid",
         gridTemplateColumns: "repeat(5, minmax(150px, 1fr))",
@@ -32,7 +36,7 @@ export const PlayerBar: React.FC<{ styles?: React.CSSProperties }> = ({ styles =
       <MiniCardStack cards={collection} />
       <MiniCardStack cards={collection} />
       <MiniCardStack cards={collection} />
-      <CardStack cards={[collection[0], collection[1]]} />
+      <CardStack cards={[...(playerState?.archive ?? [])]} />
 
       <EnergyCounter energyCount={new EnergyTypeDictionary(2, 5, 1, 5)} />
     </div>

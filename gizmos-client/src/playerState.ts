@@ -7,7 +7,7 @@ const initialArchiveLimit = 1;
 const initialResearchLimit = 3;
 
 export class PlayerState {
-  constructor(public readonly playerId: string) {}
+  constructor(public readonly playerId: number | string) {}
   victoryPoints = 0;
 
   energyStorage: ReadonlyArray<EnergyType> = [];

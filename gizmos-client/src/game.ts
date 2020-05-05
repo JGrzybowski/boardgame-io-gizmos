@@ -8,6 +8,7 @@ import { actionStage } from "./stages/actionStage";
 import { activationStage } from "./stages/activationStage";
 import { paymentStage } from "./stages/paymentStage";
 import { researchStage } from "./stages/researchStage";
+import { EnergyType } from "./basicGameElements";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
@@ -27,11 +28,13 @@ const Gizmos: Game<GameState, GameContext> = {
     };
 
     const shuffledCards: ReadonlyArray<CardInfo> = ctx.random?.Shuffle([...G.cards]) ?? [];
-    G = { ...G, cards: shuffledCards };
+    const shuffledDispenser: ReadonlyArray<EnergyType> = ctx.random?.Shuffle([...G.dispenser]) ?? [];
+    G = { ...G, cards: shuffledCards, dispenser: shuffledDispenser };
 
     return G;
   },
-  plugins: [PluginPlayer],
+
+  plugins: [PluginPlayer({ setup: (playerId) => new PlayerState(playerId) })],
 
   turn: {
     stages: {
