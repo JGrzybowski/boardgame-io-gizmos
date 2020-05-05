@@ -22,14 +22,11 @@ const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
   setup: (ctx) => {
-    let G = {
-      ...InitialGameState,
-      playerSetup: (playerId: string): PlayerState => new PlayerState(playerId),
-    };
-
+    let G = { ...InitialGameState };
+    const players = { "0": new PlayerState("0") };
     const shuffledCards: ReadonlyArray<CardInfo> = ctx.random?.Shuffle([...G.cards]) ?? [];
     const shuffledDispenser: ReadonlyArray<EnergyType> = ctx.random?.Shuffle([...G.dispenser]) ?? [];
-    G = { ...G, cards: shuffledCards, dispenser: shuffledDispenser };
+    G = { ...G, cards: shuffledCards, dispenser: shuffledDispenser, players };
 
     return G;
   },

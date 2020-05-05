@@ -8,23 +8,23 @@ const initialResearchLimit = 3;
 
 export class PlayerState {
   constructor(public readonly playerId: number | string) {}
-  victoryPoints = 0;
+  readonly victoryPoints = 0;
 
-  energyStorage: ReadonlyArray<EnergyType> = [];
-  archivesLimit: ReadonlyArray<CardInfo> = [];
+  readonly energyStorage: ReadonlyArray<EnergyType> = [];
+  readonlyarchivesLimit: ReadonlyArray<CardInfo> = [];
 
-  energyStorageCapacity: number = initialEnergyStorageCapacity;
-  archiveLimit: number = initialArchiveLimit;
-  researchLimit: number = initialResearchLimit;
+  readonly energyStorageCapacity: number = initialEnergyStorageCapacity;
+  readonly archiveLimit: number = initialArchiveLimit;
+  readonly researchLimit: number = initialResearchLimit;
 
-  machines: ReadonlyArray<CardInfo> = [InitialCard];
-  archive: ReadonlyArray<CardInfo> = [];
-  researched: ReadonlyArray<CardInfo> = [];
+  readonly machines: ReadonlyArray<CardInfo> = [InitialCard];
+  readonly archive: ReadonlyArray<CardInfo> = [];
+  readonly researched: ReadonlyArray<CardInfo> = [];
 
-  activeCards: ReadonlyArray<number> = [];
+  readonly activeCards: ReadonlyArray<number> = [];
 
-  isArchivingBlocked = false;
-  isResearchBlocked = false;
+  readonly isArchivingBlocked = false;
+  readonly isResearchBlocked = false;
 
   canArchiveAnotherCard(): boolean {
     if (this.isArchivingBlocked) return false;

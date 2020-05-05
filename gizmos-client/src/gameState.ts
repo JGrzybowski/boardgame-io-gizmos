@@ -3,7 +3,7 @@ import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
-import { Ctx } from "boardgame.io";
+import { Ctx, PlayerID } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
 export interface GameState {
@@ -17,6 +17,8 @@ export interface GameState {
   readonly previousStageName: string | null;
   readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
+
+  readonly players: { [playerId: string]: PlayerState };
 
   findCardOnTheTable(cardId: number): CardInfo | null;
   cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
@@ -49,6 +51,8 @@ export const InitialGameState: GameState = {
   previousStageName: null,
   playerStateBeforeBuild: null,
   gameStateBeforeBuild: null,
+
+  players: {},
 
   findCardOnTheTable(cardId: number): CardInfo | null {
     const card = this.cards.find((c) => c.cardId === cardId);

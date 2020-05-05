@@ -21,7 +21,9 @@ interface BoardProps {
   //gameMetadata: //An object containing the players that have joined the game from a room.
 }
 
-export const GizmosBoard: React.FC<BoardProps> = ({ G, ctx, moves, events }) => {
+export const GizmosBoard: React.FC<BoardProps> = (props) => {
+  const { G, ctx, moves, events } = props;
+
   const commonAreaGridStyle: React.CSSProperties = {
     display: "grid",
     gridTemplateRows: "33% 34% 33%",
@@ -54,8 +56,9 @@ export const GizmosBoard: React.FC<BoardProps> = ({ G, ctx, moves, events }) => 
     .slice(0, G.visibleEnergyBallsLimit)
     .map((energy: EnergyType) => <EnergyOrb energyType={energy} />);
 
-  console.log(ctx);
-  const playerState = ctx.player?.get();
+  console.log(G);
+
+  const playerState = G.players[ctx.currentPlayer];
 
   return (
     <div style={styles1players}>
