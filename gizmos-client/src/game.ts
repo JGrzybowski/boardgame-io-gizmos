@@ -20,11 +20,18 @@ function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
 const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
-  setup: () => ({
-    ...InitialGameState,
-    playerSetup: (playerId: string): PlayerState => new PlayerState(playerId),
-    plugins: [PluginPlayer],
-  }),
+  setup: (ctx) => {
+    let G = {
+      ...InitialGameState,
+      playerSetup: (playerId: string): PlayerState => new PlayerState(playerId),
+    };
+
+    const shuffledCards: ReadonlyArray<CardInfo> = ctx.random?.Shuffle([...G.cards]) ?? [];
+    G = { ...G, cards: shuffledCards };
+
+    return G;
+  },
+  plugins: [PluginPlayer],
 
   turn: {
     stages: {
