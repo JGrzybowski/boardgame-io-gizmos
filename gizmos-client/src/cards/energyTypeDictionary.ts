@@ -29,18 +29,15 @@ export class EnergyTypeDictionary {
   }
 
   withAmountToPayWithEnergyTypeSetTo(energyType: EnergyType, amount: number): EnergyTypeDictionary {
-    switch (energyType) {
-      case EnergyType.Red:
-        return { ...this, R: amount };
-      case EnergyType.Blue:
-        return { ...this, U: amount };
-      case EnergyType.Black:
-        return { ...this, B: amount };
-      case EnergyType.Yellow:
-        return { ...this, Y: amount };
-      case EnergyType.Any:
-        return { ...this, Any: amount };
-    }
+    let data = new EnergyTypeDictionary();
+
+    if (energyType === EnergyType.Red) data = { ...this, R: amount };
+    if (energyType === EnergyType.Blue) data = { ...this, U: amount };
+    if (energyType === EnergyType.Black) data = { ...this, B: amount };
+    if (energyType === EnergyType.Yellow) data = { ...this, Y: amount };
+    if (energyType === EnergyType.Any) data = { ...this, Any: amount };
+
+    return new EnergyTypeDictionary(data.R, data.U, data.B, data.Y, data.Any);
   }
 
   add(anotherCost: EnergyTypeDictionary): EnergyTypeDictionary {
