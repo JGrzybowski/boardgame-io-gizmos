@@ -36,6 +36,10 @@ const Gizmos: Game<GameState, GameContext> = {
   plugins: [PluginPlayer({ setup: (playerId) => PlayerState.WithId(playerId) })],
 
   turn: {
+    onBegin: (G, ctx) => {
+      ctx.events?.setStage?.(actionStage.name);
+      return G;
+    },
     stages: {
       [actionStage.name]: actionStage,
       [paymentStage.name]: paymentStage,
