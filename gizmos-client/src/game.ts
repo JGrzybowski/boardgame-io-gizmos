@@ -33,7 +33,7 @@ const Gizmos: Game<GameState, GameContext> = {
     return G;
   },
 
-  plugins: [PluginPlayer({ setup: (playerId) => new PlayerState(playerId) })],
+  plugins: [PluginPlayer({ setup: (playerId) => PlayerState.WithId(playerId) })],
 
   turn: {
     stages: {
