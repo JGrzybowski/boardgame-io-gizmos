@@ -23,10 +23,9 @@ const Gizmos: Game<GameState, GameContext> = {
 
   setup: (ctx) => {
     let G = { ...InitialGameState };
+
     console.log(ctx.events);
-    if (ctx.events?.setStage) {
-      ctx.events?.setStage(actionStage.name);
-    }
+    ctx.events?.setStage?.(actionStage.name);
     const shuffledCards: ReadonlyArray<CardInfo> = ctx.random?.Shuffle([...G.cards]) ?? [];
     const shuffledDispenser: ReadonlyArray<EnergyType> = ctx.random?.Shuffle([...G.dispenser]) ?? [];
     G = { ...G, cards: shuffledCards, dispenser: shuffledDispenser };
@@ -38,10 +37,10 @@ const Gizmos: Game<GameState, GameContext> = {
 
   turn: {
     stages: {
-      actionStage,
-      paymentStage,
-      researchStage,
-      activationStage,
+      [actionStage.name]: actionStage,
+      [paymentStage.name]: paymentStage,
+      [researchStage.name]: researchStage,
+      [activationStage.name]: activationStage,
     },
   },
 

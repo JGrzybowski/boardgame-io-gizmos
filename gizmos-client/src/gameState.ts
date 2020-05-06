@@ -3,7 +3,7 @@ import { EnergyType, initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
-import { Ctx, PlayerID } from "boardgame.io";
+import { Ctx } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
 export interface GameState {

@@ -44,7 +44,7 @@ export class PlayerState {
       this.energyStorage.B +
       this.energyStorage.Y +
       this.energyStorage.Any;
-    return sum >= this.energyStorageCapacity;
+    return sum < this.energyStorageCapacity;
   }
 
   findCardInTheArchive(cardId: number): CardInfo | null {

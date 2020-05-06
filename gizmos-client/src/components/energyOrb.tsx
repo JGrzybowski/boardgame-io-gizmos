@@ -1,7 +1,10 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { EnergyType } from "../basicGameElements";
 
-export const EnergyOrb: React.FC<{ energyType: EnergyType; OnClick?: () => void }> = ({ energyType, OnClick }) => {
+export const EnergyOrb: React.FC<{ energyType: EnergyType; OnClick?: MouseEventHandler<HTMLImageElement> }> = ({
+  energyType,
+  OnClick,
+}) => {
   const svgSrc =
     energyType === EnergyType.Red
       ? "images/energy-red.svg"
