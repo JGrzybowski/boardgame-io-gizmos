@@ -97,7 +97,8 @@ export const InitialGameState: GameState = {
     const revealedCards: ReadonlyArray<CardInfo> = this.cards
       .filter((c) => c.level === cardLevel)
       .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel] + researchLimit);
-    const cards: ReadonlyArray<CardInfo> = this.cards.filter((c) => revealedCards.find((r) => c.cardId === r.cardId));
+    const revealedIds = revealedCards.map((c) => c.cardId);
+    const cards: ReadonlyArray<CardInfo> = this.cards.filter((c) => !revealedIds.find((id) => c.cardId === id));
     return [{ ...this, cards }, revealedCards];
   },
 
