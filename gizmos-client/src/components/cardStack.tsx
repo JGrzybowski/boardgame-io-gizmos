@@ -21,7 +21,15 @@ export const MiniCardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?:
     width: "75%",
   };
 
-  const renderedCards = cards.map((c: CardInfo) => <MiniCard key={c.cardId} {...c} />);
+  const renderedCards = cards.map((c: CardInfo) => (
+    <MiniCard
+      key={c.cardId}
+      {...c}
+      OnActivateButtonClick={() => {
+        console.log(`card ${c.cardId} activated`);
+      }}
+    />
+  ));
 
   return <div style={flexStyle}>{renderedCards}</div>;
 };

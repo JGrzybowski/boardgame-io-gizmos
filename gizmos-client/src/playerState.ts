@@ -9,7 +9,7 @@ const initialArchiveLimit = 1;
 const initialResearchLimit = 3;
 
 interface PlayerStateData {
-  playerId: number | string;
+  playerId: PlayerID;
   victoryPoints?: number;
 
   energyStorage?: EnergyTypeDictionary;
@@ -58,7 +58,7 @@ export class PlayerState {
     this.isResearchBlocked = isResearchBlocked;
   }
 
-  readonly playerId: number | string = "NON_INITIALISED";
+  readonly playerId: PlayerID = "NON_INITIALISED";
   readonly victoryPoints: number;
 
   readonly energyStorage: EnergyTypeDictionary;
@@ -76,7 +76,7 @@ export class PlayerState {
   readonly isArchivingBlocked: boolean = false;
   readonly isResearchBlocked: boolean = false;
 
-  static WithId(playerId: string | number): PlayerState {
+  static WithId(playerId: PlayerID): PlayerState {
     return new PlayerState({ playerId });
   }
 

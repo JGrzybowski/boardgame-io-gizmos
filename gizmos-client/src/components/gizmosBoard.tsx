@@ -53,7 +53,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
   return (
     <div style={styles1players}>
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
-        <CardsPile cards={G.cards} />
+        <CardsPile cards={G.cards} moves={moves} />
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gridArea: "energy" }}>{energyRail}</div>
       <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} />

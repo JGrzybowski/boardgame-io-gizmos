@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { CardInfo, TriggerType } from "../cards/cardInfo";
 import { upperFrame, corners, accentBorder, triggerBoxBorder, triggerBox } from "./colorDictionary";
 import { EnergyType } from "../basicGameElements";
@@ -186,44 +186,111 @@ const CardImage: React.FC<CardInfo & { viewBoxHeight: string | number }> = ({
   );
 };
 
-export const Card: React.FC<CardInfo> = ({ type, victoryPoints, level, color, cost, cardId, effect }) => (
+export const Card: React.FC<
+  CardInfo & {
+    OnArchiveButtonClick?: MouseEventHandler<HTMLImageElement>;
+    OnBuildButtonClick?: MouseEventHandler<HTMLImageElement>;
+    OnPickButtonClick?: MouseEventHandler<HTMLImageElement>;
+    OnConvertButtonClick?: MouseEventHandler<HTMLImageElement>;
+  }
+> = ({
+  type,
+  victoryPoints,
+  level,
+  color,
+  cost,
+  cardId,
+  effect,
+  OnArchiveButtonClick,
+  OnBuildButtonClick,
+  OnPickButtonClick,
+  OnConvertButtonClick,
+}) => (
   <div className="card">
     <CardImage viewBoxHeight="136.83" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
-    <div
-      className="cardAction"
-      style={{
-        height: "100%",
-        width: "100%",
-        gridRow: "1/2",
-        gridColumn: "1/2",
-        justifyContent: "center",
-        alignContent: "center",
-        background: "rgba(1,1,1,0.4)",
-      }}
-    >
-      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" alt="File Action Button" />
-      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" alt="Build Action Button" />
-    </div>
+    {(OnArchiveButtonClick || OnBuildButtonClick || OnPickButtonClick || OnConvertButtonClick) && (
+      <div
+        className="cardAction"
+        style={{
+          flexWrap: "wrap-reverse",
+          height: "100%",
+          width: "100%",
+          gridRow: "1/2",
+          gridColumn: "1/2",
+          justifyContent: "center",
+          alignContent: "center",
+          background: "rgba(1,1,1,0.4)",
+        }}
+      >
+        {OnArchiveButtonClick && (
+          <img
+            style={{ width: "35%", margin: "8px" }}
+            src="images/button-archive.svg"
+            alt="File Action Button"
+            onClick={OnArchiveButtonClick}
+          />
+        )}
+        {OnPickButtonClick && (
+          <img
+            style={{ width: "35%", margin: "8px" }}
+            src="images/button-pick.svg"
+            alt="File Action Button"
+            onClick={OnPickButtonClick}
+          />
+        )}
+        {OnBuildButtonClick && (
+          <img
+            style={{ width: "35%", margin: "8px" }}
+            src="images/button-build.svg"
+            alt="Build Action Button"
+            onClick={OnBuildButtonClick}
+          />
+        )}
+        {OnConvertButtonClick && (
+          <img
+            style={{ width: "35%", margin: "8px" }}
+            src="images/button-convert.svg"
+            alt="File Action Button"
+            onClick={OnConvertButtonClick}
+          />
+        )}
+      </div>
+    )}
   </div>
 );
 
-export const MiniCard: React.FC<CardInfo> = ({ type, victoryPoints, level, color, cost, cardId, effect }) => (
+export const MiniCard: React.FC<CardInfo & { OnActivateButtonClick?: MouseEventHandler<HTMLImageElement> }> = ({
+  type,
+  victoryPoints,
+  level,
+  color,
+  cost,
+  cardId,
+  effect,
+  OnActivateButtonClick,
+}) => (
   <div className="card">
     <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
-    <div
-      className="cardAction"
-      style={{
-        height: "100%",
-        width: "100%",
-        gridRow: "1/2",
-        gridColumn: "1/2",
-        justifyContent: "center",
-        alignContent: "center",
-        background: "rgba(1,1,1,0.4)",
-      }}
-    >
-      <img style={{ width: "30px", margin: "8px" }} src="images/file-trigger.svg" alt="File Action Button" />
-      <img style={{ width: "30px", margin: "8px" }} src="images/build-trigger.svg" alt="Build Action Button" />
-    </div>
+    {OnActivateButtonClick && (
+      <div
+        className="cardAction"
+        style={{
+          height: "100%",
+          width: "100%",
+          gridRow: "1/2",
+          gridColumn: "1/2",
+          justifyContent: "center",
+          alignContent: "center",
+          background: "rgba(1,1,1,0.4)",
+        }}
+      >
+        <img
+          style={{ width: "50%" }}
+          src="images/button-activate.svg"
+          alt="File Action Button"
+          onClick={OnActivateButtonClick}
+        />
+      </div>
+    )}
   </div>
 );

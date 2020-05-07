@@ -6,11 +6,6 @@ import { Local } from "boardgame.io/multiplayer";
 import { Client } from "boardgame.io/react";
 
 const GizmosClient = Client({
-  // : React.FC<{
-  //   numPlayers: number;
-  //   debug: boolean;
-  //   playerId: number | string;
-  // }> = ({ numPlayers, debug, playerId }) =>
   game: Gizmos,
   gameID: "default",
   board: GizmosBoard,
@@ -22,7 +17,7 @@ const GizmosClient = Client({
 export const App: React.FC = () => {
   return (
     <div className="App">
-      <GizmosClient numPlayers={1} debug={false} playerID="0" />
+      <GizmosClient debug={false} playerID="0" />
       {/* <GizmosBoard gameClient={client} /> */}
     </div>
   );
