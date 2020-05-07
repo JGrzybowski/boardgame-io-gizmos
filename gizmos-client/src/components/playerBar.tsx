@@ -30,6 +30,7 @@ export const PlayerBar: React.FC<{ style?: React.CSSProperties; playerState: Pla
         columnGap: "5px",
         justifyItems: "center",
         alignItems: "end",
+        alignSelf: "end",
       }}
     >
       <MiniCardStack cards={playerState.machines.filter((m) => m.type === TriggerType.Upgrade)} />

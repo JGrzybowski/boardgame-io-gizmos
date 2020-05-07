@@ -1,5 +1,8 @@
-#commonArea .card {
-    width: 19%;
+.card {
+    max-width: 150px;
+    max-height: 200px;
+    min-width: 50px;
+    width: 100%;
     margin: 1px;
 }
 

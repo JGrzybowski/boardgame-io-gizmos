@@ -33,7 +33,7 @@ export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo>; moves: any }>
     .map(renderCard);
 
   return (
-    <>
+    <div style={{ alignSelf: "stretch", justifySelf: "stretch" }}>
       <div style={{ ...flexStyle, gridRow: "1/2" }}>
         <CardBack level={3} onClick={() => moves.researchAction(3)} />
         {level3Cards}
@@ -46,6 +46,6 @@ export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo>; moves: any }>
         <CardBack level={1} onClick={() => moves.researchAction(1)} />
         {level1Cards}
       </div>
-    </>
+    </div>
   );
 };

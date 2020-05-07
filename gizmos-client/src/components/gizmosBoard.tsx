@@ -26,19 +26,23 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
   const { G, ctx, moves, events, plugins } = props;
 
   const commonAreaGridStyle: React.CSSProperties = {
-    display: "grid",
-    gridTemplateRows: "33% 34% 33%",
+    display: "flex",
+    flexDirection: "column",
+    justifyItems: "center",
+    alignContent: "center",
+    //alignItems: "center",
+    // gridTemplateRows: "33% 34% 33%",
     margin: "40px",
   };
 
   const styles1players = {
     display: "grid",
     height: "100vh",
-    gridTemplateColumns: "50vw",
+    gridTemplateColumns: "50vw 50vw",
     gridTemplateRows: "50vh 50vh",
     gridTemplateAreas: `
-        "commonArea energy"
-        "commonArea localPlayer"`,
+        "commonArea commonArea"
+        "localPlayer localPlayer"`,
   };
 
   const energyRail = G.dispenser
@@ -59,10 +63,20 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
     <div style={styles1players}>
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
         <CardsPile cards={G.cards} moves={moves} />
+        <div
+          style={{
+            display: "flex",
+            justifySelf: "center",
+            alignItems: "center",
+            height: "150px",
+            marginTop: "20px",
+            justifyContent: "center",
+          }}
+        >
+          {energyRail}
+        </div>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap", gridArea: "energy", alignItems: "center", height: "150px" }}>
-        {energyRail}
-      </div>
+
       <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} />
     </div>
   );
