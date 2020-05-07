@@ -6,10 +6,10 @@ export const CardBack: React.FC<{ level: CardLevel; onClick?: MouseEventHandler<
   onClick,
 }) => {
   return (
-    <div className="card">
-      <img src={`images/card-back-${level}.svg`} alt={`card level ${level} back`} style={{ gridArea: "1/1/2/2" }} />
+    <div className="card has-action-buttons">
+      <img src={`images/card-back-${level}.svg`} alt={`card level ${level} back`} />
       {onClick && (
-        <div className="cardAction">
+        <div className="action-buttons">
           <img src="images/button-research.svg" alt="Research button icon" onClick={onClick} />
         </div>
       )}

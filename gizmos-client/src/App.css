@@ -1,55 +1,43 @@
-.card {
-    display: grid;
-}
-
 #commonArea .card {
     width: 19%;
     margin: 1px;
 }
 
-.card .cardAction {
+.has-action-buttons {
+    display: grid
+}
+
+.has-action-buttons .action-buttons {
     display: none;
 }
 
-.card:hover>svg {
+.has-action-buttons:hover>svg,
+.has-action-buttons:hover>img {
     filter: brightness(0.3);
+    grid-area: 1/1/2/2
 }
 
-.card:hover>img {
-    filter: brightness(0.3);
-}
-
-.card:hover>.cardAction,
-.cardAction:hover {
+.has-action-buttons:hover>.action-buttons,
+.action-buttons:hover {
     display: flex;
     filter: brightness(0.9)
 }
 
-.cardAction {
+.action-buttons {
     flex-wrap: wrap-reverse;
     height: 100%;
     width: 100%;
-    grid-row: 1/2;
-    grid-column: 1/2;
+    grid-area: 1/1/2/2;
     justify-content: center;
     align-content: center
 }
 
-.cardAction img {
+.action-buttons img {
     width: 35%;
     margin: 8px
 }
 
-.mini-card .cardAction {
-    height: 100%;
-    width: 100%;
-    grid-row: 1/2;
-    grid-column: 1/2;
-    justify-content: center;
-    align-content: center;
-}
-
-.mini-card .cardAction img {
+.mini-card .action-buttons img {
     width: auto;
     max-height: 100%;
     max-width: 100%;
