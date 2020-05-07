@@ -11,7 +11,31 @@
     display: none;
 }
 
+.card:hover>svg {
+    filter: brightness(0.3);
+}
+
+.card:hover>img {
+    filter: brightness(0.3);
+}
+
 .card:hover>.cardAction,
 .cardAction:hover {
     display: flex;
+    filter: brightness(0.9)
+}
+
+.cardAction {
+    flex-wrap: wrap-reverse;
+    height: 100%;
+    width: 100%;
+    grid-row: 1/2;
+    grid-column: 1/2;
+    justify-content: center;
+    align-content: center
+}
+
+.cardAction img {
+    width: 35%;
+    margin: 8px
 }

@@ -209,50 +209,16 @@ export const Card: React.FC<
   <div className="card">
     <CardImage viewBoxHeight="136.83" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
     {(OnArchiveButtonClick || OnBuildButtonClick || OnPickButtonClick || OnConvertButtonClick) && (
-      <div
-        className="cardAction"
-        style={{
-          flexWrap: "wrap-reverse",
-          height: "100%",
-          width: "100%",
-          gridRow: "1/2",
-          gridColumn: "1/2",
-          justifyContent: "center",
-          alignContent: "center",
-          background: "rgba(1,1,1,0.4)",
-        }}
-      >
+      <div className="cardAction">
         {OnArchiveButtonClick && (
-          <img
-            style={{ width: "35%", margin: "8px" }}
-            src="images/button-archive.svg"
-            alt="File Action Button"
-            onClick={OnArchiveButtonClick}
-          />
+          <img src="images/button-archive.svg" alt="File Action Button" onClick={OnArchiveButtonClick} />
         )}
-        {OnPickButtonClick && (
-          <img
-            style={{ width: "35%", margin: "8px" }}
-            src="images/button-pick.svg"
-            alt="File Action Button"
-            onClick={OnPickButtonClick}
-          />
-        )}
+        {OnPickButtonClick && <img src="images/button-pick.svg" alt="File Action Button" onClick={OnPickButtonClick} />}
         {OnBuildButtonClick && (
-          <img
-            style={{ width: "35%", margin: "8px" }}
-            src="images/button-build.svg"
-            alt="Build Action Button"
-            onClick={OnBuildButtonClick}
-          />
+          <img src="images/button-build.svg" alt="Build Action Button" onClick={OnBuildButtonClick} />
         )}
         {OnConvertButtonClick && (
-          <img
-            style={{ width: "35%", margin: "8px" }}
-            src="images/button-convert.svg"
-            alt="File Action Button"
-            onClick={OnConvertButtonClick}
-          />
+          <img src="images/button-convert.svg" alt="File Action Button" onClick={OnConvertButtonClick} />
         )}
       </div>
     )}
@@ -269,7 +235,7 @@ export const MiniCard: React.FC<CardInfo & { OnActivateButtonClick?: MouseEventH
   effect,
   OnActivateButtonClick,
 }) => (
-  <div className="card">
+  <div className="card mini-card">
     <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
     {OnActivateButtonClick && (
       <div
