@@ -238,24 +238,8 @@ export const MiniCard: React.FC<CardInfo & { OnActivateButtonClick?: MouseEventH
   <div className="card mini-card">
     <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
     {OnActivateButtonClick && (
-      <div
-        className="cardAction"
-        style={{
-          height: "100%",
-          width: "100%",
-          gridRow: "1/2",
-          gridColumn: "1/2",
-          justifyContent: "center",
-          alignContent: "center",
-          background: "rgba(1,1,1,0.4)",
-        }}
-      >
-        <img
-          style={{ width: "50%" }}
-          src="images/button-activate.svg"
-          alt="File Action Button"
-          onClick={OnActivateButtonClick}
-        />
+      <div className="cardAction">
+        <img src="images/button-activate.svg" alt="File Action Button" onClick={OnActivateButtonClick} />
       </div>
     )}
   </div>
