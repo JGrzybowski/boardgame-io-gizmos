@@ -44,7 +44,12 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
   const energyRail = G.dispenser
     .slice(0, G.visibleEnergyBallsLimit)
     .map((energy, index) => (
-      <EnergyOrb energyType={energy} key={`${index}${energy}`} OnClick={() => moves.pickAction(index)} />
+      <EnergyOrb
+        energyType={energy}
+        key={`${index}${energy}`}
+        OnClick={() => moves.pickAction(index)}
+        style={{ width: "150px" }}
+      />
     ));
 
   const playerState = plugins.player.data.players[ctx.currentPlayer];
@@ -55,7 +60,9 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
         <CardsPile cards={G.cards} moves={moves} />
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap", gridArea: "energy" }}>{energyRail}</div>
+      <div style={{ display: "flex", flexWrap: "wrap", gridArea: "energy", alignItems: "center", height: "150px" }}>
+        {energyRail}
+      </div>
       <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} />
     </div>
   );

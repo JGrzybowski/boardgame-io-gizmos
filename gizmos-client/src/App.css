@@ -4,7 +4,14 @@
 }
 
 .has-action-buttons {
-    display: grid
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.has-action-buttons>svg,
+.has-action-buttons>img {
+    grid-area: 1/1/2/2
 }
 
 .has-action-buttons .action-buttons {
@@ -33,13 +40,22 @@
 }
 
 .action-buttons img {
+    width: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.card .action-buttons img {
     width: 35%;
     margin: 8px
 }
 
 .mini-card .action-buttons img {
     width: auto;
-    max-height: 100%;
-    max-width: 100%;
     margin: 2px;
+}
+
+.energy-orb .action-buttons {
+    max-width: 90%;
+    max-height: 90%;
 }
