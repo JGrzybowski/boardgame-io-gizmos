@@ -19,7 +19,7 @@ function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameStat
   //.withCardsActivated(new TriggerCriteria("Pick", energy);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(activationStage.name);
+  ctx.events?.setStage?.(activationStage.name);
   return newGameState;
 }
 

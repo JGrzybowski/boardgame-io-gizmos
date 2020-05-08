@@ -23,8 +23,6 @@ const Gizmos: Game<GameState, GameContext> = {
 
   setup: (ctx) => {
     let G = { ...InitialGameState };
-
-    console.log(ctx.events);
     ctx.events?.setStage?.(actionStage.name);
     const shuffledCards: ReadonlyArray<CardInfo> = ctx.random?.Shuffle([...G.cards]) ?? [];
     const shuffledDispenser: ReadonlyArray<EnergyType> = ctx.random?.Shuffle([...G.dispenser]) ?? [];

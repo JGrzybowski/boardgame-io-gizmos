@@ -12,7 +12,7 @@ function failResearchMove(G: GameState, ctx: GameContext): GameState {
   const newPlayerState: PlayerState = playerState.withResearchedCleared();
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(activationStage.name);
+  ctx.events?.setStage?.(activationStage.name);
   return newGameState;
 }
 

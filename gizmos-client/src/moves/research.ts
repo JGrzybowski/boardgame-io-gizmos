@@ -19,7 +19,7 @@ function researchMove(G: GameState, ctx: GameContext, cardLevel: CardLevel): Gam
   const newPlayerState = playerState.withCardsAddedToResearched(revealedCards);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(researchStage.name);
+  ctx.events?.setStage?.(researchStage.name);
   return newGameState;
 }
 

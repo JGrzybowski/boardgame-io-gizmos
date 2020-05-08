@@ -1,35 +1,12 @@
 import React from "react";
-import { CardInfo } from "../cards/cardInfo";
-import { Card, MiniCard } from "./card";
 
-export const CardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boolean }> = ({ cards, flipped }) => {
+export const CardStack: React.FC<{ style?: React.CSSProperties }> = ({ style, children }) => {
   const flexStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "column-reverse",
-    width: "75%",
+    justifySelf: "stretch",
+    alignItems: "center",
   };
 
-  const renderedCards = cards.map((c: CardInfo) => <Card key={c.cardId} {...c} />);
-
-  return <div style={flexStyle}>{renderedCards}</div>;
-};
-
-export const MiniCardStack: React.FC<{ cards: ReadonlyArray<CardInfo>; flipped?: boolean }> = ({ cards, flipped }) => {
-  const flexStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column-reverse",
-    width: "75%",
-  };
-
-  const renderedCards = cards.map((c: CardInfo) => (
-    <MiniCard
-      key={c.cardId}
-      {...c}
-      OnActivateButtonClick={() => {
-        console.log(`card ${c.cardId} activated`);
-      }}
-    />
-  ));
-
-  return <div style={flexStyle}>{renderedCards}</div>;
+  return <div style={{ ...flexStyle, ...style }}>{children}</div>;
 };

@@ -20,7 +20,7 @@ function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState 
   //.withCardsActivated(new TriggerCriteria("Archive", selectedCard);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(activationStage.name);
+  ctx.events?.setStage?.(activationStage.name);
   return newGameState;
 }
 
@@ -39,7 +39,7 @@ function archiveFromResearchedMove(G: GameState, ctx: GameContext, cardId: numbe
   //.withCardsActivated(new TriggerCriteria("Archive", selectedCard);
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(activationStage.name);
+  ctx.events?.setStage?.(activationStage.name);
   return newGameState;
 }
 

@@ -31,7 +31,7 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
   );
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(paymentStage.name);
+  ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
 }
 
@@ -47,7 +47,7 @@ function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): Ga
   );
 
   ctx.player?.set(newPlayerState);
-  ctx.events?.endStage?.(paymentStage.name);
+  ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
 }
 

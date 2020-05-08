@@ -5,6 +5,9 @@ import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyOrb } from "./energyOrb";
 import { EnergyType } from "../basicGameElements";
+import { CardStack } from "./cardStack";
+import { PlayerState } from "../playerState";
+import { MiniCard, Card } from "./card";
 
 interface BoardProps {
   G: GameState;
@@ -38,11 +41,11 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
   const styles1players = {
     display: "grid",
     height: "100vh",
-    gridTemplateColumns: "50vw 50vw",
+    gridTemplateColumns: "40vw 40vw 20vw",
     gridTemplateRows: "50vh 50vh",
     gridTemplateAreas: `
-        "commonArea commonArea"
-        "localPlayer localPlayer"`,
+        "commonArea commonArea infoBar"
+        "localPlayer localPlayer infoBar"`,
   };
 
   const energyRail = G.dispenser
@@ -56,7 +59,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
       />
     ));
 
-  const playerState = plugins.player.data.players[ctx.currentPlayer];
+  const playerState: PlayerState = plugins.player.data.players[ctx.currentPlayer];
   console.log(plugins.player.data.players[ctx.currentPlayer]);
 
   return (
@@ -76,8 +79,19 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
           {energyRail}
         </div>
       </div>
-
-      <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} />
+      <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} moves={moves} />
+      <div style={{ background: "beige", gridArea: "infoBar" }}>
+        <CardStack>
+          {playerState.researched.map((card) => (
+            <Card
+              key={card.cardId}
+              {...card}
+              OnArchiveButtonClick={() => moves.archiveFromResearchedAction(card.cardId)}
+              OnBuildButtonClick={() => moves.buildFromResearchedAction(card.cardId)}
+            />
+          ))}
+        </CardStack>
+      </div>
     </div>
   );
 };
