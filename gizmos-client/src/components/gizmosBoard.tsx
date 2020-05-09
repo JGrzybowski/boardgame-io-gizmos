@@ -10,12 +10,15 @@ import { PlayerState } from "../playerState";
 import { MiniCard, Card } from "./card";
 import { PlayerID } from "boardgame.io";
 import { EnergyCounter } from "./energyCounter";
+import { actionStage } from "../stages/actionStage";
+import { activationStage } from "../stages/activationStage";
+import { researchStage } from "../stages/researchStage";
 
 interface BoardProps {
   G: GameState;
   ctx: GameContext;
   moves: any;
-  events: unknown; //An object containing functions to dispatch various game events like endTurn and endPhase.
+  events: any; //An object containing functions to dispatch various game events like endTurn and endPhase.
   plugins: any;
   reset: () => void;
   undo: () => void; //Function that undoes the last move.
@@ -82,7 +85,16 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
         </div>
       </div>
       <PlayerBar style={{ gridArea: "localPlayer" }} playerState={playerState} moves={moves} />
-      <div style={{ background: "beige", gridArea: "infoBar" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          background: "beige",
+          gridArea: "infoBar",
+          justifyContent: "stretch",
+          alignItems: "end",
+        }}
+      >
         <CardStack>
           {playerState.researched.map((card) => (
             <Card
@@ -95,6 +107,40 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
         </CardStack>
 
         {G.cardToBeBuiltCost && <EnergyCounter energyCount={G.cardToBeBuiltCost} />}
+        <div className="flow-buttons">
+          {G.cardToBeBuiltCost?.isPaid() && (
+            <div
+              style={{ width: "100%", background: "lime", border: "2px solid green" }}
+              onClick={() => moves.confirmBuildAction()}
+            >
+              Confirm Build
+            </div>
+          )}
+          {G.cardToBeBuiltCost && (
+            <div
+              style={{ width: "100%", background: "pink", border: "2px solid red" }}
+              onClick={() => moves.cancelBuildAction()}
+            >
+              Cancel Build
+            </div>
+          )}
+          {ctx.activePlayers?.[ctx.currentPlayer] === activationStage.name && (
+            <div
+              style={{ width: "100%", background: "lightGray", border: "2px solid gray", textAlign: "center" }}
+              onClick={() => events.endTurn()}
+            >
+              End Turn
+            </div>
+          )}
+          {ctx.activePlayers?.[ctx.currentPlayer] === researchStage.name && (
+            <div
+              style={{ width: "100%", background: "lightGray", border: "2px solid gray", textAlign: "center" }}
+              onClick={() => moves.failResearchAction()}
+            >
+              Fail Research
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
