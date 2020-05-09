@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .card {
     max-width: 150px;
     max-height: 200px;
@@ -7,25 +11,25 @@
 }
 
 .has-action-buttons {
-    display: grid;
-    align-items: center;
-    justify-items: center;
+    position: relative;
     user-select: none;
 }
 
 .has-action-buttons>svg,
-.has-action-buttons>img {
-    grid-area: 1/1/2/2
-}
+.has-action-buttons>img {}
 
 .has-action-buttons .action-buttons {
     display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .has-action-buttons:hover>svg,
 .has-action-buttons:hover>img {
     filter: brightness(0.3);
-    grid-area: 1/1/2/2
 }
 
 .has-action-buttons:hover>.action-buttons,
@@ -35,12 +39,8 @@
 }
 
 .action-buttons {
-    flex-wrap: wrap-reverse;
-    height: 100%;
-    width: 100%;
-    grid-area: 1/1/2/2;
     justify-content: center;
-    align-content: center
+    align-items: center
 }
 
 .action-buttons img {
@@ -56,11 +56,12 @@
 }
 
 .mini-card .action-buttons img {
-    width: auto;
-    margin: 2px;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
 }
 
-.energy-orb .action-buttons {
+.energy-orb .action-buttons img {
     max-width: 90%;
     max-height: 90%;
 }

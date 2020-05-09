@@ -133,11 +133,7 @@ const CardImage: React.FC<CardInfo & { viewBoxHeight: string | number }> = ({
   const frame = color === EnergyType.Any ? multiColorFrame : singleColorFrame(color);
 
   return (
-    <svg
-      viewBox={`0 0 136.63 ${viewBoxHeight}`}
-      style={{ gridRow: "1/2", gridColumn: "1/2" }}
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-    >
+    <svg viewBox={`0 0 136.63 ${viewBoxHeight}`} xmlnsXlink="http://www.w3.org/1999/xlink">
       <defs>
         <clipPath id="clip-path">
           <path

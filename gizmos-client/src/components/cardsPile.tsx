@@ -7,7 +7,7 @@ export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo>; moves: any }>
   const flexStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "stretch",
     justifyContent: "center",
   };
 

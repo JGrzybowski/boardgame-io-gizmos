@@ -41,8 +41,8 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
   const styles1players = {
     display: "grid",
     height: "100vh",
-    gridTemplateColumns: "40vw 40vw 20vw",
-    gridTemplateRows: "50vh 50vh",
+    gridTemplateColumns: "2fr 2fr 1fr",
+    gridTemplateRows: "1fr 1fr",
     gridTemplateAreas: `
         "commonArea commonArea infoBar"
         "localPlayer localPlayer infoBar"`,
