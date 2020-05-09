@@ -2,6 +2,7 @@ import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
 import { TriggerType } from "./triggerType";
+import { CardEffect } from "./cardEffect";
 
 export type CardLevel = 0 | 1 | 2 | 3;
 
