@@ -161,6 +161,13 @@ export class PlayerState {
     return new PlayerState({ ...this, archive });
   }
 
+  withRemovedCardFromResearched(cardId: number): PlayerState {
+    const card = this.findCardInTheResearched(cardId);
+    if (!card) throw new Error("Card was not found");
+    const researched = this.researchedWithout(cardId);
+    return new PlayerState({ ...this, researched });
+  }
+
   withResearchedCleared(): PlayerState {
     const researched: ReadonlyArray<CardInfo> = [];
     return new PlayerState({ ...this, researched });

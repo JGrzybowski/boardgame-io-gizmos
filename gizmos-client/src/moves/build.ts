@@ -15,7 +15,7 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameSt
     selectedCard,
     EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
   );
-  ctx.events?.endPhase?.(paymentStage.name);
+  ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
 }
 
@@ -40,7 +40,7 @@ function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): Ga
   const selectedCard: CardInfo | null = playerState.findCardInTheResearched(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
-  const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
+  const newPlayerState = playerState.withRemovedCardFromResearched(cardId);
   const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
     selectedCard,
     EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)

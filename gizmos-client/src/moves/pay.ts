@@ -6,17 +6,23 @@ import { PlayerState } from "../playerState";
 import { EnergyType } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 
-function payMove(G: GameState, ctx: GameContext, payment: EnergyType, paidFor: EnergyType): GameState | string {
+function payMove(G: GameState, ctx: GameContext, payment: EnergyType): GameState | string {
   const playerState: PlayerState = ctx.player?.get();
 
   if (!G.cardToBeBuilt || !G.cardToBeBuiltCost) return INVALID_MOVE;
 
   if (!playerState.hasDeclaredEnergy(payment)) return INVALID_MOVE;
-  if (G.cardToBeBuiltCost?.get(paidFor) <= 0) return INVALID_MOVE;
-  if (!EnergyTypeDictionary.canPayFor(payment, paidFor)) return INVALID_MOVE;
+
+  //jest za co płacić więc albo koszt ma kolor albo any
+  const cardCost = G.cardToBeBuiltCost;
+  const energyToReduce =
+    cardCost?.get(payment) > 0 ? payment : cardCost?.get(EnergyType.Any) > 0 ? EnergyType.Any : null;
+
+  if (!energyToReduce) return INVALID_MOVE;
+  if (!EnergyTypeDictionary.canPayFor(payment, energyToReduce)) return INVALID_MOVE;
 
   const newPlayerState = playerState.withRemovedEnergy(payment);
-  const newGameState = G.withEnergyRemovedFromCost(paidFor);
+  const newGameState = G.withEnergyRemovedFromCost(energyToReduce);
 
   ctx.player?.set(newPlayerState);
   return newGameState;
