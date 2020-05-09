@@ -3,9 +3,9 @@ import { EnergyType } from "../basicGameElements";
 
 export const EnergyOrb: React.FC<{
   energyType: EnergyType;
-  OnClick?: MouseEventHandler<HTMLImageElement>;
+  onClick?: MouseEventHandler<HTMLImageElement>;
   style?: React.CSSProperties;
-}> = ({ energyType, OnClick, style }) => {
+}> = ({ energyType, onClick, style }) => {
   const svgSrc =
     energyType === EnergyType.Red
       ? "images/energy-red.svg"
@@ -18,11 +18,11 @@ export const EnergyOrb: React.FC<{
       : "images/energy-any.svg";
 
   return (
-    <div className={`energy-orb ${OnClick ? "has-action-buttons" : ""}`} style={style}>
+    <div className={`energy-orb ${onClick ? "has-action-buttons" : ""}`} style={style}>
       <img src={svgSrc} alt={`energy ${energyType}`} />
-      {OnClick && (
+      {onClick && (
         <div className="action-buttons">
-          <img src="images/button-pick.svg" alt="Pick action button" onClick={OnClick} />
+          <img src="images/button-pick.svg" alt="Pick action button" onClick={onClick} />
         </div>
       )}
     </div>

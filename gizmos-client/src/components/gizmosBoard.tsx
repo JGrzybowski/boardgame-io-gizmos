@@ -8,6 +8,8 @@ import { EnergyType } from "../basicGameElements";
 import { CardStack } from "./cardStack";
 import { PlayerState } from "../playerState";
 import { MiniCard, Card } from "./card";
+import { PlayerID } from "boardgame.io";
+import { EnergyCounter } from "./energyCounter";
 
 interface BoardProps {
   G: GameState;
@@ -21,12 +23,12 @@ interface BoardProps {
   //step: //Function that will advance the game if AI is configured.
   //log: //The game log.
   //gameID: //The game ID associated with the client.
-  //playerID: //The player ID associated with the client.
+  playerID: PlayerID; //The player ID associated with the client.
   //gameMetadata: //An object containing the players that have joined the game from a room.
 }
 
 export const GizmosBoard: React.FC<BoardProps> = (props) => {
-  const { G, ctx, moves, events, plugins } = props;
+  const { G, ctx, moves, events, plugins, playerID } = props;
 
   const commonAreaGridStyle: React.CSSProperties = {
     display: "flex",
@@ -54,7 +56,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
       <EnergyOrb
         energyType={energy}
         key={`${index}${energy}`}
-        OnClick={() => moves.pickAction(index)}
+        onClick={() => moves.pickAction(index)}
         style={{ width: "150px" }}
       />
     ));
@@ -91,6 +93,8 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
             />
           ))}
         </CardStack>
+
+        {G.cardToBeBuiltCost && <EnergyCounter energyCount={G.cardToBeBuiltCost} />}
       </div>
     </div>
   );

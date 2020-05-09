@@ -1,9 +1,13 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { EnergyType } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { EnergyOrb } from "./energyOrb";
 
-export const EnergyCounter: React.FC<{ energyCount: EnergyTypeDictionary }> = ({ energyCount }) => {
+export const EnergyCounter: React.FC<{
+  energyCount: EnergyTypeDictionary;
+  showAny?: boolean;
+  onClick?: (energyType: EnergyType) => MouseEventHandler<HTMLImageElement>;
+}> = ({ energyCount, showAny, onClick }) => {
   const numbersStyle: React.CSSProperties = {
     fontSize: "x-large",
     fontFamily: "source-code-pro,monospace",
@@ -12,10 +16,10 @@ export const EnergyCounter: React.FC<{ energyCount: EnergyTypeDictionary }> = ({
   };
 
   const counters = Object.values(EnergyType)
-    .filter((et) => et !== EnergyType.Any)
+    .filter((et) => showAny || et !== EnergyType.Any)
     .map((e) => (
       <div key={e} style={{ ...numbersStyle, margin: "3px", flexGrow: 1 }}>
-        <EnergyOrb energyType={e} /> {energyCount.get(e)}
+        <EnergyOrb energyType={e} onClick={onClick && onClick(e)} /> {energyCount.get(e)}
       </div>
     ));
 

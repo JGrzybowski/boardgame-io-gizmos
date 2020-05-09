@@ -4,6 +4,7 @@ import { CardStack } from "./cardStack";
 import { EnergyCounter } from "./energyCounter";
 import { PlayerState } from "../playerState";
 import { Card, MiniCard } from "./card";
+import { EnergyType } from "../basicGameElements";
 
 function renderMiniCard(card: CardInfo): ReactNode {
   return <MiniCard key={card.cardId} {...card} OnActivateButtonClick={() => alert(`activation ${card.cardId}`)} />;
@@ -35,11 +36,14 @@ export const PlayerBar: React.FC<{ style?: React.CSSProperties; playerState: Pla
 
       <CardStack>
         {playerState?.archive?.map?.((card) => (
-          <Card key={card.cardId} {...card} OnBuildButtonClick={moves.buildFromArchiveAction} />
+          <Card key={card.cardId} {...card} OnBuildButtonClick={() => moves.buildFromArchiveAction(card.cardId)} />
         ))}
       </CardStack>
 
-      <EnergyCounter energyCount={playerState.energyStorage} />
+      <EnergyCounter
+        energyCount={playerState.energyStorage}
+        onClick={(energyType: EnergyType) => () => moves.payAction(energyType)}
+      />
     </div>
   );
 };
