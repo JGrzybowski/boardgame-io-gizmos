@@ -13,6 +13,7 @@ import { EnergyCounter } from "./energyCounter";
 import { actionStage } from "../stages/actionStage";
 import { activationStage } from "../stages/activationStage";
 import { researchStage } from "../stages/researchStage";
+import { PlayerLimits } from "./playerLimits";
 
 interface BoardProps {
   G: GameState;

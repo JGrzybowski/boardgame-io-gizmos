@@ -5,6 +5,7 @@ import { EnergyCounter } from "./energyCounter";
 import { PlayerState } from "../playerState";
 import { Card, MiniCard } from "./card";
 import { EnergyType } from "../basicGameElements";
+import { PlayerLimits } from "./playerLimits";
 
 function renderMiniCard(card: CardInfo): ReactNode {
   return <MiniCard key={card.cardId} {...card} OnActivateButtonClick={() => alert(`activation ${card.cardId}`)} />;
@@ -43,6 +44,11 @@ export const PlayerBar: React.FC<{ style?: React.CSSProperties; playerState: Pla
       <EnergyCounter
         energyCount={playerState.energyStorage}
         onClick={(energyType: EnergyType) => () => moves.payAction(energyType)}
+      />
+      <PlayerLimits
+        energyLimit={playerState.energyStorageCapacity}
+        archiveLimit={playerState.archiveLimit}
+        researchLimit={playerState.researchLimit}
       />
     </div>
   );
