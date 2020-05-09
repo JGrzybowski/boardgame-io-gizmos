@@ -1,11 +1,12 @@
 import React, { ReactNode } from "react";
-import { TriggerType, CardInfo } from "../cards/cardInfo";
+import { CardInfo } from "../cards/cardInfo";
 import { CardStack } from "./cardStack";
 import { EnergyCounter } from "./energyCounter";
 import { PlayerState } from "../playerState";
 import { Card, MiniCard } from "./card";
 import { EnergyType } from "../basicGameElements";
 import { PlayerLimits } from "./playerLimits";
+import { TriggerType } from "../cards/triggerType";
 
 function renderMiniCard(card: CardInfo): ReactNode {
   return <MiniCard key={card.cardId} {...card} OnActivateButtonClick={() => alert(`activation ${card.cardId}`)} />;

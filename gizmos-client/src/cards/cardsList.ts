@@ -1,7 +1,8 @@
-import { CardInfo, TriggerType } from "./cardInfo";
+import { CardInfo } from "./cardInfo";
 import { CardWithFileEffect, fileEffect } from "./cardWithFileEffect";
 import { CardWithTakeEnergyEffect } from "./cardWithTakeEnergyEffect";
 import { EnergyType } from "../basicGameElements";
+import { TriggerType } from "./triggerType";
 
 export const InitialCard = new CardWithTakeEnergyEffect(
   /*CardId */ 1,

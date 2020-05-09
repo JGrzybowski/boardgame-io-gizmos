@@ -1,7 +1,8 @@
-import { CardInfo, CardEffect, TriggerType, CardLevel } from "./cardInfo";
+import { CardInfo, CardEffect, CardLevel } from "./cardInfo";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
+import { TriggerType } from "./triggerType";
 
 type TakeEnergyLimit = 1 | 2 | 3;
 

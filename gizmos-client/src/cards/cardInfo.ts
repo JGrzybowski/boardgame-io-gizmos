@@ -1,14 +1,7 @@
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
-
-export enum TriggerType {
-  Upgrade = "U",
-  Converter = "C",
-  Pick = "P",
-  Build = "B",
-  Archive = "A",
-}
+import { TriggerType } from "./triggerType";
 
 export type CardLevel = 0 | 1 | 2 | 3;
 

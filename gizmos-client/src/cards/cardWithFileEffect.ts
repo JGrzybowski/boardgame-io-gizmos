@@ -1,8 +1,9 @@
-import { CardInfo, CardEffect, TriggerType, CardLevel } from "./cardInfo";
+import { CardInfo, CardEffect, CardLevel, CardEffectFunction } from "./cardInfo";
 import { GameState } from "../gameState";
 import { archiveAction } from "../moves/archive";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
+import { TriggerType } from "./triggerType";
 
 export class CardWithFileEffect extends CardInfo<FileActionEffect> {
   constructor(

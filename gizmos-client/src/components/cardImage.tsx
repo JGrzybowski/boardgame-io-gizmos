@@ -1,7 +1,8 @@
 import React from "react";
-import { CardInfo, TriggerType } from "../cards/cardInfo";
+import { CardInfo } from "../cards/cardInfo";
 import { upperFrame, corners, accentBorder, triggerBoxBorder, triggerBox } from "./colorDictionary";
 import { EnergyType } from "../basicGameElements";
+import { TriggerType } from "../cards/triggerType";
 
 const numbersStyle: React.CSSProperties = {
   fontSize: "large",
