@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from "react";
 import { CardInfo } from "../cards/cardInfo";
-import { CardImage } from "./cardImage";
+import { CardImage } from "./card/cardImage";
 
 export const Card: React.FC<
   CardInfo & {
