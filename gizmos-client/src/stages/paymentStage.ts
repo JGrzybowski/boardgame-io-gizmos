@@ -2,6 +2,7 @@ import { confirmBuildAction } from "../moves/confirmBuild";
 import { payAction } from "../moves/pay";
 import { cancelBuildAction } from "../moves/cancelBuild";
 import { GameStage } from "./gameStage";
+import { activateConverterCardAction } from "../moves/activateCard";
 
 export const paymentStage: GameStage = {
   name: "Payment",
@@ -9,5 +10,6 @@ export const paymentStage: GameStage = {
     confirmBuildAction,
     payAction,
     cancelBuildAction,
+    activateConverterCardAction,
   },
 };

@@ -10,6 +10,14 @@
     margin: 1px;
 }
 
+.numeric-value {
+    font-size: large;
+    font-family: source-code-pro, monospace;
+    font-weight: bold;
+    fill: black;
+    user-select: none,
+}
+
 .has-action-buttons {
     position: relative;
     user-select: none;
