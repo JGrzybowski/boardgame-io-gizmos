@@ -1,23 +1,10 @@
-import { CardInfo, CardEffect, CardLevel, CardEffectFunction } from "./cardInfo";
+import { CardInfo, CardLevel, CardEffectFunction } from "./cardInfo";
 import { GameState } from "../gameState";
 import { archiveAction } from "../moves/archive";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
 import { TriggerType } from "./triggerType";
-
-export class CardWithFileEffect extends CardInfo<FileActionEffect> {
-  constructor(
-    cardId: number,
-    type: TriggerType,
-    effect: FileActionEffect,
-    victoryPoints: number,
-    color: EnergyType,
-    cost: number,
-    level: CardLevel
-  ) {
-    super(cardId, type, effect, victoryPoints, color, cost, level);
-  }
-}
+import { CardEffect } from "./cardEffect";
 
 class FileActionEffect extends CardEffect {
   canBeResolved(G: GameState, ctx: GameContext): boolean {
@@ -28,3 +15,17 @@ class FileActionEffect extends CardEffect {
   }
 }
 export const fileEffect: FileActionEffect = new FileActionEffect();
+
+export class CardWithFileEffect extends CardInfo<FileActionEffect> {
+  constructor(
+    cardId: number,
+    type: TriggerType,
+    oneTimeEffect: CardEffectFunction,
+    victoryPoints: number,
+    color: EnergyType,
+    cost: number,
+    level: CardLevel
+  ) {
+    super(cardId, type, oneTimeEffect, fileEffect, victoryPoints, color, cost, level);
+  }
+}

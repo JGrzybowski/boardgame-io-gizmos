@@ -183,4 +183,12 @@ export class PlayerState {
     const energyStorage = this.energyStorage.withAmountToPayWithEnergyTypeSetTo(payment, newValue);
     return new PlayerState({ ...this, energyStorage });
   }
+
+  withLimitsChangedBy(storage: number, archive: number, research: number): PlayerState {
+    const archiveLimit = this.archiveLimit + archive;
+    const energyStorageCapacity = this.energyStorageCapacity + storage;
+    const researchLimit = this.researchLimit + research;
+
+    return new PlayerState({ ...this, archiveLimit, energyStorageCapacity, researchLimit });
+  }
 }

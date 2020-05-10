@@ -37,6 +37,6 @@ export class CardWithTakeEnergyEffect extends CardInfo<TakeEnergyEffect> {
     cost: number,
     level: CardLevel
   ) {
-    super(cardId, type, new TakeEnergyEffect(howMany), victoryPoints, color, cost, level);
+    super(cardId, type, null, new TakeEnergyEffect(howMany), victoryPoints, color, cost, level);
   }
 }

@@ -17,13 +17,14 @@ export const Card: React.FC<
   cost,
   cardId,
   effect,
+  oneTimeEffect,
   OnArchiveButtonClick,
   OnBuildButtonClick,
   OnPickButtonClick,
   OnConvertButtonClick,
 }) => (
   <div className="card has-action-buttons">
-    <CardImage viewBoxHeight="136.83" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
+    <CardImage viewBoxHeight="136.83" {...{ type, victoryPoints, level, color, cost, cardId, effect, oneTimeEffect }} />
     {(OnArchiveButtonClick || OnBuildButtonClick || OnPickButtonClick || OnConvertButtonClick) && (
       <div className="action-buttons">
         {OnArchiveButtonClick && (
@@ -49,10 +50,11 @@ export const MiniCard: React.FC<CardInfo & { OnActivateButtonClick?: MouseEventH
   cost,
   cardId,
   effect,
+  oneTimeEffect,
   OnActivateButtonClick,
 }) => (
   <div className="card mini-card has-action-buttons">
-    <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect }} />
+    <CardImage viewBoxHeight="36.25" {...{ type, victoryPoints, level, color, cost, cardId, effect, oneTimeEffect }} />
     {OnActivateButtonClick && (
       <div className="action-buttons">
         <img src="images/button-activate.svg" alt="File Action Button" onClick={OnActivateButtonClick} />
