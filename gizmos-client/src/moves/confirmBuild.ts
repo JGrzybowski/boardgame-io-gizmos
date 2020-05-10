@@ -17,6 +17,8 @@ function confirmBuildMove(G: GameState, ctx: GameContext): GameState | string {
 
   ctx.player?.set(newPlayerState);
   ctx.events?.setStage?.(activationStage.name);
+
+  if (G.cardToBeBuilt.oneTimeEffect) return G.cardToBeBuilt.oneTimeEffect(newGameState, ctx);
   return newGameState;
 }
 

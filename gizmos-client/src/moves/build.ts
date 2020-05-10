@@ -15,6 +15,7 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameSt
     selectedCard,
     EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
   );
+
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
 }

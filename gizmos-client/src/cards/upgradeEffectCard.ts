@@ -23,9 +23,9 @@ export function UpgradeEffectFunction(
   storage = 0,
   archive = 0,
   research = 0
-): [GameState, GameContext] {
+): GameState {
   const playerState = Ctx.player.get().withLimitsChangedBy(storage, archive, research);
   Ctx.player.set(playerState);
 
-  return [G, Ctx];
+  return G;
 }

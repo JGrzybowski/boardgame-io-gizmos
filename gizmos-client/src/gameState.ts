@@ -103,7 +103,8 @@ export const InitialGameState: GameState = {
   },
 
   withCardToBeBuiltCleared(): GameState {
-    return { ...this, cardToBeBuilt: null, cardToBeBuiltCost: null };
+    const cards = this.cardToBeBuilt ? this.cardsWithout(this.cardToBeBuilt?.cardId) : this.cards;
+    return { ...this, cards: cards, cardToBeBuilt: null, cardToBeBuiltCost: null };
   },
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
