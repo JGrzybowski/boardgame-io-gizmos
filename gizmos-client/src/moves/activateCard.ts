@@ -4,6 +4,8 @@ import { GameContext } from "../gameContext";
 import { PlayerMove } from "./playerMove";
 import { TriggerType } from "../cards/triggerType";
 import { CardInfo } from "../cards/cardInfo";
+import { EnergyType } from "../basicGameElements";
+import { ConvertEffectCard } from "../cards/convertEffectCard";
 
 export function activateCard(
   G: GameState,
@@ -23,11 +25,31 @@ export function activateCard(
   return selectedCard.effect.gameStateAfterEffect(G, ctx);
 }
 
+export function getActiveCard<T extends CardInfo>(
+  G: GameState,
+  ctx: GameContext,
+  cardId: number,
+  additionalCardCondition?: (card: CardInfo) => boolean
+): T | null {
+  const playerState = ctx.player.get();
+  const selectedCard = ctx.player?.get().findCardInMachines(cardId);
+  const cardIsActive = playerState.activeCards.filter((cid) => cid === cardId);
+
+  if (!selectedCard || !cardIsActive) return null;
+  if (additionalCardCondition && !additionalCardCondition(selectedCard)) return null;
+  if (!selectedCard.effect.canBeResolved(G, ctx)) return null;
+
+  return selectedCard as T;
+}
+
 export const activateConverterCardAction: PlayerMove = {
-  move: (G: GameState, ctx: GameContext, cardId: number, effectIndex = 0) => {
+  move: (G: GameState, ctx: GameContext, from: EnergyType, to: EnergyType, cardId: number) => {
     const newGameState = activateCard(G, ctx, cardId, (card) => card?.type === TriggerType.Converter);
+    const newPlayerState = ctx.player.get().withUsedCard(cardId);
+    ctx.player.set(newPlayerState);
     return newGameState;
   },
-  client: false,
+  client: true,
   undoable: true,
+  redact: true,
 };

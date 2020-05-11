@@ -4,6 +4,7 @@ import { CardWithTakeEnergyEffect } from "./cardWithTakeEnergyEffect";
 import { EnergyType } from "../basicGameElements";
 import { TriggerType } from "./triggerType";
 import { UpgradeEffectCard, UpgradeEffectFunction } from "./upgradeEffectCard";
+import { ConvertEffect, ConvertEffectCard } from "./convertEffectCard";
 
 export const InitialCard = new CardWithTakeEnergyEffect(
   /*CardId */ 1,
@@ -16,21 +17,31 @@ export const InitialCard = new CardWithTakeEnergyEffect(
 );
 
 const Level_I_cards: ReadonlyArray<CardInfo> = [
-  new CardWithFileEffect(1, TriggerType.Archive, null, 2, EnergyType.Red, 2, 1),
+  new CardWithFileEffect(0, TriggerType.Archive, null, 2, EnergyType.Red, 2, 1),
 ];
 // const Level_II_cards = Array(36).fill(Card());
 // const Level_III_cards = Array(36).fill(Card());
 
 const TestCards: ReadonlyArray<CardInfo> = [
-  new UpgradeEffectCard(1, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Red, 1, 1),
-  new UpgradeEffectCard(2, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Blue, 1, 1),
-  new UpgradeEffectCard(3, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Black, 1, 1),
-  new UpgradeEffectCard(4, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Yellow, 1, 1),
+  new UpgradeEffectCard(101, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Red, 1, 1),
+  new UpgradeEffectCard(102, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Blue, 1, 1),
+  new UpgradeEffectCard(103, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Black, 1, 1),
+  new UpgradeEffectCard(104, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 1, 0), 1, EnergyType.Yellow, 1, 1),
 
-  new UpgradeEffectCard(5, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Red, 1, 1),
-  new UpgradeEffectCard(6, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Blue, 1, 1),
-  new UpgradeEffectCard(7, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Black, 1, 1),
-  new UpgradeEffectCard(8, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Yellow, 1, 1),
+  new UpgradeEffectCard(105, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Red, 1, 1),
+  new UpgradeEffectCard(106, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Blue, 1, 1),
+  new UpgradeEffectCard(107, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Black, 1, 1),
+  new UpgradeEffectCard(108, (G, Ctx) => UpgradeEffectFunction(G, Ctx, 1, 0, 1), 1, EnergyType.Yellow, 1, 1),
+
+  new ConvertEffectCard(111, new ConvertEffect(EnergyType.Any, EnergyType.Blue), 1, EnergyType.Red, 1, 1),
+  new ConvertEffectCard(112, new ConvertEffect(EnergyType.Any, EnergyType.Black), 1, EnergyType.Red, 1, 1),
+  new ConvertEffectCard(113, new ConvertEffect(EnergyType.Any, EnergyType.Red), 1, EnergyType.Blue, 1, 1),
+  new ConvertEffectCard(114, new ConvertEffect(EnergyType.Any, EnergyType.Yellow), 1, EnergyType.Blue, 1, 1),
+
+  new ConvertEffectCard(115, new ConvertEffect(EnergyType.Any, EnergyType.Red), 1, EnergyType.Black, 1, 1),
+  new ConvertEffectCard(116, new ConvertEffect(EnergyType.Any, EnergyType.Yellow), 1, EnergyType.Black, 1, 1),
+  new ConvertEffectCard(117, new ConvertEffect(EnergyType.Any, EnergyType.Blue), 1, EnergyType.Yellow, 1, 1),
+  new ConvertEffectCard(118, new ConvertEffect(EnergyType.Any, EnergyType.Black), 1, EnergyType.Yellow, 1, 1),
 
   new CardWithFileEffect(101, TriggerType.Converter, null, 1, EnergyType.Blue, 1, 1),
   new CardWithFileEffect(102, TriggerType.Build, null, 1, EnergyType.Yellow, 1, 1),

@@ -23,6 +23,7 @@ interface PlayerStateData {
   researched?: ReadonlyArray<CardInfo>;
 
   activeCards?: ReadonlyArray<number>;
+  usedCards?: ReadonlyArray<number>;
 
   isArchivingBlocked?: boolean;
   isResearchBlocked?: boolean;
@@ -41,6 +42,7 @@ export class PlayerState {
       archive = [],
       researched = [],
       activeCards = [],
+      usedCards = [],
       isArchivingBlocked = false,
       isResearchBlocked = false,
     } = data;
@@ -54,6 +56,7 @@ export class PlayerState {
     this.archive = archive;
     this.researched = researched;
     this.activeCards = activeCards;
+    this.usedCards = usedCards;
     this.isArchivingBlocked = isArchivingBlocked;
     this.isResearchBlocked = isResearchBlocked;
   }
@@ -72,6 +75,7 @@ export class PlayerState {
   readonly researched: ReadonlyArray<CardInfo>;
 
   readonly activeCards: ReadonlyArray<number>;
+  readonly usedCards: ReadonlyArray<number>;
 
   readonly isArchivingBlocked: boolean = false;
   readonly isResearchBlocked: boolean = false;
@@ -190,5 +194,19 @@ export class PlayerState {
     const researchLimit = this.researchLimit + research;
 
     return new PlayerState({ ...this, archiveLimit, energyStorageCapacity, researchLimit });
+  }
+
+  withCardActive(cardId: number): PlayerState {
+    const card = this.findCardInMachines(cardId);
+    if (!card) throw new Error("Card was not found");
+    if (this.usedCards.filter((cId) => cId === cardId)) throw new Error("Card was already used");
+    const activeCards = [...this.activeCards, cardId];
+    return new PlayerState({ ...this, activeCards });
+  }
+
+  withUsedCard(cardId: number): PlayerState {
+    const activeCards = this.activeCards.filter((cId) => cId !== cardId);
+    const usedCards = [...this.usedCards, cardId];
+    return new PlayerState({ ...this, activeCards, usedCards });
   }
 }
