@@ -1,14 +1,15 @@
 import { CardInfo } from "./cards/cardInfo";
 import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
-import { GameState, InitialGameState } from "./gameState";
+import { GameState, GameS } from "./gameState";
 import { GameContext } from "./gameContext";
 import { Game } from "boardgame.io";
 import { actionStage } from "./stages/actionStage";
 import { activationStage } from "./stages/activationStage";
 import { paymentStage } from "./stages/paymentStage";
 import { researchStage } from "./stages/researchStage";
-import { EnergyType } from "./basicGameElements";
+import { initialDispenser } from "./basicGameElements";
+import { CardsList } from "./cards/cardsList";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
@@ -18,15 +19,26 @@ function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
   return ctx.player?.get().machines.filter((c: CardInfo) => c.level === 3).length === 4;
 }
 
+const InitialGameState: GameState = new GameS({
+  dispenser: initialDispenser,
+  cards: CardsList,
+  visibleEnergyBallsLimit: 6,
+  visibleCardsLimits: [0, 4, 3, 2],
+
+  cardToBeBuilt: null,
+  cardToBeBuiltCost: null,
+
+  previousStageName: null,
+  playerStateBeforeBuild: null,
+  gameStateBeforeBuild: null,
+});
+
 const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
   setup: (ctx) => {
-    let G = { ...InitialGameState };
+    const G = InitialGameState.withShuffeledCards(ctx).withShuffeledDispenser(ctx);
     ctx.events?.setStage?.(actionStage.name);
-    const shuffledCards: ReadonlyArray<CardInfo> = ctx.random?.Shuffle([...G.cards]) ?? [];
-    const shuffledDispenser: ReadonlyArray<EnergyType> = ctx.random?.Shuffle([...G.dispenser]) ?? [];
-    G = { ...G, cards: shuffledCards, dispenser: shuffledDispenser };
 
     return G;
   },

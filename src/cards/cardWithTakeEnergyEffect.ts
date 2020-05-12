@@ -15,10 +15,10 @@ export class TakeEnergyEffect extends CardEffect {
   }
 
   gameStateAfterEffect(G: GameState, ctx: GameContext): GameState {
+    // TODO change to G.WithoutRandomEnergy(): [GameState, EnergyType]
     const numberOfEnergyToSelectFrom = G.dispenser.length - dispenserVisibilityLimit;
     const takenIndex = (ctx.random?.Die(numberOfEnergyToSelectFrom) ?? 1) + dispenserVisibilityLimit - 1;
     const dispenser = G.dispenser.filter((e, idx) => idx !== takenIndex);
-
     return { ...G, dispenser };
   }
 
