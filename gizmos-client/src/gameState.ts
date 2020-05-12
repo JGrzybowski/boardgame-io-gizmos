@@ -20,20 +20,22 @@ export interface GameState {
 
   findCardOnTheTable(cardId: number): CardInfo | null;
   cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
+  withCardRemovedFromTable(cardId: number): GameState;
+  withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
+
+  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>];
+
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
+  withCardToBeBuiltCleared(): GameState;
+
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
   dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType>;
   dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType];
-  withCardRemovedFromTable(cardId: number): GameState;
   withDispenserWithout(index: number): [GameState, EnergyType];
-  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
-  withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
-  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>];
-  withCardToBeBuiltCleared(): GameState;
-
-  withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
 
   withPlayerAndGameStateSaved(ctx: Ctx): GameState;
 
+  withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
   withEnergyAddedToCost(changeTo: EnergyType): GameState;
 }
 
@@ -134,3 +136,17 @@ export const InitialGameState: GameState = {
     };
   },
 };
+
+export class GameS implements GameState {
+  constructor(
+    public readonly dispenser: ReadonlyArray<EnergyType>,
+    public readonly cards: ReadonlyArray<CardInfo>,
+    public readonly visibleEnergyBallsLimit: number,
+    public readonly cardToBeBuilt: CardInfo | null,
+    public readonly cardToBeBuiltCost: EnergyTypeDictionary | null,
+    public readonly visibleCardsLimits: ReadonlyArray<number>,
+    public readonly previousStageName: string | null,
+    public readonly playerStateBeforeBuild: PlayerState | null,
+    public readonly gameStateBeforeBuild: GameState | null
+  ) {}
+}

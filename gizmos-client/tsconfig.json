@@ -16,7 +16,8 @@
     "noEmit": true,
     "jsx": "react",
     "downlevelIteration": true,
-    "plugins": []
+    "plugins": [],
+    "sourceMap": true
   },
   "include": ["src"]
 }
