@@ -5,7 +5,6 @@ import { PlayerMove } from "./playerMove";
 import { TriggerType } from "../cards/triggerType";
 import { CardInfo } from "../cards/cardInfo";
 import { EnergyType } from "../basicGameElements";
-import { ConvertEffectCard } from "../cards/convertEffectCard";
 
 export function activateCard(
   G: GameState,
@@ -32,7 +31,7 @@ export function getActiveCard<T extends CardInfo>(
   additionalCardCondition?: (card: CardInfo) => boolean
 ): T | null {
   const playerState = ctx.player.get();
-  const selectedCard = ctx.player?.get().findCardInMachines(cardId);
+  const selectedCard = playerState.findCardInMachines(cardId);
   const cardIsActive = playerState.activeCards.filter((cid) => cid === cardId);
 
   if (!selectedCard || !cardIsActive) return null;

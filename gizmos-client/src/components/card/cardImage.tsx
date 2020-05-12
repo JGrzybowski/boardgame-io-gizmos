@@ -1,6 +1,6 @@
 import React from "react";
 import { CardInfo } from "../../cards/cardInfo";
-import { upperFrame, corners, accentBorder, triggerBoxBorder, triggerBox } from "../colorDictionary";
+import { upperFrame, triggerBoxBorder, triggerBox } from "../colorDictionary";
 import { EnergyType } from "../../basicGameElements";
 import { TriggerType } from "../../cards/triggerType";
 import { EnergySymbol } from "./energySymbol";
@@ -10,7 +10,6 @@ import { SingleColorFrame, MultiColorFrame } from "./frames";
 import { TriggerIcon } from "./triggerIcon";
 import { CardIdCount } from "./cardId";
 import { ConditionalEffectBox } from "./conditionalEffectBox";
-import { PlayerLimits } from "../playerLimits";
 import { SingleCounter } from "./singleCounter";
 
 export const CardImage: React.FC<CardInfo & { viewBoxHeight: string | number }> = (props) => {

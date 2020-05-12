@@ -1,9 +1,9 @@
 import { EnergyType } from "../basicGameElements";
 import { TriggerType } from "./triggerType";
 import { GameContext } from "../gameContext";
-import { GameState, InitialGameState } from "../gameState";
+import { GameState } from "../gameState";
 import { EnergyTypeDictionary } from "./energyTypeDictionary";
-import { CardInfo, CardLevel, CardEffectFunction } from "./cardInfo";
+import { CardInfo, CardLevel } from "./cardInfo";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { CardEffect } from "./cardEffect";
 

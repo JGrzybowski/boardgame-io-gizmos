@@ -4,16 +4,13 @@ import { PlayerBar } from "./playerBar";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { EnergyOrb } from "./energyOrb";
-import { EnergyType } from "../basicGameElements";
 import { CardStack } from "./cardStack";
 import { PlayerState } from "../playerState";
-import { MiniCard, Card } from "./card";
+import { Card } from "./card";
 import { PlayerID } from "boardgame.io";
 import { EnergyCounter } from "./energyCounter";
-import { actionStage } from "../stages/actionStage";
 import { activationStage } from "../stages/activationStage";
 import { researchStage } from "../stages/researchStage";
-import { PlayerLimits } from "./playerLimits";
 
 interface BoardProps {
   G: GameState;
@@ -32,7 +29,7 @@ interface BoardProps {
 }
 
 export const GizmosBoard: React.FC<BoardProps> = (props) => {
-  const { G, ctx, moves, events, plugins, playerID } = props;
+  const { G, ctx, moves, events, plugins } = props;
 
   const commonAreaGridStyle: React.CSSProperties = {
     display: "flex",
