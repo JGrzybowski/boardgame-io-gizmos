@@ -10,10 +10,10 @@ test("Should remove amount of cards it was asked", () => {
   });
 
   //Act
-  const [afterPickOne, pickedCards] = From.TopOfPile(1, 2)(G);
+  const [gameStateAfterPut, pickedCards] = From.TopOfPile(1, 2)(G);
 
   //Assert
-  expect(afterPickOne.cards).toHaveLength(3);
+  expect(gameStateAfterPut.cards).toHaveLength(3);
   expect(pickedCards).toHaveLength(2);
 });
 
@@ -25,10 +25,10 @@ test("Should not take more cards from pile", () => {
   });
 
   //Act
-  const [afterPickOne] = From.TopOfPile(1, 2)(G);
+  const [gameStateAfterPut] = From.TopOfPile(1, 2)(G);
 
   //Assert
-  expect(afterPickOne.cards.map((c) => c.cardId)).toContain(14);
+  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(14);
 });
 
 test("Should skip cards visible on the table", () => {
@@ -39,11 +39,11 @@ test("Should skip cards visible on the table", () => {
   });
 
   //Act
-  const [afterPickOne] = From.TopOfPile(1, 2)(G);
+  const [gameStateAfterPut] = From.TopOfPile(1, 2)(G);
 
   //Assert
-  expect(afterPickOne.cards.map((c) => c.cardId)).toContain(10);
-  expect(afterPickOne.cards.map((c) => c.cardId)).toContain(11);
+  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(10);
+  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(11);
 });
 
 test("Order is not disrupted", () => {
@@ -54,10 +54,10 @@ test("Order is not disrupted", () => {
   });
 
   //Act
-  const [afterPickOne] = From.TopOfPile(1, 2)(G);
+  const [gameStateAfterPut] = From.TopOfPile(1, 2)(G);
 
   //Assert
-  expect(afterPickOne.cards.map((c) => c.cardId)).toMatchObject([10, 11, 14]);
+  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toMatchObject([10, 11, 14]);
 });
 
 test("Returns picked cards", () => {
@@ -75,13 +75,13 @@ test("Returns picked cards", () => {
   expect(pickedCards.map((c) => c.cardId)).toContain(13);
 });
 
-test("Does not modify the original state", () => {
+test("Does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const gBeforePick = new GameS({
+  const originalGameState = new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -90,7 +90,7 @@ test("Does not modify the original state", () => {
   From.TopOfPile(1, 2)(G);
 
   //Assert
-  expect(G).toMatchObject(gBeforePick);
+  expect(G).toMatchObject(originalGameState);
 });
 
 test("Returns all remaining cards from pile if there is less of them than asked number ", () => {
