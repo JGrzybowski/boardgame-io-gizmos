@@ -5,6 +5,9 @@ import { PlayerState } from "./playerState";
 import { Ctx } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
+export type CardPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
+export type CardPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => T;
+
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
   readonly cards: ReadonlyArray<CardInfo>;
@@ -18,7 +21,6 @@ export interface GameState {
   readonly gameStateBeforeBuild: GameState | null;
 
   findCardOnTheTable(cardId: number): CardInfo | null;
-  //cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
   withCardRemovedFromTable(cardId: number): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
 
@@ -28,8 +30,6 @@ export interface GameState {
   withCardToBeBuiltCleared(): GameState;
 
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
-  //dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType>;
-  //dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType];
   withDispenserWithout(index: number): [GameState, EnergyType];
 
   withPlayerAndGameStateSaved(ctx: Ctx): GameState;
@@ -39,18 +39,20 @@ export interface GameState {
 
   withShuffeledCards(ctx: GameContext): GameState;
   withShuffeledDispenser(ctx: GameContext): GameState;
+
+  moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
 }
 
 export interface GameStateData {
-  readonly dispenser: ReadonlyArray<EnergyType>;
-  readonly cards: ReadonlyArray<CardInfo>;
+  readonly dispenser?: ReadonlyArray<EnergyType>;
+  readonly cards?: ReadonlyArray<CardInfo>;
   readonly visibleEnergyBallsLimit?: number;
-  readonly cardToBeBuilt: CardInfo | null;
-  readonly cardToBeBuiltCost: EnergyTypeDictionary | null;
-  readonly visibleCardsLimits: ReadonlyArray<number>;
-  readonly previousStageName: string | null;
-  readonly playerStateBeforeBuild: PlayerState | null;
-  readonly gameStateBeforeBuild: GameState | null;
+  readonly cardToBeBuilt?: CardInfo | null;
+  readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
+  readonly visibleCardsLimits?: ReadonlyArray<number>;
+  readonly previousStageName?: string | null;
+  readonly playerStateBeforeBuild?: PlayerState | null;
+  readonly gameStateBeforeBuild?: GameState | null;
 }
 
 export class GameS implements GameState {
@@ -92,7 +94,7 @@ export class GameS implements GameState {
     return !card ? null : card;
   }
 
-  cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
+  private cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
     return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
   }
 
@@ -100,12 +102,7 @@ export class GameS implements GameState {
     return index >= 0 && index < this.visibleEnergyBallsLimit;
   }
 
-  dispenserWithoutEnergy(energy: EnergyType): ReadonlyArray<EnergyType> {
-    const i = this.dispenser.indexOf(energy);
-    return this.dispenserWithout(i)[0];
-  }
-
-  dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
+  private dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
     const energy = this.dispenser[index];
     const dispenser = this.dispenser.filter((e, idx) => idx !== index);
     return [dispenser, energy];
@@ -177,5 +174,11 @@ export class GameS implements GameState {
 
   withShuffeledDispenser(ctx: GameContext): GameState {
     return new GameS({ ...this, dispenser: ctx.random?.Shuffle([...this.dispenser]) });
+  }
+
+  moveCard(picker: CardPicker<GameState>, putter: CardPutter<GameState>): GameState {
+    const [gAfterPick, pickedCards] = picker(this);
+    const gAfterPut = putter(gAfterPick, pickedCards);
+    return gAfterPut;
   }
 }

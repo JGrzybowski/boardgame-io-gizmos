@@ -1,4 +1,4 @@
-import { InitialGameState } from "./gameState";
+import { GameS } from "./gameState";
 
 //Testing FindCardOntheTable
 test.todo("Finds cards on any level."); //cases 1,2,3
