@@ -8,7 +8,7 @@ test("Cards are put into player's cards collection", () => {
   const G = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 
@@ -28,14 +28,14 @@ test("Does not change the other players", () => {
   const G = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 
   const originalGameState = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 
@@ -46,7 +46,7 @@ test("Does not change the other players", () => {
 
   //Assert
   expect(afterPut.players["1"]).toMatchObject(originalGameState.players["1"]);
-  expect(afterPut.players["1"]).toMatchObject(new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }));
+  expect(afterPut.players["1"]).toMatchObject(new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }));
 });
 
 test("Does not remove any other cards previously owned by the player", () => {
@@ -54,7 +54,7 @@ test("Does not remove any other cards previously owned by the player", () => {
   const G = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 
@@ -73,14 +73,14 @@ test("Does not modify the original game state", () => {
   const G = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 
   const originalGameState = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 
@@ -98,7 +98,7 @@ test("Throws an Error if there is no player with given Id", () => {
   const G = new GameS({
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
-      "1": new PlayerState({ playerId: "0", machines: [new TestCard(11, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
     },
   });
 

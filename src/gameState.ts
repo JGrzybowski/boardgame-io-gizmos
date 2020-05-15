@@ -189,8 +189,7 @@ export class GameS implements GameState {
   }
 
   withUpdatedPlayer(playerId: PlayerID, playerState: PlayerState): GameState {
-    const players = { ...this.players };
-    players[playerId] = playerState;
+    const players = { ...this.players, [playerId]: playerState };
     return new GameS({ ...this, players });
   }
 }
