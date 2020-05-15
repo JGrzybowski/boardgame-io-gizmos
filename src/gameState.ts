@@ -2,7 +2,7 @@ import { CardInfo } from "./cards/cardInfo";
 import { EnergyType } from "./basicGameElements";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
-import { Ctx } from "boardgame.io";
+import { Ctx, PlayerID } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
 export type CardPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
@@ -11,6 +11,7 @@ export type CardPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
   readonly cards: ReadonlyArray<CardInfo>;
+  readonly players: { [id: string]: PlayerState };
   readonly visibleEnergyBallsLimit: number;
   readonly cardToBeBuilt: CardInfo | null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null;
@@ -41,11 +42,13 @@ export interface GameState {
   withShuffeledDispenser(ctx: GameContext): GameState;
 
   moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
+  withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
 }
 
 export interface GameStateData {
   readonly dispenser?: ReadonlyArray<EnergyType>;
   readonly cards?: ReadonlyArray<CardInfo>;
+  readonly players?: { [id: string]: PlayerState };
   readonly visibleEnergyBallsLimit?: number;
   readonly cardToBeBuilt?: CardInfo | null;
   readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
@@ -60,6 +63,7 @@ export class GameS implements GameState {
     const {
       dispenser = [],
       cards = [],
+      players = {},
       visibleEnergyBallsLimit = 6,
       cardToBeBuilt = null,
       cardToBeBuiltCost = null,
@@ -70,6 +74,7 @@ export class GameS implements GameState {
     } = initialGameState;
     this.dispenser = dispenser;
     this.cards = cards;
+    this.players = players;
     this.visibleEnergyBallsLimit = visibleEnergyBallsLimit;
     this.cardToBeBuilt = cardToBeBuilt;
     this.cardToBeBuiltCost = cardToBeBuiltCost;
@@ -81,6 +86,7 @@ export class GameS implements GameState {
 
   readonly dispenser: ReadonlyArray<EnergyType> = [];
   readonly cards: ReadonlyArray<CardInfo> = [];
+  readonly players: { [id: string]: PlayerState } = {};
   readonly visibleEnergyBallsLimit: number = 6;
   readonly cardToBeBuilt: CardInfo | null = null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null = null;
@@ -180,5 +186,11 @@ export class GameS implements GameState {
     const [gAfterPick, pickedCards] = picker(this);
     const gAfterPut = putter(gAfterPick, pickedCards);
     return gAfterPut;
+  }
+
+  withUpdatedPlayer(playerId: PlayerID, playerState: PlayerState): GameState {
+    const players = { ...this.players };
+    players[playerId] = playerState;
+    return new GameS({ ...this, players });
   }
 }

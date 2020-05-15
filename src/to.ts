@@ -1,6 +1,8 @@
 import { CardPutter, GameState, GameS } from "./gameState";
 import { CardInfo } from "./cards/cardInfo";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
+import { PlayerID } from "boardgame.io";
+import { PlayerState } from "./playerState";
 
 export class To {
   static BottomOfPile(): CardPutter<GameState> {
@@ -20,6 +22,19 @@ export class To {
       const cardToBeBuiltCost = EnergyTypeDictionary.fromTypeAndAmount(cardToBeBuilt.color, cardToBeBuilt.cost);
 
       const gAfterPut = new GameS({ ...G, cardToBeBuilt, cardToBeBuiltCost });
+      return gAfterPut;
+    };
+  }
+
+  static PlayerCards(playerId: PlayerID): CardPutter<GameState> {
+    return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
+      const playerStateAfter = newCards.reduce(
+        (p: PlayerState, card: CardInfo) => p.withAddedCardToMachines(card),
+        G.players[playerId]
+      );
+
+      const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
+
       return gAfterPut;
     };
   }

@@ -1,6 +1,6 @@
 import { TestCard, TestCardWithCost } from "./test/TestCard";
 import { GameS } from "./gameState";
-import { To } from "./to";
+import { To } from "./To";
 import { CardInfo } from "./cards/cardInfo";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { EnergyType } from "./basicGameElements";
