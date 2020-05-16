@@ -3,7 +3,6 @@ import { CardInfo } from "./cards/cardInfo";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
 import { PlayerState } from "./playerState";
-import { From } from "./From";
 
 export class To {
   static BottomOfPile(): CardPutter<GameState> {
@@ -50,6 +49,19 @@ export class To {
         (p: PlayerState, card: CardInfo) => p.withAddedCardToArchive(card),
         playerState
       );
+
+      const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
+      return gAfterPut;
+    };
+  }
+
+  static PlayerResearched(playerId: PlayerID): CardPutter<GameState> {
+    return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
+      const playerState = G.players[playerId];
+      if (playerState.researchLimit < playerState.researched.length + newCards.length)
+        throw new Error("The amount of new cards would cause to go above archive limit.");
+
+      const playerStateAfter = playerState.withCardsAddedToResearched(newCards);
 
       const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
       return gAfterPut;

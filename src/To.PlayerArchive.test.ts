@@ -3,7 +3,7 @@ import { GameS } from "./gameState";
 import { To } from "./To";
 import { PlayerState } from "./playerState";
 
-test("Cards are put into player's cards collection", () => {
+test("Cards are put into player's archived cards", () => {
   //Arrange
   const G = new GameS({
     players: {
