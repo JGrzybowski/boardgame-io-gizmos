@@ -5,20 +5,20 @@ import { INVALID_MOVE } from "boardgame.io/core";
 import { CardLevel } from "../cards/cardInfo";
 import { PlayerMove } from "./playerMove";
 import { researchStage } from "../stages/researchStage";
+import { From } from "../From";
+import { To } from "../To";
 
 function researchMove(G: GameState, ctx: GameContext, cardLevel: CardLevel): GameState | string {
-  const playerState: PlayerState = ctx.player?.get();
+  const playerState: PlayerState = G.players[ctx.currentPlayer]; // ctx.player?.get();
   if (!playerState.canResearch()) return INVALID_MOVE;
   if (cardLevel === 0) return INVALID_MOVE;
+  if (G.cards.filter((c) => c.level === cardLevel).length <= G.visibleCardsLimits[cardLevel]) return INVALID_MOVE;
 
-  //Load X cards (up to limit) from pile
-  const [newGameState, revealedCards] = G.revealedCardsFromPile(playerState.researchLimit, cardLevel);
-  if (revealedCards.length === 0) return INVALID_MOVE;
+  const newGameState = G.moveCard(
+    From.TopOfPile(cardLevel, playerState.researchLimit),
+    To.PlayerResearched(ctx.currentPlayer)
+  );
 
-  //Show the cards to active player
-  const newPlayerState = playerState.withCardsAddedToResearched(revealedCards);
-
-  ctx.player?.set(newPlayerState);
   ctx.events?.setStage?.(researchStage.name);
   return newGameState;
 }

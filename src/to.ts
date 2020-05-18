@@ -59,7 +59,7 @@ export class To {
     return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
       const playerState = G.players[playerId];
       if (playerState.researchLimit < playerState.researched.length + newCards.length)
-        throw new Error("The amount of new cards would cause to go above archive limit.");
+        throw new Error("The amount of new cards would cause to go above research limit.");
 
       const playerStateAfter = playerState.withCardsAddedToResearched(newCards);
 

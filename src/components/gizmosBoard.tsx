@@ -63,6 +63,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
     ));
 
   const playerState: PlayerState = plugins.player.data.players[ctx.currentPlayer];
+  const newPlayerState: PlayerState = G.players[ctx.currentPlayer];
   console.log(plugins.player.data.players[ctx.currentPlayer]);
 
   return (
@@ -94,7 +95,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
         }}
       >
         <CardStack>
-          {playerState.researched.map((card) => (
+          {newPlayerState.researched.map((card) => (
             <Card
               key={card.cardId}
               {...card}
