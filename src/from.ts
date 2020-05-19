@@ -8,7 +8,9 @@ export class From {
         .filter((c) => c.level === lvl)
         .slice(G.visibleCardsLimits[lvl], n + G.visibleCardsLimits[lvl]);
       const pickedIds = pickedCards.map((c) => c.cardId);
-      const gAfterPick = new GameS({ ...G, cards: G.cards.filter((c: CardInfo) => !pickedIds.includes(c.cardId)) });
+
+      const cards = G.cards.filter((c: CardInfo) => !pickedIds.includes(c.cardId));
+      const gAfterPick = new GameS({ ...G, cards });
       return [gAfterPick, pickedCards];
     };
   }
@@ -24,8 +26,19 @@ export class From {
 
       if (!isCardVisible) throw new Error("This move should pick exactly one card and it must be visible.");
 
-      const gAfterPick = new GameS({ ...G, cards: G.cards.filter((c: CardInfo) => c.cardId !== selectedCard.cardId) });
+      const cards = G.cards.filter((c: CardInfo) => c.cardId !== selectedCard.cardId);
+      const gAfterPick = new GameS({ ...G, cards });
       return [gAfterPick, selectedCards];
+    };
+  }
+
+  static CardToBuild(): CardPicker<GameState> {
+    return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
+      if (!G.cardToBeBuilt) throw new Error("There is no card to be built.");
+
+      const cards = G.cardsWithout(G.cardToBeBuilt.cardId);
+      const newGameState: GameState = new GameS({ ...G, cards: cards, cardToBeBuilt: null, cardToBeBuiltCost: null });
+      return [newGameState, [G.cardToBeBuilt]];
     };
   }
 }

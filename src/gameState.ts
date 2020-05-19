@@ -29,6 +29,7 @@ export interface GameState {
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
   withCardToBeBuiltCleared(): GameState;
+  cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
 
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
   withDispenserWithout(index: number): [GameState, EnergyType];
@@ -100,7 +101,7 @@ export class GameS implements GameState {
     return !card ? null : card;
   }
 
-  private cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
+  cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
     return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
   }
 

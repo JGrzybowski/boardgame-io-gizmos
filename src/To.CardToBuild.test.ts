@@ -82,7 +82,7 @@ test("Does not modify the original game state", () => {
   const cardsToPut = [new TestCard(15, 1)];
 
   //Act
-  To.CardToBuild()(G, cardsToPut);
+  const afterPut = To.CardToBuild()(G, cardsToPut);
 
   //Assert
   expect(G).toMatchObject(originalGameState);

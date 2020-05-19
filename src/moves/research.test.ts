@@ -111,5 +111,5 @@ test("No cards in the pile returns invalid move", () => {
 
   //Assert
   const afterMoveCtx: GameContext = client.store.getState().ctx;
-  expect(afterMoveCtx?.activePlayers["0"]).toBe(actionStage.name);
+  expect(afterMoveCtx?.activePlayers?.["0"]).toBe(actionStage.name);
 });
