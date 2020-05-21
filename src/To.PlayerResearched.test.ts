@@ -70,7 +70,6 @@ test("Does not remove any other cards previously owned by the player", () => {
   expect(afterPut.players["0"].machines.map((c) => c.cardId)).toContain(11);
 });
 
-// TODO fix
 test("Does not remove any other cards previously researched by the player", () => {
   //Arrange
   const G = new GameS({
@@ -80,7 +79,7 @@ test("Does not remove any other cards previously researched by the player", () =
     },
   });
 
-  const cardsToPut = [new TestCard(15, 1), new TestCard(20, 2)];
+  const cardsToPut = [new TestCard(15, 1), new TestCard(12, 2)];
 
   //Act
   const afterPut = To.PlayerResearched("0")(G, cardsToPut);
