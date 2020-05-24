@@ -10,6 +10,7 @@ import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const selectedCard: CardInfo | null = G.findCardOnTheTable(cardId);
   if (!selectedCard) return INVALID_MOVE;
+  if (G.cardToBeBuilt || G.cardToBeBuiltCost) return INVALID_MOVE;
 
   const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
     selectedCard,
