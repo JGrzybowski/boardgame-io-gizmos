@@ -6,6 +6,8 @@ import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";
 import { paymentStage } from "../stages/paymentStage";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
+import { From } from "../From";
+import { To } from "../To";
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   const selectedCard: CardInfo | null = G.findCardOnTheTable(cardId);
@@ -38,17 +40,22 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
 }
 
 function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): GameState | string {
-  const playerState: PlayerState = ctx.player?.get();
+  const playerState: PlayerState = G.players[ctx.currentPlayer];
   const selectedCard: CardInfo | null = playerState.findCardInTheResearched(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
-  const newPlayerState = playerState.withRemovedCardFromResearched(cardId);
-  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
-    selectedCard,
-    EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+  const withCardsMoved = G.moveCard(From.PlayerResearched(ctx.currentPlayer, cardId), To.CardToBuild()).moveCard(
+    From.PlayerResearched(ctx.currentPlayer),
+    To.BottomOfPile()
   );
 
-  ctx.player?.set(newPlayerState);
+  if (!withCardsMoved.cardToBeBuilt) return INVALID_MOVE;
+
+  const newGameState = withCardsMoved.withCardToBeBuilt(
+    withCardsMoved.cardToBeBuilt,
+    EnergyTypeDictionary.fromTypeAndAmount(withCardsMoved.cardToBeBuilt.color, withCardsMoved.cardToBeBuilt?.cost)
+  );
+
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
 }
