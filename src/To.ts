@@ -1,11 +1,11 @@
-import { CardPutter, GameState, GameS } from "./gameState";
+import { CardsPutter, GameState, GameS } from "./gameState";
 import { CardInfo } from "./cards/cardInfo";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
 import { PlayerState } from "./playerState";
 
 export class To {
-  static BottomOfPile(): CardPutter<GameState> {
+  static BottomOfPile(): CardsPutter<GameState> {
     return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
       const cards = [...G.cards, ...newCards];
       const gAfterPut = new GameS({ ...G, cards });
@@ -13,7 +13,7 @@ export class To {
     };
   }
 
-  static CardToBuild(): CardPutter<GameState> {
+  static CardToBuild(): CardsPutter<GameState> {
     return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
       if (newCards.length !== 1) throw new Error("Only one card can be put to Card to be built slot");
       if (G.cardToBeBuilt) throw new Error("Only one card can be put to Card to be built slot");
@@ -26,7 +26,7 @@ export class To {
     };
   }
 
-  static PlayerCards(playerId: PlayerID): CardPutter<GameState> {
+  static PlayerCards(playerId: PlayerID): CardsPutter<GameState> {
     return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
       const playerStateAfter = newCards.reduce(
         (p: PlayerState, card: CardInfo) => p.withAddedCardToMachines(card),
@@ -39,7 +39,7 @@ export class To {
     };
   }
 
-  static PlayerArchive(playerId: PlayerID): CardPutter<GameState> {
+  static PlayerArchive(playerId: PlayerID): CardsPutter<GameState> {
     return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
       const playerState = G.players[playerId];
       if (playerState.archiveLimit < playerState.archive.length + newCards.length)
@@ -55,7 +55,7 @@ export class To {
     };
   }
 
-  static PlayerResearched(playerId: PlayerID): CardPutter<GameState> {
+  static PlayerResearched(playerId: PlayerID): CardsPutter<GameState> {
     return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
       const playerState = G.players[playerId];
       if (playerState.researchLimit < playerState.researched.length + newCards.length)

@@ -6,7 +6,6 @@ import { Client } from "boardgame.io/client";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
-import { researchStage } from "../stages/researchStage";
 import { Game } from "boardgame.io";
 import { actionStage } from "../stages/actionStage";
 
@@ -78,8 +77,8 @@ test("card cost is set up", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cardToBeBuilt).not.toBeNull();
-  expect(afterMove.cardToBeBuilt).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Red, 3));
+  expect(afterMove.cardToBeBuiltCost).not.toBeNull();
+  expect(afterMove.cardToBeBuiltCost).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Red, 3));
 });
 
 test("can be undone", () => {

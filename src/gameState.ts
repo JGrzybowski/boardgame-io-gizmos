@@ -5,8 +5,11 @@ import { PlayerState } from "./playerState";
 import { Ctx, PlayerID } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
-export type CardPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
-export type CardPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => T;
+export type CardPicker<T> = (source: T) => [T, CardInfo];
+export type CardPutter<T> = (destination: T, cards: CardInfo) => T;
+
+export type CardsPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
+export type CardsPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => T;
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
@@ -43,6 +46,8 @@ export interface GameState {
   withShuffeledDispenser(ctx: GameContext): GameState;
 
   moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
+  moveCard(from: CardPicker<GameState>, into: CardsPutter<GameState>): GameState;
+  moveCard(from: CardsPicker<GameState>, into: CardsPutter<GameState>): GameState;
   withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
 }
 
@@ -183,7 +188,11 @@ export class GameS implements GameState {
     return new GameS({ ...this, dispenser: ctx.random?.Shuffle([...this.dispenser]) });
   }
 
-  moveCard(picker: CardPicker<GameState>, putter: CardPutter<GameState>): GameState {
+  moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
+  moveCard(from: CardPicker<GameState>, into: CardsPutter<GameState>): GameState;
+  moveCard(from: CardsPicker<GameState>, into: CardsPutter<GameState>): GameState;
+  moveCard(picker: any, putter: any): GameState {
+    return new GameS({ ...this });
     const [gAfterPick, pickedCards] = picker(this);
     const gAfterPut = putter(gAfterPick, pickedCards);
     return gAfterPut;

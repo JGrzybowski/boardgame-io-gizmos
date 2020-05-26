@@ -1,11 +1,11 @@
 import { CardLevel, CardInfo } from "./cards/cardInfo";
-import { GameState, GameS, CardPicker } from "./gameState";
+import { GameState, GameS, CardsPicker } from "./gameState";
 import { Game, PlayerID } from "boardgame.io";
 import { researchAction } from "./moves/research";
 import { researchStage } from "./stages/researchStage";
 
 export class From {
-  static TopOfPile(lvl: CardLevel, n: number): CardPicker<GameState> {
+  static TopOfPile(lvl: CardLevel, n: number): CardsPicker<GameState> {
     return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
       const pickedCards = G.cards
         .filter((c) => c.level === lvl)
@@ -18,7 +18,7 @@ export class From {
     };
   }
 
-  static Table(cardId: number): CardPicker<GameState> {
+  static Table(cardId: number): CardsPicker<GameState> {
     return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
       const selectedCards = G.cards.filter((c) => c.cardId === cardId);
       if (selectedCards.length < 1) throw new Error("Card with given id is not on the table.");
@@ -36,7 +36,7 @@ export class From {
     };
   }
 
-  static CardToBuild(): CardPicker<GameState> {
+  static CardToBuild(): CardsPicker<GameState> {
     return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
       if (!G.cardToBeBuilt) throw new Error("There is no card to be built.");
 
@@ -46,7 +46,7 @@ export class From {
     };
   }
 
-  static PlayerResearched(playerId: PlayerID, cardId?: number): CardPicker<GameState> {
+  static PlayerResearched(playerId: PlayerID, cardId?: number): CardsPicker<GameState> {
     return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
       const playerState = G.players[playerId];
       if (!playerState) throw new Error("There is no player with such ID");
@@ -64,5 +64,9 @@ export class From {
       const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
       return [gAfterPut, selectedCards];
     };
+  }
+
+  static PlayerArchive(playerId: PlayerID, cardId?: number) {
+    throw new Error("Method not implemented.");
   }
 }

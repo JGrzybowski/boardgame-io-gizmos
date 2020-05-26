@@ -24,17 +24,15 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameSt
 }
 
 function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameState | string {
-  const playerState: PlayerState = ctx.player?.get();
+  const playerState: PlayerState = G.players[ctx.currentPlayer];
   const selectedCard: CardInfo | null = playerState.findCardInTheArchive(cardId);
   if (!selectedCard) return INVALID_MOVE;
 
   const newPlayerState = playerState.withRemovedCardFromArchive(cardId);
-  const newGameState = G.withPlayerAndGameStateSaved(ctx).withCardToBeBuilt(
-    selectedCard,
-    EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
-  );
+  const newGameState = G.withPlayerAndGameStateSaved(ctx)
+    .withCardToBeBuilt(selectedCard, EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost))
+    .withUpdatedPlayer(ctx.currentPlayer, newPlayerState);
 
-  ctx.player?.set(newPlayerState);
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
 }
