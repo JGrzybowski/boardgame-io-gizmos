@@ -7,9 +7,20 @@ import { GameContext } from "./gameContext";
 
 export type CardPicker<T> = (source: T) => [T, CardInfo];
 export type CardPutter<T> = (destination: T, cards: CardInfo) => T;
-
 export type CardsPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
 export type CardsPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => T;
+function isCardPicker<T>(x: Function): x is CardPicker<T> {
+  return typeof x === "function" && x.length === 1;
+}
+function isCardsPicker<T>(x: Function): x is CardsPicker<T> {
+  return typeof x === "function" && x.length === 1;
+}
+function isCardPutter<T>(x: Function): x is CardPutter<T> {
+  return typeof x === "function" && x.length === 1;
+}
+function isCardsPutter<T>(x: Function): x is CardsPutter<T> {
+  return typeof x === "function" && x.length === 1;
+}
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
@@ -191,11 +202,21 @@ export class GameS implements GameState {
   moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
   moveCard(from: CardPicker<GameState>, into: CardsPutter<GameState>): GameState;
   moveCard(from: CardsPicker<GameState>, into: CardsPutter<GameState>): GameState;
-  moveCard(picker: any, putter: any): GameState {
-    return new GameS({ ...this });
-    const [gAfterPick, pickedCards] = picker(this);
-    const gAfterPut = putter(gAfterPick, pickedCards);
-    return gAfterPut;
+  moveCard(picker: Function, putter: Function): GameState {
+    if (isCardsPicker<GameState>(picker) && isCardsPutter<GameState>(putter)) {
+      const [gAfterPick, pickedCards] = picker(this);
+      const gAfterPut = putter(gAfterPick, pickedCards);
+      return gAfterPut;
+    } else if (isCardPicker<GameState>(picker) && isCardsPutter<GameState>(putter)) {
+      const [gAfterPick, pickedCard] = picker(this);
+      const gAfterPut = putter(gAfterPick, [pickedCard]);
+      return gAfterPut;
+    } else if (isCardPicker<GameState>(picker) && isCardPutter<GameState>(putter)) {
+      const [gAfterPick, pickedCard] = picker(this);
+      const gAfterPut = putter(gAfterPick, pickedCard);
+      return gAfterPut;
+    }
+    throw new Error("Cannot move cards due to wrong picker/putter setup");
   }
 
   withUpdatedPlayer(playerId: PlayerID, playerState: PlayerState): GameState {
