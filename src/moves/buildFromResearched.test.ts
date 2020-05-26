@@ -7,8 +7,9 @@ import { GameContext } from "../gameContext";
 import { EnergyType } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { researchStage } from "../stages/researchStage";
+import { Game } from "boardgame.io";
 
-function InitialTestScenario() {
+function InitialTestScenario(): GameState {
   return new GameS({
     cards: [
       new TestCardWithCost(10, 1, EnergyType.Red, 1),
@@ -30,23 +31,18 @@ function InitialTestScenario() {
   });
 }
 
+function GameWithInitialTestScenario(): Game<GameState, GameContext> {
+  return { ...Gizmos, setup: (): GameState => InitialTestScenario() };
+}
+
+function TestClient(game: Game<GameState, GameContext>) {
+  return Client({ game, numPlayers: 2, playerID: "0" });
+}
+
 test("removes specified card", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(researchStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
 
   // Act
@@ -60,20 +56,8 @@ test("removes specified card", () => {
 
 test("card is put into build slot", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
 
   // Act
@@ -86,21 +70,8 @@ test("card is put into build slot", () => {
 
 test("removes other non specified cards", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(researchStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
 
   // Act
@@ -114,21 +85,8 @@ test("removes other non specified cards", () => {
 
 test("remaining cards are put on the bottom of the pile", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(researchStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
 
   // Act
@@ -145,21 +103,8 @@ test("remaining cards are put on the bottom of the pile", () => {
 
 test("card cost is set up", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(researchStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
 
   // Act
@@ -172,21 +117,8 @@ test("card cost is set up", () => {
 
 test("can be undone", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(researchStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
   client.moves.buildFromResearchedAction(12);
 
@@ -202,21 +134,8 @@ test("can be undone", () => {
 
 test("returns invalid move if no card with given id", () => {
   // Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(researchStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
-
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
   client.moves.researchAction(1);
 
   // Act

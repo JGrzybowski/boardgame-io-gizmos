@@ -5,8 +5,9 @@ import Gizmos from "../game";
 import { Client } from "boardgame.io/client";
 import { actionStage } from "../stages/actionStage";
 import { GameContext } from "../gameContext";
+import { Game } from "boardgame.io";
 
-function InitialTestScenario() {
+function InitialTestScenario(): GameState {
   return new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     players: {
@@ -17,22 +18,18 @@ function InitialTestScenario() {
   });
 }
 
+function GameWithInitialTestScenario(): Game<GameState, GameContext> {
+  return { ...Gizmos, setup: (): GameState => InitialTestScenario() };
+}
+
+function TestClient(game: Game<GameState, GameContext>) {
+  return Client({ game, numPlayers: 2, playerID: "0" });
+}
+
 test("Moves cards from pile to the active player researched collection", () => {
   //Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(actionStage.name);
-      return G;
-    },
-  };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
 
   //Act
   client.moves.researchAction(1);
@@ -51,20 +48,9 @@ test("Moves cards from pile to the active player researched collection", () => {
 
 test("Cannot be undone", () => {
   //Arrange
-  const GameCustomScenario = {
-    ...Gizmos,
-    setup: (ctx: GameContext) => {
-      const G = InitialTestScenario();
-      ctx.events?.setStage?.(actionStage.name);
-      return G;
-    },
-  };
+  const GameCustomScenario = GameWithInitialTestScenario();
+  const client = TestClient(GameCustomScenario);
 
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
   client.moves.researchAction(1);
 
   //Act
@@ -86,7 +72,7 @@ test("No cards in the pile returns invalid move", () => {
   //Arrange
   const GameCustomScenario = {
     ...Gizmos,
-    setup: (ctx: GameContext) => {
+    setup: (ctx: GameContext): GameState => {
       const G = new GameS({
         cards: [new TestCard(10, 1), new TestCard(11, 1)],
         players: {
@@ -99,12 +85,7 @@ test("No cards in the pile returns invalid move", () => {
       return G;
     },
   };
-
-  const client = Client({
-    game: GameCustomScenario,
-    numPlayers: 2,
-    playerID: "0",
-  });
+  const client = TestClient(GameCustomScenario);
 
   //Act
   client.moves.researchAction(1);
