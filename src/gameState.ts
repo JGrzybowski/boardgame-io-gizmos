@@ -5,26 +5,29 @@ import { PlayerState } from "./playerState";
 import { Ctx, PlayerID } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
-export type CardPicker<T> = (source: T) => [T, CardInfo];
-export type CardPutter<T> = (destination: T, cards: CardInfo) => T;
-export type CardsPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
-export type CardsPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => T;
-function isCardPicker<T>(x: Function): x is CardPicker<T> {
-  if (x as CardPicker<T>) return true;
+export type Picker<T> = (source: GameState) => [GameState, T];
+export type Putter<T> = (destination: GameState, cards: T) => GameState;
+export type MultiPicker<T> = (source: GameState) => [GameState, ReadonlyArray<T>];
+export type MultiPutter<T> = (destination: GameState, cards: ReadonlyArray<T>) => GameState;
+
+function isPicker<T>(x: Function): x is Picker<T> {
+  if (x as Picker<T>) return true;
   return false;
 }
-function isCardsPicker<T>(x: Function): x is CardsPicker<T> {
-  if (x as CardsPicker<T>) return true;
+function isMultiPicker<T>(x: Function): x is MultiPicker<T> {
+  if (x as MultiPicker<T>) return true;
   return false;
 }
-function isCardPutter<T>(x: Function): x is CardPutter<T> {
-  if (x as CardPutter<T>) return true;
+function isPutter<T>(x: Function): x is Putter<T> {
+  if (x as Putter<T>) return true;
   return false;
 }
-function isCardsPutter<T>(x: Function): x is CardsPutter<T> {
-  if (x as CardsPutter<T>) return true;
+function isMultiPutter<T>(x: Function): x is MultiPutter<T> {
+  if (x as MultiPutter<T>) return true;
   return false;
 }
+
+export type PilesCardLevel = 1 | 2 | 3;
 
 export interface GameState {
   readonly dispenser: ReadonlyArray<EnergyType>;
@@ -43,7 +46,7 @@ export interface GameState {
   withCardRemovedFromTable(cardId: number): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
 
-  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>];
+  revealedCardsFromPile(researchLimit: number, cardLevel: PilesCardLevel): [GameState, ReadonlyArray<CardInfo>];
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
   withCardToBeBuiltCleared(): GameState;
@@ -60,9 +63,9 @@ export interface GameState {
   withShuffeledCards(ctx: GameContext): GameState;
   withShuffeledDispenser(ctx: GameContext): GameState;
 
-  moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
-  moveCard(from: CardPicker<GameState>, into: CardsPutter<GameState>): GameState;
-  moveCard(from: CardsPicker<GameState>, into: CardsPutter<GameState>): GameState;
+  moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
+  moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+  moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
   withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
 }
 
@@ -154,7 +157,7 @@ export class GameS implements GameState {
     return new GameS({ ...this, cards });
   }
 
-  revealedCardsFromPile(researchLimit: number, cardLevel: 1 | 2 | 3): [GameState, ReadonlyArray<CardInfo>] {
+  revealedCardsFromPile(researchLimit: number, cardLevel: PilesCardLevel): [GameState, ReadonlyArray<CardInfo>] {
     const revealedCards: ReadonlyArray<CardInfo> = this.cards
       .filter((c) => c.level === cardLevel)
       .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel] + researchLimit);
@@ -203,23 +206,23 @@ export class GameS implements GameState {
     return new GameS({ ...this, dispenser: ctx.random?.Shuffle([...this.dispenser]) });
   }
 
-  moveCard(from: CardPicker<GameState>, into: CardPutter<GameState>): GameState;
-  moveCard(from: CardPicker<GameState>, into: CardsPutter<GameState>): GameState;
-  moveCard(from: CardsPicker<GameState>, into: CardsPutter<GameState>): GameState;
+  moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
+  moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+  moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
   moveCard(picker: Function, putter: Function): GameState {
-    if (isCardsPicker<GameState>(picker) && isCardsPutter<GameState>(putter)) {
+    if (isMultiPicker<CardInfo>(picker) && isMultiPutter<CardInfo>(putter)) {
       const [gAfterPick, pickedCards] = picker(this);
       const gAfterPut = putter(gAfterPick, pickedCards);
       return gAfterPut;
-    } else if (isCardPicker<GameState>(picker) && isCardsPutter<GameState>(putter)) {
+    } else if (isPicker<CardInfo>(picker) && isMultiPutter<CardInfo>(putter)) {
       const [gAfterPick, pickedCard] = picker(this);
       const gAfterPut = putter(gAfterPick, [pickedCard]);
       return gAfterPut;
-    } else if (isCardPicker<GameState>(picker) && isCardPutter<GameState>(putter)) {
+    } else if (isPicker<CardInfo>(picker) && isPutter<CardInfo>(putter)) {
       const [gAfterPick, pickedCard] = picker(this);
       const gAfterPut = putter(gAfterPick, pickedCard);
       return gAfterPut;
-    } else if (isCardsPicker<GameState>(picker) && isCardPutter<GameState>(putter)) {
+    } else if (isMultiPicker<CardInfo>(picker) && isPutter<CardInfo>(putter)) {
       throw new Error("Cannot move cards due to wrong picker/putter setup");
     }
     throw new Error("Unknown args for picker/putter");

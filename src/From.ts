@@ -1,9 +1,9 @@
 import { CardLevel, CardInfo } from "./cards/cardInfo";
-import { GameState, GameS, CardsPicker, CardPicker } from "./gameState";
+import { GameState, GameS, MultiPicker, Picker } from "./gameState";
 import { PlayerID } from "boardgame.io";
 
 export class From {
-  static TopOfPile(lvl: CardLevel, n: number): CardsPicker<GameState> {
+  static TopOfPile(lvl: CardLevel, n: number): MultiPicker<CardInfo> {
     return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
       const pickedCards = G.cards
         .filter((c) => c.level === lvl)
@@ -16,7 +16,7 @@ export class From {
     };
   }
 
-  static Table(cardId: number): CardPicker<GameState> {
+  static Table(cardId: number): Picker<CardInfo> {
     return (G: GameState): [GameState, CardInfo] => {
       const selectedCards = G.cards.filter((c) => c.cardId === cardId);
       if (selectedCards.length < 1) throw new Error("Card with given id is not on the table.");
@@ -34,7 +34,7 @@ export class From {
     };
   }
 
-  static CardToBuild(): CardPicker<GameState> {
+  static CardToBuild(): Picker<CardInfo> {
     return (G: GameState): [GameState, CardInfo] => {
       if (!G.cardToBeBuilt) throw new Error("There is no card to be built.");
 
@@ -44,9 +44,9 @@ export class From {
     };
   }
 
-  static PlayerResearched(playerId: PlayerID, cardId: number): CardPicker<GameState>;
-  static PlayerResearched(playerId: PlayerID): CardsPicker<GameState>;
-  static PlayerResearched(playerId: PlayerID, cardId?: number): CardPicker<GameState> | CardsPicker<GameState> {
+  static PlayerResearched(playerId: PlayerID, cardId: number): Picker<CardInfo>;
+  static PlayerResearched(playerId: PlayerID): MultiPicker<CardInfo>;
+  static PlayerResearched(playerId: PlayerID, cardId?: number): Picker<CardInfo> | MultiPicker<CardInfo> {
     if (cardId) {
       return (G: GameState): [GameState, CardInfo] => {
         const playerState = G.players[playerId];
