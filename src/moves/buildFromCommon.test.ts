@@ -89,7 +89,7 @@ test("card cost is set up", () => {
   expect(afterMove.cardToBeBuiltCost).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Red, 2));
 });
 
-test("can be undone", () => {
+test.skip("can be undone", () => {
   // Arrange
   const GameCustomScenario = GameWithInitialTestScenario();
   const client = TestClient(GameCustomScenario);

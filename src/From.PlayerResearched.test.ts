@@ -162,11 +162,10 @@ describe("When card Id was provided", () => {
     });
 
     //Act
-    const [afterPick, pickedCards] = From.PlayerResearched("0", 11)(G);
+    const [afterPick, pickedCard] = From.PlayerResearched("0", 11)(G);
 
     //Assert
-    expect(pickedCards).toHaveLength(1);
-    expect(pickedCards.map((c) => c.cardId)).toContain(11);
+    expect(pickedCard).toMatchObject(new TestCard(11, 1));
   });
 
   test("Preserves other researched cards in the collection", () => {
@@ -183,7 +182,7 @@ describe("When card Id was provided", () => {
     });
 
     //Act
-    const [afterPick, pickedCards] = From.PlayerResearched("0", 11)(G);
+    const [afterPick, pickedCard] = From.PlayerResearched("0", 11)(G);
 
     //Assert
     expect(afterPick.players["0"].researched).toHaveLength(2);
@@ -281,7 +280,7 @@ describe("When card Id was provided", () => {
     });
 
     //Act
-    const [afterPick, pickedCards] = From.PlayerResearched("0", 11)(G);
+    const [afterPick, pickedCard] = From.PlayerResearched("0", 11)(G);
 
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);

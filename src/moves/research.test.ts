@@ -46,7 +46,7 @@ test("Moves cards from pile to the active player researched collection", () => {
   expect(afterPlayerState.researched.map((c) => c.cardId)).toContain(14);
 });
 
-test("Cannot be undone", () => {
+test.skip("Cannot be undone", () => {
   //Arrange
   const GameCustomScenario = GameWithInitialTestScenario();
   const client = TestClient(GameCustomScenario);

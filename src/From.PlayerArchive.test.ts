@@ -17,11 +17,10 @@ test("Card with given ID is taken from player's archive collection", () => {
   });
 
   //Act
-  const [afterPick, pickedCards] = From.PlayerArchive("0", 11)(G);
+  const [afterPick, pickedCard] = From.PlayerArchive("0", 11)(G);
 
   //Assert
-  expect(pickedCards).toHaveLength(1);
-  expect(pickedCards.map((c) => c.cardId)).toContain(11);
+  expect(pickedCard).toMatchObject(new TestCard(11, 1));
 });
 
 test("Preserves other archive cards in the collection", () => {
@@ -38,7 +37,7 @@ test("Preserves other archive cards in the collection", () => {
   });
 
   //Act
-  const [afterPick, pickedCards] = From.PlayerArchive("0", 11)(G);
+  const [afterPick, pickedCard] = From.PlayerArchive("0", 11)(G);
 
   //Assert
   expect(afterPick.players["0"].archive).toHaveLength(2);
@@ -136,7 +135,7 @@ test("Does not modify the the other player state", () => {
   });
 
   //Act
-  const [afterPick, pickedCards] = From.PlayerArchive("0", 11)(G);
+  const [afterPick, pickedCard] = From.PlayerArchive("0", 11)(G);
 
   //Assert
   expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);

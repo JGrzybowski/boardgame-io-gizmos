@@ -1,4 +1,4 @@
-import { CardsPutter, GameState, GameS } from "./gameState";
+import { CardsPutter, GameState, GameS, CardPutter } from "./gameState";
 import { CardInfo } from "./cards/cardInfo";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
@@ -13,14 +13,11 @@ export class To {
     };
   }
 
-  static CardToBuild(): CardsPutter<GameState> {
-    return (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
-      if (newCards.length !== 1) throw new Error("Only one card can be put to Card to be built slot");
+  static CardToBuild(): CardPutter<GameState> {
+    return (G: GameState, cardToBeBuilt: CardInfo): GameState => {
       if (G.cardToBeBuilt) throw new Error("Only one card can be put to Card to be built slot");
 
-      const cardToBeBuilt = newCards[0];
       const cardToBeBuiltCost = EnergyTypeDictionary.fromTypeAndAmount(cardToBeBuilt.color, cardToBeBuilt.cost);
-
       const gAfterPut = new GameS({ ...G, cardToBeBuilt, cardToBeBuiltCost });
       return gAfterPut;
     };

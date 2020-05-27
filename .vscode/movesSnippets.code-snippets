@@ -18,7 +18,7 @@
     "body": ["test(\"$1\", () => {", "\t//Arrange", "\t", "\t", "\t//Act", "\t", "\t", "\t//Assert", "\t", "});"],
     "description": "Prepare Jest test with Arrange, Act & Assert sections"
   },
-  "Jest test with Arrange-Act-Assert": {
+  "Arrange-Act-Assert": {
     "prefix": "aaa",
     "body": ["\t$LINE_COMMENT Arrange", "\t", "\t", "\t$LINE_COMMENT Act", "\t", "\t", "\t$LINE_COMMENT Assert", "\t"],
     "description": "Arrange, Act & Assert sections"

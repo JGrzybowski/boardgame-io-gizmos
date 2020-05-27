@@ -10,16 +10,20 @@ export type CardPutter<T> = (destination: T, cards: CardInfo) => T;
 export type CardsPicker<T> = (source: T) => [T, ReadonlyArray<CardInfo>];
 export type CardsPutter<T> = (destination: T, cards: ReadonlyArray<CardInfo>) => T;
 function isCardPicker<T>(x: Function): x is CardPicker<T> {
-  return typeof x === "function" && x.length === 1;
+  if (x as CardPicker<T>) return true;
+  return false;
 }
 function isCardsPicker<T>(x: Function): x is CardsPicker<T> {
-  return typeof x === "function" && x.length === 1;
+  if (x as CardsPicker<T>) return true;
+  return false;
 }
 function isCardPutter<T>(x: Function): x is CardPutter<T> {
-  return typeof x === "function" && x.length === 1;
+  if (x as CardPutter<T>) return true;
+  return false;
 }
 function isCardsPutter<T>(x: Function): x is CardsPutter<T> {
-  return typeof x === "function" && x.length === 1;
+  if (x as CardsPutter<T>) return true;
+  return false;
 }
 
 export interface GameState {
@@ -215,8 +219,10 @@ export class GameS implements GameState {
       const [gAfterPick, pickedCard] = picker(this);
       const gAfterPut = putter(gAfterPick, pickedCard);
       return gAfterPut;
+    } else if (isCardsPicker<GameState>(picker) && isCardPutter<GameState>(putter)) {
+      throw new Error("Cannot move cards due to wrong picker/putter setup");
     }
-    throw new Error("Cannot move cards due to wrong picker/putter setup");
+    throw new Error("Unknown args for picker/putter");
   }
 
   withUpdatedPlayer(playerId: PlayerID, playerState: PlayerState): GameState {

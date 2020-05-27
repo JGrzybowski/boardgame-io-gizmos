@@ -11,12 +11,11 @@ test("Card is taken from the built slot", () => {
   });
 
   //Act
-  const [afterPick, pickedCards] = From.CardToBuild()(G);
+  const [afterPick, pickedCard] = From.CardToBuild()(G);
 
   //Assert
   expect(afterPick.cardToBeBuilt).toBeNull();
-  expect(pickedCards).toHaveLength(1);
-  expect(pickedCards[0]).toMatchObject(new TestCard(10, 1));
+  expect(pickedCard).toMatchObject(new TestCard(10, 1));
 });
 
 test("Throws an error if there is no card in the slot", () => {
@@ -61,11 +60,11 @@ test("Sets Card's cost to null", () => {
   });
 
   //Act
-  const [afterPut] = From.CardToBuild()(G);
+  const [afterPick] = From.CardToBuild()(G);
 
   //Assert
-  expect(afterPut.cardToBeBuiltCost).not.toBeUndefined();
-  expect(afterPut.cardToBeBuiltCost).toBeNull();
+  expect(afterPick.cardToBeBuiltCost).not.toBeUndefined();
+  expect(afterPick.cardToBeBuiltCost).toBeNull();
 });
 
 test("Removes only card to be build from cards pile", () => {
@@ -77,12 +76,12 @@ test("Removes only card to be build from cards pile", () => {
   });
 
   //Act
-  const [afterPut] = From.CardToBuild()(G);
+  const [afterPick] = From.CardToBuild()(G);
 
   //Assert
-  expect(afterPut.cards.map((c) => c.cardId)).not.toContain(10);
-  expect(afterPut.cards.map((c) => c.cardId)).toContain(11);
-  expect(afterPut.cards.map((c) => c.cardId)).toContain(12);
-  expect(afterPut.cards.map((c) => c.cardId)).toContain(13);
-  expect(afterPut.cards.map((c) => c.cardId)).toContain(14);
+  expect(afterPick.cards.map((c) => c.cardId)).not.toContain(10);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(11);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(12);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(13);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(14);
 });

@@ -10,11 +10,10 @@ test("Should remove one card with given id from table", () => {
   });
 
   //Act
-  const [gameStateAfterPick, pickedCards] = From.Table(11)(G);
+  const [afterPick, pickedCard] = From.Table(11)(G);
 
   //Assert
-  expect(pickedCards).toHaveLength(1);
-  expect(gameStateAfterPick.cards.map((c) => c.cardId)).not.toContain(11);
+  expect(afterPick.cards.map((c) => c.cardId)).not.toContain(11);
 });
 
 test("Should not take more cards from table", () => {
@@ -25,14 +24,14 @@ test("Should not take more cards from table", () => {
   });
 
   //Act
-  const [gameStateAfterPick] = From.Table(11)(G);
+  const [afterPick] = From.Table(11)(G);
 
   //Assert
-  expect(gameStateAfterPick.cards).toHaveLength(4);
-  expect(gameStateAfterPick.cards.map((c) => c.cardId)).toContain(10);
-  expect(gameStateAfterPick.cards.map((c) => c.cardId)).toContain(12);
-  expect(gameStateAfterPick.cards.map((c) => c.cardId)).toContain(13);
-  expect(gameStateAfterPick.cards.map((c) => c.cardId)).toContain(14);
+  expect(afterPick.cards).toHaveLength(4);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(10);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(12);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(13);
+  expect(afterPick.cards.map((c) => c.cardId)).toContain(14);
 });
 
 test("Does not change order of the other cards", () => {
@@ -43,10 +42,10 @@ test("Does not change order of the other cards", () => {
   });
 
   //Act
-  const [gameStateAfterPick] = From.Table(11)(G);
+  const [afterPick] = From.Table(11)(G);
 
   //Assert
-  expect(gameStateAfterPick.cards.map((c) => c.cardId)).toMatchObject([10, 12, 13, 14]);
+  expect(afterPick.cards.map((c) => c.cardId)).toMatchObject([10, 12, 13, 14]);
 });
 
 test("Returns picked card", () => {
@@ -57,10 +56,10 @@ test("Returns picked card", () => {
   });
 
   //Act
-  const [, pickedCards] = From.Table(11)(G);
+  const [, pickedCard] = From.Table(11)(G);
 
   //Assert
-  expect(pickedCards[0]).toMatchObject(new TestCard(11, 1));
+  expect(pickedCard).toMatchObject(new TestCard(11, 1));
 });
 
 test("Does not modify the original game state", () => {
