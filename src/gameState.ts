@@ -42,15 +42,15 @@ export interface GameState {
   readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
 
-  findCardOnTheTable(cardId: number): CardInfo | null;
   withCardRemovedFromTable(cardId: number): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
 
-  revealedCardsFromPile(researchLimit: number, cardLevel: PilesCardLevel): [GameState, ReadonlyArray<CardInfo>];
+  withCardToBeBuilt(
+    cardToBeBuilt: CardInfo,
+    cardToBeBuiltCost: EnergyTypeDictionary
+  ): GameState;
 
-  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
   withCardToBeBuiltCleared(): GameState;
-  cardsWithout(cardId: number): ReadonlyArray<CardInfo>;
 
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
   withDispenserWithout(index: number): [GameState, EnergyType];
@@ -119,11 +119,6 @@ export class GameS implements GameState {
   readonly playerStateBeforeBuild: PlayerState | null = null;
   readonly gameStateBeforeBuild: GameState | null = null;
 
-  findCardOnTheTable(cardId: number): CardInfo | null {
-    const card = this.cards.find((c) => c.cardId === cardId);
-    return !card ? null : card;
-  }
-
   cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
     return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
   }
@@ -132,7 +127,9 @@ export class GameS implements GameState {
     return index >= 0 && index < this.visibleEnergyBallsLimit;
   }
 
-  private dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
+  private dispenserWithout(
+    index: number
+  ): [ReadonlyArray<EnergyType>, EnergyType] {
     const energy = this.dispenser[index];
     const dispenser = this.dispenser.filter((e, idx) => idx !== index);
     return [dispenser, energy];
@@ -148,7 +145,10 @@ export class GameS implements GameState {
     return [new GameS({ ...this, dispenser }), energy];
   }
 
-  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
+  withCardToBeBuilt(
+    cardToBeBuilt: CardInfo,
+    cardToBeBuiltCost: EnergyTypeDictionary
+  ): GameState {
     return new GameS({ ...this, cardToBeBuilt, cardToBeBuiltCost });
   }
 
@@ -157,34 +157,40 @@ export class GameS implements GameState {
     return new GameS({ ...this, cards });
   }
 
-  revealedCardsFromPile(researchLimit: number, cardLevel: PilesCardLevel): [GameState, ReadonlyArray<CardInfo>] {
-    const revealedCards: ReadonlyArray<CardInfo> = this.cards
-      .filter((c) => c.level === cardLevel)
-      .slice(this.visibleCardsLimits[cardLevel], this.visibleCardsLimits[cardLevel] + researchLimit);
-    const revealedIds = revealedCards.map((c) => c.cardId);
-    const cards: ReadonlyArray<CardInfo> = this.cards.filter((c) => !revealedIds.find((id) => c.cardId === id));
-    return [new GameS({ ...this, cards }), revealedCards];
-  }
-
   withCardToBeBuiltCleared(): GameState {
-    const cards = this.cardToBeBuilt ? this.cardsWithout(this.cardToBeBuilt?.cardId) : this.cards;
-    return new GameS({ ...this, cards: cards, cardToBeBuilt: null, cardToBeBuiltCost: null });
+    const cards = this.cardToBeBuilt
+      ? this.cardsWithout(this.cardToBeBuilt?.cardId)
+      : this.cards;
+    return new GameS({
+      ...this,
+      cards: cards,
+      cardToBeBuilt: null,
+      cardToBeBuiltCost: null,
+    });
   }
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
-    if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
+    if (!this.cardToBeBuiltCost)
+      throw new Error("There is no card to pay for.");
 
     const reducedAmount = this.cardToBeBuiltCost?.get(paidFor) - 1;
-    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, reducedAmount);
+    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(
+      paidFor,
+      reducedAmount
+    );
 
     return new GameS({ ...this, cardToBeBuiltCost });
   }
 
   withEnergyAddedToCost(paidFor: EnergyType): GameState {
-    if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
+    if (!this.cardToBeBuiltCost)
+      throw new Error("There is no card to pay for.");
 
     const increasedAmount = this.cardToBeBuiltCost?.get(paidFor) + 1;
-    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, increasedAmount);
+    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(
+      paidFor,
+      increasedAmount
+    );
 
     return new GameS({ ...this, cardToBeBuiltCost });
   }
@@ -203,7 +209,10 @@ export class GameS implements GameState {
   }
 
   withShuffeledDispenser(ctx: GameContext): GameState {
-    return new GameS({ ...this, dispenser: ctx.random?.Shuffle([...this.dispenser]) });
+    return new GameS({
+      ...this,
+      dispenser: ctx.random?.Shuffle([...this.dispenser]),
+    });
   }
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
