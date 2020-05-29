@@ -7,8 +7,13 @@ import { GameContext } from "./gameContext";
 
 export type Picker<T> = (source: GameState) => [GameState, T];
 export type Putter<T> = (destination: GameState, cards: T) => GameState;
-export type MultiPicker<T> = (source: GameState) => [GameState, ReadonlyArray<T>];
-export type MultiPutter<T> = (destination: GameState, cards: ReadonlyArray<T>) => GameState;
+export type MultiPicker<T> = (
+  source: GameState
+) => [GameState, ReadonlyArray<T>];
+export type MultiPutter<T> = (
+  destination: GameState,
+  cards: ReadonlyArray<T>
+) => GameState;
 
 function isPicker<T>(x: Function): x is Picker<T> {
   if (x as Picker<T>) return true;
