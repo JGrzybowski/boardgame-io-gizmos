@@ -7,13 +7,8 @@ import { GameContext } from "./gameContext";
 
 export type Picker<T> = (source: GameState) => [GameState, T];
 export type Putter<T> = (destination: GameState, cards: T) => GameState;
-export type MultiPicker<T> = (
-  source: GameState
-) => [GameState, ReadonlyArray<T>];
-export type MultiPutter<T> = (
-  destination: GameState,
-  cards: ReadonlyArray<T>
-) => GameState;
+export type MultiPicker<T> = (source: GameState) => [GameState, ReadonlyArray<T>];
+export type MultiPutter<T> = (destination: GameState, cards: ReadonlyArray<T>) => GameState;
 
 function isPicker<T>(x: Function): x is Picker<T> {
   if (x as Picker<T>) return true;
@@ -50,10 +45,7 @@ export interface GameState {
   withCardRemovedFromTable(cardId: number): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
 
-  withCardToBeBuilt(
-    cardToBeBuilt: CardInfo,
-    cardToBeBuiltCost: EnergyTypeDictionary
-  ): GameState;
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
 
   withCardToBeBuiltCleared(): GameState;
 
@@ -132,9 +124,7 @@ export class GameS implements GameState {
     return index >= 0 && index < this.visibleEnergyBallsLimit;
   }
 
-  private dispenserWithout(
-    index: number
-  ): [ReadonlyArray<EnergyType>, EnergyType] {
+  private dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
     const energy = this.dispenser[index];
     const dispenser = this.dispenser.filter((e, idx) => idx !== index);
     return [dispenser, energy];
@@ -150,10 +140,7 @@ export class GameS implements GameState {
     return [new GameS({ ...this, dispenser }), energy];
   }
 
-  withCardToBeBuilt(
-    cardToBeBuilt: CardInfo,
-    cardToBeBuiltCost: EnergyTypeDictionary
-  ): GameState {
+  withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
     return new GameS({ ...this, cardToBeBuilt, cardToBeBuiltCost });
   }
 
@@ -163,9 +150,7 @@ export class GameS implements GameState {
   }
 
   withCardToBeBuiltCleared(): GameState {
-    const cards = this.cardToBeBuilt
-      ? this.cardsWithout(this.cardToBeBuilt?.cardId)
-      : this.cards;
+    const cards = this.cardToBeBuilt ? this.cardsWithout(this.cardToBeBuilt?.cardId) : this.cards;
     return new GameS({
       ...this,
       cards: cards,
@@ -175,27 +160,19 @@ export class GameS implements GameState {
   }
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
-    if (!this.cardToBeBuiltCost)
-      throw new Error("There is no card to pay for.");
+    if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
 
     const reducedAmount = this.cardToBeBuiltCost?.get(paidFor) - 1;
-    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(
-      paidFor,
-      reducedAmount
-    );
+    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, reducedAmount);
 
     return new GameS({ ...this, cardToBeBuiltCost });
   }
 
   withEnergyAddedToCost(paidFor: EnergyType): GameState {
-    if (!this.cardToBeBuiltCost)
-      throw new Error("There is no card to pay for.");
+    if (!this.cardToBeBuiltCost) throw new Error("There is no card to pay for.");
 
     const increasedAmount = this.cardToBeBuiltCost?.get(paidFor) + 1;
-    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(
-      paidFor,
-      increasedAmount
-    );
+    const cardToBeBuiltCost = this.cardToBeBuiltCost?.withAmountToPayWithEnergyTypeSetTo(paidFor, increasedAmount);
 
     return new GameS({ ...this, cardToBeBuiltCost });
   }

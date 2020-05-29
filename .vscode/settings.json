@@ -1,5 +1,6 @@
 {
   "eslint.workingDirectories": [{ "directory": "gizmos-client", "changeProcessCWD": true }],
   "eslint.lintTask.enable": true,
-  "eslint.alwaysShowStatus": true
+  "eslint.alwaysShowStatus": true,
+  "prettier.printWidth": 120
 }
