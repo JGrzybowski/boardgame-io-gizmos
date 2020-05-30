@@ -84,4 +84,16 @@ export class To {
       return newGameState;
     };
   }
+
+  static PlayerEnergyStorage(playerId: PlayerID): Putter<EnergyTypeDictionary> {
+    return (G: GameState, energyAmounts: EnergyTypeDictionary): GameState => {
+      if (energyAmounts.isPaid()) throw new Error("Cannot add zer0 energy to player's energy storage");
+      if (energyAmounts.Any !== 0) throw new Error("Cannot add energy of type Any to player's energy storage");
+      const playerState = G.players[playerId];
+      const energyStorage = playerState.energyStorage.add(energyAmounts);
+      const newPlayerState = new PlayerState({ ...playerState, energyStorage });
+      const newGameState = G.withUpdatedPlayer(playerId, newPlayerState);
+      return newGameState;
+    };
+  }
 }
