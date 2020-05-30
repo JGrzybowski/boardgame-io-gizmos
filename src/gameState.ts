@@ -58,7 +58,6 @@ export interface GameState {
   withEnergyAddedToCost(changeTo: EnergyType): GameState;
 
   withShuffeledCards(ctx: GameContext): GameState;
-  withShuffeledDispenser(ctx: GameContext): GameState;
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
   moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
@@ -68,6 +67,7 @@ export interface GameState {
 
 export interface GameStateData {
   readonly energyRow?: ReadonlyArray<EnergyType>;
+  readonly dispenser?: EnergyTypeDictionary;
   readonly cards?: ReadonlyArray<CardInfo>;
   readonly players?: { [id: string]: PlayerState };
   readonly visibleEnergyBallsLimit?: number;
@@ -83,6 +83,7 @@ export class GameS implements GameState {
   constructor(initialGameState: GameStateData) {
     const {
       energyRow = [],
+      dispenser = new EnergyTypeDictionary(13, 13, 13, 13, 0),
       cards = [],
       players = {},
       visibleEnergyBallsLimit = 6,
@@ -94,6 +95,7 @@ export class GameS implements GameState {
       gameStateBeforeBuild = null,
     } = initialGameState;
     this.energyRow = energyRow;
+    this.dispenser = dispenser;
     this.cards = cards;
     this.players = players;
     this.visibleEnergyBallsLimit = visibleEnergyBallsLimit;
@@ -106,6 +108,7 @@ export class GameS implements GameState {
   }
 
   readonly energyRow: ReadonlyArray<EnergyType> = [];
+  readonly dispenser: EnergyTypeDictionary = new EnergyTypeDictionary(13, 13, 13, 13, 0);
   readonly cards: ReadonlyArray<CardInfo> = [];
   readonly players: { [id: string]: PlayerState } = {};
   readonly visibleEnergyBallsLimit: number = 6;
@@ -188,13 +191,6 @@ export class GameS implements GameState {
 
   withShuffeledCards(ctx: GameContext): GameState {
     return new GameS({ ...this, cards: ctx.random?.Shuffle([...this.cards]) });
-  }
-
-  withShuffeledDispenser(ctx: GameContext): GameState {
-    return new GameS({
-      ...this,
-      energyRow: ctx.random?.Shuffle([...this.energyRow]),
-    });
   }
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;

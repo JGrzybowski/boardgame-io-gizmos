@@ -39,7 +39,7 @@ const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
   setup: (ctx) => {
-    const G = InitialGameState.withShuffeledCards(ctx).withShuffeledDispenser(ctx);
+    const G = InitialGameState.withShuffeledCards(ctx);
     ctx.events?.setStage?.(actionStage.name);
 
     return G;
