@@ -1,4 +1,5 @@
 import { CardInfo } from "./cardInfo";
+import { GameContext } from "../gameContext";
 
 export function GetFirstOrNull<T>(array: ReadonlyArray<T>, filter: (t: T, i: number) => boolean): T | null {
   const foundElement = array.find(filter);
@@ -18,4 +19,8 @@ export function CardWithId(cardId: number): (card: CardInfo) => boolean {
 
 export function WithIndex<T>(index: number): (element: T, i: number) => boolean {
   return (element: T, i: number): boolean => i === index;
+}
+
+export function RandomIndex(ctx: GameContext): (n: number) => number {
+  return (n: number): number => ctx.Die(n) - 1;
 }

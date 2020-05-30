@@ -9,6 +9,10 @@ export class EnergyTypeDictionary {
     public readonly Any: number = 0
   ) {}
 
+  sum(): number {
+    return this.R + this.U + this.B + this.Y + this.Any;
+  }
+
   isPaid(): boolean {
     return this.R === 0 && this.U === 0 && this.B === 0 && this.Y === 0 && this.Any === 0;
   }

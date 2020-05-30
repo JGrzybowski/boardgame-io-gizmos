@@ -63,6 +63,9 @@ export interface GameState {
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
   moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
   moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+
+  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): GameState;
+
   withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
 }
 
@@ -214,6 +217,12 @@ export class GameS implements GameState {
       throw new Error("Cannot move cards due to wrong picker/putter setup");
     }
     throw new Error("Unknown args for picker/putter");
+  }
+
+  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): GameState {
+    const [gAfterPick, pickedEnergy] = from(this);
+    const gAfterPut = to(gAfterPick, pickedEnergy);
+    return gAfterPut;
   }
 
   withUpdatedPlayer(playerId: PlayerID, playerState: PlayerState): GameState {

@@ -12,6 +12,8 @@ import { initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { From } from "./From";
+import { To } from "./To";
+import { RandomIndex } from "./cards/cardsCollection";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
@@ -40,11 +42,10 @@ const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
   setup: (ctx) => {
-    // const G = [...range(0, InitialGameState.energyRowSize - 1)].reduce(
-    //   (g:GameState) => g.moveEnergy(From.Dispenser, To.EnergyRow),
-    //   InitialGameState.withShuffeledCards(ctx)
-    // );
-    const G = InitialGameState.withShuffeledCards(ctx);
+    const G = [...range(0, InitialGameState.energyRowSize - 1)].reduce(
+      (g: GameState) => g.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.EnergyRow()),
+      InitialGameState.withShuffeledCards(ctx)
+    );
     ctx.events?.setStage?.(actionStage.name);
     return G;
   },
