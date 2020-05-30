@@ -3,6 +3,7 @@ import { CardInfo } from "./cards/cardInfo";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
 import { PlayerState } from "./playerState";
+import { EnergyType } from "./basicGameElements";
 
 export class To {
   static BottomOfPile(): MultiPutter<CardInfo> {
@@ -71,6 +72,15 @@ export class To {
       if (energyAmounts.Any !== 0) throw new Error("Cannot add energy od type Any to the dispenser");
       const dispenser = G.dispenser.add(energyAmounts);
       const newGameState = new GameS({ ...G, dispenser });
+      return newGameState;
+    };
+  }
+
+  static EnergyRow(): Putter<EnergyType> {
+    return (G: GameState, energyType: EnergyType): GameState => {
+      if (energyType === EnergyType.Any) throw new Error("Cannot add energyof type Any to the energy row");
+      const energyRow = G.energyRow.concat([energyType]);
+      const newGameState = new GameS({ ...G, energyRow });
       return newGameState;
     };
   }

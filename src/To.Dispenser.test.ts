@@ -38,3 +38,20 @@ test("throws error if provided zero energy", () => {
   // Act && Assert
   expect(() => To.Dispenser()(G, new EnergyTypeDictionary(0, 0, 0, 0, 0))).toThrowError();
 });
+
+test("Does not modify original game state", () => {
+  // Arrange
+  const G = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+  });
+
+  const originalGameState = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+  });
+
+  // Act
+  const afterPut = To.Dispenser()(G, new EnergyTypeDictionary(1, 2, 3, 4, 0));
+
+  // Assert
+  expect(G).toMatchObject(originalGameState);
+});

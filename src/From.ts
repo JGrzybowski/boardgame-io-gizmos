@@ -125,8 +125,8 @@ export class From {
     };
   }
 
-  static Dispenser(selectorFunction: (n: number) => number): Picker<EnergyTypeDictionary> {
-    return (G: GameState): [GameState, EnergyTypeDictionary] => {
+  static Dispenser(selectorFunction: (n: number) => number): Picker<EnergyType> {
+    return (G: GameState): [GameState, EnergyType] => {
       const n = G.dispenser.R + G.dispenser.U + G.dispenser.B + G.dispenser.Y;
       const index = selectorFunction(n);
       if (index < 0 || index > n)
@@ -137,11 +137,12 @@ export class From {
         ...repeat(EnergyType.Black, G.dispenser.B),
         ...repeat(EnergyType.Yellow, G.dispenser.Y),
       ];
+
       const selectedEnergy = dispenserArray[index];
       const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
       const dispenser = G.dispenser.subtract(reduction);
       const newGameState = new GameS({ ...G, dispenser });
-      return [newGameState, reduction];
+      return [newGameState, selectedEnergy];
     };
   }
 }

@@ -36,7 +36,7 @@ test("Returns EnergyTypeDictionary with energyType placed on specified index", (
   const [afterPick, pickedEnergy] = From.Dispenser(pickNth(13))(G);
 
   // Assert
-  expect(pickedEnergy).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Black, 1));
+  expect(pickedEnergy).toBe(EnergyType.Black);
 });
 
 test("Throws an Error if asked for energy from outside of EnergyRow range", () => {
