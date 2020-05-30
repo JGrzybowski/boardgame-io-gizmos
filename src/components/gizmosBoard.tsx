@@ -51,7 +51,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
         "localPlayer localPlayer infoBar"`,
   };
 
-  const energyRail = G.dispenser
+  const energyRail = G.energyRow
     .slice(0, G.visibleEnergyBallsLimit)
     .map((energy, index) => (
       <EnergyOrb

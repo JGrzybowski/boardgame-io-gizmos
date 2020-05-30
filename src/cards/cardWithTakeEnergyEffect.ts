@@ -7,7 +7,7 @@ import { CardEffect } from "./cardEffect";
 
 type TakeEnergyLimit = 1 | 2 | 3;
 
-const dispenserVisibilityLimit = 6;
+const energyRowVisibilityLimit = 6;
 
 export class TakeEnergyEffect extends CardEffect {
   canBeResolved(G: GameState, ctx: GameContext): boolean {
@@ -16,10 +16,10 @@ export class TakeEnergyEffect extends CardEffect {
 
   gameStateAfterEffect(G: GameState, ctx: GameContext): GameState {
     // TODO change to G.WithoutRandomEnergy(): [GameState, EnergyType]
-    const numberOfEnergyToSelectFrom = G.dispenser.length - dispenserVisibilityLimit;
-    const takenIndex = (ctx.random?.Die(numberOfEnergyToSelectFrom) ?? 1) + dispenserVisibilityLimit - 1;
-    const dispenser = G.dispenser.filter((e, idx) => idx !== takenIndex);
-    return { ...G, dispenser };
+    const numberOfEnergyToSelectFrom = G.energyRow.length - energyRowVisibilityLimit;
+    const takenIndex = (ctx.random?.Die(numberOfEnergyToSelectFrom) ?? 1) + energyRowVisibilityLimit - 1;
+    const energyRow = G.energyRow.filter((e, idx) => idx !== takenIndex);
+    return { ...G, energyRow };
   }
 
   constructor(public readonly howMany: TakeEnergyLimit) {

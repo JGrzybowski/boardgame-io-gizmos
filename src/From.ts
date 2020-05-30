@@ -113,12 +113,12 @@ export class From {
     };
   }
 
-  static Dispenser(index: number): Picker<EnergyTypeDictionary> {
+  static EnergyRow(index: number): Picker<EnergyTypeDictionary> {
     return (G: GameState): [GameState, EnergyTypeDictionary] => {
       if (index < 0) throw new Error("Index must be non negative number");
-      if (index > G.dispenser.length - 1) throw new Error("Index must be in range 0 to length of the dispenser array");
-      const [newDispenser, selectedEnergy] = ExtractFrom(G.dispenser, WithIndex(index));
-      const newGameState = new GameS({ ...G, dispenser: newDispenser });
+      if (index > G.energyRow.length - 1) throw new Error("Index must be in range 0 to length of the EnergyRow array");
+      const [energyRow, selectedEnergy] = ExtractFrom(G.energyRow, WithIndex(index));
+      const newGameState = new GameS({ ...G, energyRow });
       return [newGameState, EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1)];
     };
   }

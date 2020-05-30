@@ -30,7 +30,7 @@ function isMultiPutter<T>(x: Function): x is MultiPutter<T> {
 export type PilesCardLevel = 1 | 2 | 3;
 
 export interface GameState {
-  readonly dispenser: ReadonlyArray<EnergyType>;
+  readonly energyRow: ReadonlyArray<EnergyType>;
   readonly cards: ReadonlyArray<CardInfo>;
   readonly players: { [id: string]: PlayerState };
   readonly visibleEnergyBallsLimit: number;
@@ -50,7 +50,7 @@ export interface GameState {
   withCardToBeBuiltCleared(): GameState;
 
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
-  withDispenserWithout(index: number): [GameState, EnergyType];
+  withEnergyRowWithout(index: number): [GameState, EnergyType];
 
   withPlayerAndGameStateSaved(ctx: Ctx): GameState;
 
@@ -67,7 +67,7 @@ export interface GameState {
 }
 
 export interface GameStateData {
-  readonly dispenser?: ReadonlyArray<EnergyType>;
+  readonly energyRow?: ReadonlyArray<EnergyType>;
   readonly cards?: ReadonlyArray<CardInfo>;
   readonly players?: { [id: string]: PlayerState };
   readonly visibleEnergyBallsLimit?: number;
@@ -82,7 +82,7 @@ export interface GameStateData {
 export class GameS implements GameState {
   constructor(initialGameState: GameStateData) {
     const {
-      dispenser = [],
+      energyRow = [],
       cards = [],
       players = {},
       visibleEnergyBallsLimit = 6,
@@ -93,7 +93,7 @@ export class GameS implements GameState {
       playerStateBeforeBuild = null,
       gameStateBeforeBuild = null,
     } = initialGameState;
-    this.dispenser = dispenser;
+    this.energyRow = energyRow;
     this.cards = cards;
     this.players = players;
     this.visibleEnergyBallsLimit = visibleEnergyBallsLimit;
@@ -105,7 +105,7 @@ export class GameS implements GameState {
     this.gameStateBeforeBuild = gameStateBeforeBuild;
   }
 
-  readonly dispenser: ReadonlyArray<EnergyType> = [];
+  readonly energyRow: ReadonlyArray<EnergyType> = [];
   readonly cards: ReadonlyArray<CardInfo> = [];
   readonly players: { [id: string]: PlayerState } = {};
   readonly visibleEnergyBallsLimit: number = 6;
@@ -124,10 +124,10 @@ export class GameS implements GameState {
     return index >= 0 && index < this.visibleEnergyBallsLimit;
   }
 
-  private dispenserWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
-    const energy = this.dispenser[index];
-    const dispenser = this.dispenser.filter((e, idx) => idx !== index);
-    return [dispenser, energy];
+  private energyRowWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
+    const energy = this.energyRow[index];
+    const energyRow = this.energyRow.filter((e, idx) => idx !== index);
+    return [energyRow, energy];
   }
 
   withCardRemovedFromTable(cardId: number): GameState {
@@ -135,9 +135,9 @@ export class GameS implements GameState {
     return new GameS({ ...this, cards });
   }
 
-  withDispenserWithout(index: number): [GameState, EnergyType] {
-    const [dispenser, energy] = this.dispenserWithout(index);
-    return [new GameS({ ...this, dispenser }), energy];
+  withEnergyRowWithout(index: number): [GameState, EnergyType] {
+    const [energyRow, energy] = this.energyRowWithout(index);
+    return [new GameS({ ...this, energyRow }), energy];
   }
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
@@ -193,7 +193,7 @@ export class GameS implements GameState {
   withShuffeledDispenser(ctx: GameContext): GameState {
     return new GameS({
       ...this,
-      dispenser: ctx.random?.Shuffle([...this.dispenser]),
+      energyRow: ctx.random?.Shuffle([...this.energyRow]),
     });
   }
 

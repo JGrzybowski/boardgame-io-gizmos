@@ -11,8 +11,8 @@ function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameStat
   const playerState: PlayerState = ctx.player?.get();
   if (!playerState.canAddEnergy()) return INVALID_MOVE;
 
-  // remove energy from dispenser
-  const [newGameState, energy] = G.withDispenserWithout(energyIndex);
+  // remove energy from energy row
+  const [newGameState, energy] = G.withEnergyRowWithout(energyIndex);
   // add energy to player's storage
   const newPlayerState = playerState.withAddedEnergy(energy);
   //TODO activate all cards that activate on pick trigger

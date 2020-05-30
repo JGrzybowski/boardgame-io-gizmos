@@ -20,7 +20,7 @@ function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
 }
 
 const InitialGameState: GameState = new GameS({
-  dispenser: initialDispenser,
+  energyRow: initialDispenser,
   cards: CardsList,
   players: { "0": new PlayerState({ playerId: "0" }) },
 
