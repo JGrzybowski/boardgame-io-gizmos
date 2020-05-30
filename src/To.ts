@@ -64,4 +64,14 @@ export class To {
       return gAfterPut;
     };
   }
+
+  static Dispenser(): Putter<EnergyTypeDictionary> {
+    return (G: GameState, energyAmounts: EnergyTypeDictionary): GameState => {
+      if (energyAmounts.isPaid()) throw new Error("Cannot add zero energy to the dispenser");
+      if (energyAmounts.Any !== 0) throw new Error("Cannot add energy od type Any to the dispenser");
+      const dispenser = G.dispenser.add(energyAmounts);
+      const newGameState = new GameS({ ...G, dispenser });
+      return newGameState;
+    };
+  }
 }
