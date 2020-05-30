@@ -4,6 +4,7 @@ import { PlayerID } from "boardgame.io";
 import { EnergyType } from "./basicGameElements";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
+import { ExtractFrom, WithIndex } from "./cards/cardsCollection";
 
 export class From {
   static TopOfPile(lvl: CardLevel, n: number): MultiPicker<CardInfo> {
@@ -109,6 +110,16 @@ export class From {
       const newPlayerState = new PlayerState({ ...playerState, energyStorage: newEnergyStorage });
       const newGameState = G.withUpdatedPlayer(playerId, newPlayerState);
       return [newGameState, reduction];
+    };
+  }
+
+  static Dispenser(index: number): Picker<EnergyTypeDictionary> {
+    return (G: GameState): [GameState, EnergyTypeDictionary] => {
+      if (index < 0) throw new Error("Index must be non negative number");
+      if (index > G.dispenser.length - 1) throw new Error("Index must be in range 0 to length of the dispenser array");
+      const [newDispenser, selectedEnergy] = ExtractFrom(G.dispenser, WithIndex(index));
+      const newGameState = new GameS({ ...G, dispenser: newDispenser });
+      return [newGameState, EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1)];
     };
   }
 }
