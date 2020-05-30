@@ -10,6 +10,7 @@ import { paymentStage } from "./stages/paymentStage";
 import { researchStage } from "./stages/researchStage";
 import { initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
+import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
   return ctx.player?.get().machines.length === 16;
@@ -21,18 +22,13 @@ function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
 
 const InitialGameState: GameState = new GameS({
   energyRow: initialDispenser,
+  dispenser: new EnergyTypeDictionary(13, 13, 13, 13, 0),
+
   cards: CardsList,
   players: { "0": new PlayerState({ playerId: "0" }) },
 
   visibleEnergyBallsLimit: 6,
   visibleCardsLimits: [0, 4, 3, 2],
-
-  cardToBeBuilt: null,
-  cardToBeBuiltCost: null,
-
-  previousStageName: null,
-  playerStateBeforeBuild: null,
-  gameStateBeforeBuild: null,
 });
 
 const Gizmos: Game<GameState, GameContext> = {
@@ -40,6 +36,13 @@ const Gizmos: Game<GameState, GameContext> = {
 
   setup: (ctx) => {
     const G = InitialGameState.withShuffeledCards(ctx);
+    //.MoveEnergy(From.Dispenser, To.EnergyRow)
+    //.MoveEnergy(From.Dispenser, To.EnergyRow)
+    //.MoveEnergy(From.Dispenser, To.EnergyRow)
+    //.MoveEnergy(From.Dispenser, To.EnergyRow)
+    //.MoveEnergy(From.Dispenser, To.EnergyRow)
+    //.MoveEnergy(From.Dispenser, To.EnergyRow)
+
     ctx.events?.setStage?.(actionStage.name);
 
     return G;

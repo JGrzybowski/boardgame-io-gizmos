@@ -1,7 +1,7 @@
 import { CardLevel, CardInfo } from "./cards/cardInfo";
 import { GameState, GameS, MultiPicker, Picker, GameStateData } from "./gameState";
 import { PlayerID } from "boardgame.io";
-import { EnergyType } from "./basicGameElements";
+import { EnergyType, repeat } from "./basicGameElements";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
 import { ExtractFrom, WithIndex } from "./cards/cardsCollection";
@@ -119,7 +119,28 @@ export class From {
       if (index > G.energyRow.length - 1) throw new Error("Index must be in range 0 to length of the EnergyRow array");
       const [energyRow, selectedEnergy] = ExtractFrom(G.energyRow, WithIndex(index));
       const newGameState = new GameS({ ...G, energyRow });
-      return [newGameState, EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1)];
+      const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
+      return [newGameState, reduction];
+    };
+  }
+
+  static Dispenser(selectorFunction: (n: number) => number): Picker<EnergyTypeDictionary> {
+    return (G: GameState): [GameState, EnergyTypeDictionary] => {
+      const n = G.dispenser.R + G.dispenser.U + G.dispenser.B + G.dispenser.Y;
+      const index = selectorFunction(n);
+      if (index < 0 || index > n)
+        throw new Error("The index calculated by the function must be in the index range from 0 to n");
+      const dispenserArray = [
+        ...repeat(EnergyType.Red, G.dispenser.R),
+        ...repeat(EnergyType.Blue, G.dispenser.U),
+        ...repeat(EnergyType.Black, G.dispenser.B),
+        ...repeat(EnergyType.Yellow, G.dispenser.Y),
+      ];
+      const selectedEnergy = dispenserArray[index];
+      const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
+      const dispenser = G.dispenser.subtract(reduction);
+      const newGameState = new GameS({ ...G, dispenser });
+      return [newGameState, reduction];
     };
   }
 }

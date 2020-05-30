@@ -31,6 +31,7 @@ export type PilesCardLevel = 1 | 2 | 3;
 
 export interface GameState {
   readonly energyRow: ReadonlyArray<EnergyType>;
+  readonly dispenser: EnergyTypeDictionary;
   readonly cards: ReadonlyArray<CardInfo>;
   readonly players: { [id: string]: PlayerState };
   readonly visibleEnergyBallsLimit: number;

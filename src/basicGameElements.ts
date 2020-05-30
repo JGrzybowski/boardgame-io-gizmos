@@ -6,7 +6,7 @@ export enum EnergyType {
   Yellow = "Y",
 }
 
-function* repeat<T>(x: T, n: number): Generator<T> {
+export function* repeat<T>(x: T, n: number): Generator<T> {
   while (n-- > 0) yield x;
 }
 
