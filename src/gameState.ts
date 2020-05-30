@@ -34,7 +34,7 @@ export interface GameState {
   readonly dispenser: EnergyTypeDictionary;
   readonly cards: ReadonlyArray<CardInfo>;
   readonly players: { [id: string]: PlayerState };
-  readonly visibleEnergyBallsLimit: number;
+  readonly energyRowSize: number;
   readonly cardToBeBuilt: CardInfo | null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null;
   readonly visibleCardsLimits: ReadonlyArray<number>;
@@ -71,7 +71,7 @@ export interface GameStateData {
   readonly dispenser?: EnergyTypeDictionary;
   readonly cards?: ReadonlyArray<CardInfo>;
   readonly players?: { [id: string]: PlayerState };
-  readonly visibleEnergyBallsLimit?: number;
+  readonly energyRowSize?: number;
   readonly cardToBeBuilt?: CardInfo | null;
   readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
   readonly visibleCardsLimits?: ReadonlyArray<number>;
@@ -87,7 +87,7 @@ export class GameS implements GameState {
       dispenser = new EnergyTypeDictionary(13, 13, 13, 13, 0),
       cards = [],
       players = {},
-      visibleEnergyBallsLimit = 6,
+      energyRowSize = 6,
       cardToBeBuilt = null,
       cardToBeBuiltCost = null,
       visibleCardsLimits = [0, 4, 3, 2],
@@ -99,7 +99,7 @@ export class GameS implements GameState {
     this.dispenser = dispenser;
     this.cards = cards;
     this.players = players;
-    this.visibleEnergyBallsLimit = visibleEnergyBallsLimit;
+    this.energyRowSize = energyRowSize;
     this.cardToBeBuilt = cardToBeBuilt;
     this.cardToBeBuiltCost = cardToBeBuiltCost;
     this.visibleCardsLimits = visibleCardsLimits;
@@ -112,7 +112,7 @@ export class GameS implements GameState {
   readonly dispenser: EnergyTypeDictionary = new EnergyTypeDictionary(13, 13, 13, 13, 0);
   readonly cards: ReadonlyArray<CardInfo> = [];
   readonly players: { [id: string]: PlayerState } = {};
-  readonly visibleEnergyBallsLimit: number = 6;
+  readonly energyRowSize: number = 6;
   readonly cardToBeBuilt: CardInfo | null = null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null = null;
   readonly visibleCardsLimits: ReadonlyArray<number> = [0, 4, 3, 2];
@@ -125,7 +125,7 @@ export class GameS implements GameState {
   }
 
   energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean {
-    return index >= 0 && index < this.visibleEnergyBallsLimit;
+    return index >= 0 && index < this.energyRowSize;
   }
 
   private energyRowWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {

@@ -1,10 +1,10 @@
 import { CardLevel, CardInfo } from "./cards/cardInfo";
-import { GameState, GameS, MultiPicker, Picker, GameStateData } from "./gameState";
+import { GameState, GameS, MultiPicker, Picker } from "./gameState";
 import { PlayerID } from "boardgame.io";
 import { EnergyType, repeat } from "./basicGameElements";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
-import { ExtractFrom, WithIndex } from "./cards/cardsCollection";
+import { ExtractFrom, WithIndex, CardWithId } from "./cards/cardsCollection";
 
 export class From {
   static TopOfPile(lvl: CardLevel, n: number): MultiPicker<CardInfo> {
@@ -22,17 +22,16 @@ export class From {
 
   static Table(cardId: number): Picker<CardInfo> {
     return (G: GameState): [GameState, CardInfo] => {
-      const selectedCards = G.cards.filter((c) => c.cardId === cardId);
+      const selectedCards = G.cards.filter(CardWithId(cardId));
       if (selectedCards.length < 1) throw new Error("Card with given id is not on the table.");
       if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
 
-      const selectedCard = selectedCards[0];
-      const isCardVisible =
-        G.cards.slice(0, G.visibleCardsLimits[selectedCard.level]).filter((c) => c.cardId === cardId).length === 1;
+      const [cards, selectedCard] = ExtractFrom(G.cards, CardWithId(cardId));
 
+      const isCardVisible =
+        G.cards.slice(0, G.visibleCardsLimits[selectedCard.level]).filter(CardWithId(cardId)).length === 1;
       if (!isCardVisible) throw new Error("This move should pick exactly one card and it must be visible.");
 
-      const cards = G.cards.filter((c: CardInfo) => c.cardId !== selectedCard.cardId);
       const gAfterPick = new GameS({ ...G, cards });
       return [gAfterPick, selectedCard];
     };
@@ -59,13 +58,14 @@ export class From {
         const playerState = G.players[playerId];
         if (!playerState) throw new Error("There is no player with such ID");
 
-        const selectedCards = playerState.researched.filter((c) => c.cardId === cardId);
+        const selectedCards = playerState.researched.filter(CardWithId(cardId));
         if (selectedCards.length < 1) throw new Error("Card with given id is not in the researched collection.");
         if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
 
-        const playerStateAfter = playerState.withRemovedCardFromResearched(cardId);
+        const [researched, selectedCard] = ExtractFrom(playerState.researched, CardWithId(cardId));
+        const playerStateAfter = new PlayerState({ ...playerState, researched });
         const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
-        return [gAfterPut, selectedCards[0]];
+        return [gAfterPut, selectedCard];
       };
     }
 
@@ -91,9 +91,10 @@ export class From {
       if (selectedCards.length < 1) throw new Error("Card with given id is not in the archive collection.");
       if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
 
-      const playerStateAfter = playerState.withRemovedCardFromArchive(cardId);
+      const [archive, selectedCard] = ExtractFrom(playerState.archive, CardWithId(cardId));
+      const playerStateAfter = new PlayerState({ ...playerState, archive });
       const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
-      return [gAfterPut, selectedCards[0]];
+      return [gAfterPut, selectedCard];
     };
   }
 

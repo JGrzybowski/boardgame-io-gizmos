@@ -52,7 +52,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
   };
 
   const energyRail = G.energyRow
-    .slice(0, G.visibleEnergyBallsLimit)
+    .slice(0, G.energyRowSize)
     .map((energy, index) => (
       <EnergyOrb
         energyType={energy}
