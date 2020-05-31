@@ -1,5 +1,5 @@
 import { CardLevel, CardInfo } from "./cards/cardInfo";
-import { GameState, GameS, MultiPicker, Picker } from "./gameState";
+import { GameState, GameS, MultiPickerFunction, PickerFunction } from "./gameState";
 import { PlayerID } from "boardgame.io";
 import { EnergyType, repeat } from "./basicGameElements";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
@@ -7,7 +7,7 @@ import { PlayerState } from "./playerState";
 import { ExtractFrom, WithIndex, CardWithId } from "./cards/cardsCollection";
 
 export class From {
-  static TopOfPile(lvl: CardLevel, n: number): MultiPicker<CardInfo> {
+  static TopOfPile(lvl: CardLevel, n: number): MultiPickerFunction<CardInfo> {
     return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
       const pickedCards = G.cards
         .filter((c) => c.level === lvl)
@@ -20,7 +20,7 @@ export class From {
     };
   }
 
-  static Table(cardId: number): Picker<CardInfo> {
+  static Table(cardId: number): PickerFunction<CardInfo> {
     return (G: GameState): [GameState, CardInfo] => {
       const selectedCards = G.cards.filter(CardWithId(cardId));
       if (selectedCards.length < 1) throw new Error("Card with given id is not on the table.");
@@ -37,7 +37,7 @@ export class From {
     };
   }
 
-  static CardToBuild(): Picker<CardInfo> {
+  static CardToBuild(): PickerFunction<CardInfo> {
     return (G: GameState): [GameState, CardInfo] => {
       if (!G.cardToBeBuilt) throw new Error("There is no card to be built.");
 
@@ -50,9 +50,12 @@ export class From {
     };
   }
 
-  static PlayerResearched(playerId: PlayerID, cardId: number): Picker<CardInfo>;
-  static PlayerResearched(playerId: PlayerID): MultiPicker<CardInfo>;
-  static PlayerResearched(playerId: PlayerID, cardId?: number): Picker<CardInfo> | MultiPicker<CardInfo> {
+  static PlayerResearched(playerId: PlayerID, cardId: number): PickerFunction<CardInfo>;
+  static PlayerResearched(playerId: PlayerID): MultiPickerFunction<CardInfo>;
+  static PlayerResearched(
+    playerId: PlayerID,
+    cardId?: number
+  ): PickerFunction<CardInfo> | MultiPickerFunction<CardInfo> {
     if (cardId) {
       return (G: GameState): [GameState, CardInfo] => {
         const playerState = G.players[playerId];
@@ -82,7 +85,7 @@ export class From {
     };
   }
 
-  static PlayerArchive(playerId: PlayerID, cardId: number): Picker<CardInfo> {
+  static PlayerArchive(playerId: PlayerID, cardId: number): PickerFunction<CardInfo> {
     return (G: GameState): [GameState, CardInfo] => {
       const playerState = G.players[playerId];
       if (!playerState) throw new Error("There is no player with such ID");
@@ -98,7 +101,7 @@ export class From {
     };
   }
 
-  static PlayerEnergyStorage(playerId: PlayerID, energyType: EnergyType): Picker<EnergyTypeDictionary> {
+  static PlayerEnergyStorage(playerId: PlayerID, energyType: EnergyType): PickerFunction<EnergyTypeDictionary> {
     return (G: GameState): [GameState, EnergyTypeDictionary] => {
       if (energyType === EnergyType.Any) throw new Error("Player Energy storage cannot store (Any) energy");
 
@@ -114,7 +117,7 @@ export class From {
     };
   }
 
-  static EnergyRow(index: number): Picker<EnergyTypeDictionary> {
+  static EnergyRow(index: number): PickerFunction<EnergyTypeDictionary> {
     return (G: GameState): [GameState, EnergyTypeDictionary] => {
       if (index < 0) throw new Error("Index must be non negative number");
       if (index > G.energyRow.length - 1) throw new Error("Index must be in range 0 to length of the EnergyRow array");
@@ -125,7 +128,7 @@ export class From {
     };
   }
 
-  static Dispenser(selectorFunction: (n: number) => number): Picker<EnergyType> {
+  static Dispenser(selectorFunction: (n: number) => number): PickerFunction<EnergyType> {
     return (G: GameState): [GameState, EnergyType] => {
       const n = G.dispenser.R + G.dispenser.U + G.dispenser.B + G.dispenser.Y;
       const index = selectorFunction(n);

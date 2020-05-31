@@ -5,25 +5,25 @@ import { PlayerState } from "./playerState";
 import { Ctx, PlayerID } from "boardgame.io";
 import { GameContext } from "./gameContext";
 
-export type Picker<T> = (source: GameState) => [GameState, T];
-export type Putter<T> = (destination: GameState, cards: T) => GameState;
-export type MultiPicker<T> = (source: GameState) => [GameState, ReadonlyArray<T>];
-export type MultiPutter<T> = (destination: GameState, cards: ReadonlyArray<T>) => GameState;
+export type PickerFunction<T> = (source: GameState) => [GameState, T];
+export type PutterFunction<T> = (destination: GameState, cards: T) => GameState;
+export type MultiPickerFunction<T> = (source: GameState) => [GameState, ReadonlyArray<T>];
+export type MultiPutterFunction<T> = (destination: GameState, cards: ReadonlyArray<T>) => GameState;
 
-function isPicker<T>(x: Function): x is Picker<T> {
-  if (x as Picker<T>) return true;
+function isPicker<T>(x: Function): x is PickerFunction<T> {
+  if (x as PickerFunction<T>) return true;
   return false;
 }
-function isMultiPicker<T>(x: Function): x is MultiPicker<T> {
-  if (x as MultiPicker<T>) return true;
+function isMultiPicker<T>(x: Function): x is MultiPickerFunction<T> {
+  if (x as MultiPickerFunction<T>) return true;
   return false;
 }
-function isPutter<T>(x: Function): x is Putter<T> {
-  if (x as Putter<T>) return true;
+function isPutter<T>(x: Function): x is PutterFunction<T> {
+  if (x as PutterFunction<T>) return true;
   return false;
 }
-function isMultiPutter<T>(x: Function): x is MultiPutter<T> {
-  if (x as MultiPutter<T>) return true;
+function isMultiPutter<T>(x: Function): x is MultiPutterFunction<T> {
+  if (x as MultiPutterFunction<T>) return true;
   return false;
 }
 
@@ -57,11 +57,11 @@ export interface GameState {
 
   withShuffeledCards(ctx: GameContext): GameState;
 
-  moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
-  moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
-  moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+  moveCard(from: PickerFunction<CardInfo>, into: PutterFunction<CardInfo>): GameState;
+  moveCard(from: PickerFunction<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
+  moveCard(from: MultiPickerFunction<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
 
-  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): GameState;
+  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: PickerFunction<T>, to: PutterFunction<T>): GameState;
 
   withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
 }
@@ -179,9 +179,9 @@ export class GameS implements GameState {
     return new GameS({ ...this, cards: ctx.random?.Shuffle([...this.cards]) });
   }
 
-  moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
-  moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
-  moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+  moveCard(from: PickerFunction<CardInfo>, into: PutterFunction<CardInfo>): GameState;
+  moveCard(from: PickerFunction<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
+  moveCard(from: MultiPickerFunction<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
   moveCard(picker: Function, putter: Function): GameState {
     if (isMultiPicker<CardInfo>(picker) && isMultiPutter<CardInfo>(putter)) {
       const [gAfterPick, pickedCards] = picker(this);
@@ -201,7 +201,7 @@ export class GameS implements GameState {
     throw new Error("Unknown args for picker/putter");
   }
 
-  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): GameState {
+  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: PickerFunction<T>, to: PutterFunction<T>): GameState {
     const [gAfterPick, pickedEnergy] = from(this);
     const gAfterPut = to(gAfterPick, pickedEnergy);
     return gAfterPut;
