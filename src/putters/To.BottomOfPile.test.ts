@@ -1,5 +1,5 @@
-import { TestCard } from "./test/TestCard";
-import { GameS } from "./gameState";
+import { TestCard } from "../test/TestCard";
+import { GameS } from "../gameState";
 import { To } from "./To";
 
 test("Increases number of cards on the table", () => {

@@ -1,6 +1,6 @@
-import { TestCard } from "./test/TestCard";
-import { GameS } from "./gameState";
-import { PlayerState } from "./playerState";
+import { TestCard } from "../test/TestCard";
+import { GameS } from "../gameState";
+import { PlayerState } from "../playerState";
 import { From } from "./From";
 
 test("Card with given ID is taken from player's archive collection", () => {

@@ -5,8 +5,8 @@ import { INVALID_MOVE } from "boardgame.io/core";
 import { CardLevel } from "../cards/cardInfo";
 import { PlayerMove } from "./playerMove";
 import { researchStage } from "../stages/researchStage";
-import { From } from "../From";
-import { To } from "../To";
+import { From } from "../pickers/From";
+import { To } from "../putters/To";
 
 function researchMove(G: GameState, ctx: GameContext, cardLevel: CardLevel): GameState | string {
   const playerState: PlayerState = G.players[ctx.currentPlayer];

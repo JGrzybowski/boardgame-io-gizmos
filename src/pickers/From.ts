@@ -1,10 +1,10 @@
-import { CardLevel, CardInfo } from "./cards/cardInfo";
-import { GameState, GameS, MultiPickerFunction, PickerFunction } from "./gameState";
+import { CardLevel, CardInfo } from "../cards/cardInfo";
+import { GameState, GameS, MultiPickerFunction, PickerFunction } from "../gameState";
 import { PlayerID } from "boardgame.io";
-import { EnergyType, repeat } from "./basicGameElements";
-import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
-import { PlayerState } from "./playerState";
-import { ExtractFrom, WithIndex, CardWithId } from "./cards/cardsCollection";
+import { EnergyType, repeat } from "../basicGameElements";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
+import { PlayerState } from "../playerState";
+import { ExtractFrom, WithIndex, CardWithId } from "../cards/cardsCollection";
 
 export class From {
   static TopOfPile(lvl: CardLevel, n: number): MultiPickerFunction<CardInfo> {

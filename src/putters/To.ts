@@ -1,9 +1,9 @@
-import { MultiPutterFunction, GameState, GameS, PutterFunction } from "./gameState";
-import { CardInfo } from "./cards/cardInfo";
-import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
+import { MultiPutterFunction, GameState, GameS, PutterFunction } from "../gameState";
+import { CardInfo } from "../cards/cardInfo";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
-import { PlayerState } from "./playerState";
-import { EnergyType } from "./basicGameElements";
+import { PlayerState } from "../playerState";
+import { EnergyType } from "../basicGameElements";
 
 export class To {
   static BottomOfPile(): MultiPutterFunction<CardInfo> {

@@ -1,6 +1,6 @@
-import { GameS } from "./gameState";
+import { GameS } from "../gameState";
 import { From } from "./From";
-import { TestCard } from "./test/TestCard";
+import { TestCard } from "../test/TestCard";
 
 test("Should remove amount of cards it was asked", () => {
   //Arrange

@@ -1,8 +1,8 @@
-import { TestCard, TestCardWithCost } from "./test/TestCard";
-import { GameS } from "./gameState";
+import { TestCard, TestCardWithCost } from "../test/TestCard";
+import { GameS } from "../gameState";
 import { To } from "./To";
-import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
-import { EnergyType } from "./basicGameElements";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
+import { EnergyType } from "../basicGameElements";
 
 test("Card is put into card into card slot", () => {
   //Arrange

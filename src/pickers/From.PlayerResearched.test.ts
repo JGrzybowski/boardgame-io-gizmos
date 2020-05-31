@@ -1,6 +1,6 @@
-import { TestCard } from "./test/TestCard";
-import { GameS } from "./gameState";
-import { PlayerState } from "./playerState";
+import { TestCard } from "../test/TestCard";
+import { GameS } from "../gameState";
+import { PlayerState } from "../playerState";
 import { From } from "./From";
 
 describe("When card Id was not provided", () => {

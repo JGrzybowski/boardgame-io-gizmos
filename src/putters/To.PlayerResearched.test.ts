@@ -1,7 +1,7 @@
-import { TestCard } from "./test/TestCard";
-import { GameS } from "./gameState";
+import { TestCard } from "../test/TestCard";
+import { GameS } from "../gameState";
 import { To } from "./To";
-import { PlayerState } from "./playerState";
+import { PlayerState } from "../playerState";
 
 test("Cards are put into cards revealed to the player", () => {
   //Arrange

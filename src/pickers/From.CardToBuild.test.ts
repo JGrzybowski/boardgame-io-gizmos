@@ -1,5 +1,5 @@
-import { TestCard } from "./test/TestCard";
-import { GameS } from "./gameState";
+import { TestCard } from "../test/TestCard";
+import { GameS } from "../gameState";
 import { From } from "./From";
 
 test("Card is taken from the built slot", () => {

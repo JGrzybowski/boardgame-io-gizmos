@@ -1,7 +1,7 @@
-import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { To } from "./To";
-import { GameS } from "./gameState";
-import { EnergyType } from "./basicGameElements";
+import { GameS } from "../gameState";
+import { EnergyType } from "../basicGameElements";
 
 test("throws an error if trying to add Any energy", () => {
   // Arrange

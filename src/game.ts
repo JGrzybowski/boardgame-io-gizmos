@@ -11,8 +11,8 @@ import { researchStage } from "./stages/researchStage";
 import { initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
-import { From } from "./From";
-import { To } from "./To";
+import { From } from "./pickers/From";
+import { To } from "./putters/To";
 import { RandomIndex } from "./cards/cardsCollection";
 
 function SomeoneHas16Machines(ctx: GameContext): boolean {
