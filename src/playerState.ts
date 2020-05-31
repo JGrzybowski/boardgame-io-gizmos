@@ -95,13 +95,7 @@ export class PlayerState {
   }
 
   canAddEnergy(): boolean {
-    const sum =
-      this.energyStorage.R +
-      this.energyStorage.U +
-      this.energyStorage.B +
-      this.energyStorage.Y +
-      this.energyStorage.Any;
-    return sum < this.energyStorageCapacity;
+    return this.energyStorage.sum() < this.energyStorageCapacity;
   }
 
   findCardInTheArchive(cardId: number): CardInfo | null {
@@ -141,11 +135,6 @@ export class PlayerState {
 
   researchedWithout(cardId: number): ReadonlyArray<CardInfo> {
     return this.researched.filter((c) => c.cardId !== cardId);
-  }
-
-  withAddedEnergy(energy: EnergyType): PlayerState {
-    const energyStorage = this.energyStorageWith(energy);
-    return new PlayerState({ ...this, energyStorage });
   }
 
   withAddedCardToArchive(card: CardInfo): PlayerState {

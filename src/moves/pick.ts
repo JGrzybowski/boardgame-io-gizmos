@@ -4,21 +4,25 @@ import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";
 import { activationStage } from "../stages/activationStage";
 import { GameContext } from "../gameContext";
+import { From } from "../From";
+import { To } from "../To";
+import { RandomIndex } from "../cards/cardsCollection";
 
 function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameState | string {
-  if (!G.energyWithIndexCanBeTakenFromEnergyRow(energyIndex)) return INVALID_MOVE;
+  if (energyIndex >= G.energyRow.length) return INVALID_MOVE;
+  if (energyIndex < 0) return INVALID_MOVE;
+  if (!ctx.playerID) return INVALID_MOVE;
 
-  const playerState: PlayerState = ctx.player?.get();
+  const playerState: PlayerState = G.players[ctx.playerID];
   if (!playerState.canAddEnergy()) return INVALID_MOVE;
 
-  // remove energy from energy row
-  const [newGameState, energy] = G.withEnergyRowWithout(energyIndex);
-  // add energy to player's storage
-  const newPlayerState = playerState.withAddedEnergy(energy);
+  const newGameState = 
+  G.moveEnergy(From.EnergyRow(energyIndex), To.PlayerEnergyStorage(ctx.playerID))
+   .moveEnergy(From.Dispenser(RandomIndex(ctx)), To.EnergyRow());
+
   //TODO activate all cards that activate on pick trigger
   //.withCardsActivated(new TriggerCriteria("Pick", energy);
 
-  ctx.player?.set(newPlayerState);
   ctx.events?.setStage?.(activationStage.name);
   return newGameState;
 }

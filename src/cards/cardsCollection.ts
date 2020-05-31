@@ -22,5 +22,5 @@ export function WithIndex<T>(index: number): (element: T, i: number) => boolean 
 }
 
 export function RandomIndex(ctx: GameContext): (n: number) => number {
-  return (n: number): number => ctx.Die(n) - 1;
+  return (n: number): number => (ctx.random?.Die(n) ?? 0) - 1;
 }

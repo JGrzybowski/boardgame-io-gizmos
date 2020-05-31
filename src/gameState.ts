@@ -50,9 +50,6 @@ export interface GameState {
 
   withCardToBeBuiltCleared(): GameState;
 
-  energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean;
-  withEnergyRowWithout(index: number): [GameState, EnergyType];
-
   withPlayerAndGameStateSaved(ctx: Ctx): GameState;
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
@@ -127,24 +124,9 @@ export class GameS implements GameState {
     return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
   }
 
-  energyWithIndexCanBeTakenFromEnergyRow(index: number): boolean {
-    return index >= 0 && index < this.energyRowSize;
-  }
-
-  private energyRowWithout(index: number): [ReadonlyArray<EnergyType>, EnergyType] {
-    const energy = this.energyRow[index];
-    const energyRow = this.energyRow.filter((e, idx) => idx !== index);
-    return [energyRow, energy];
-  }
-
   withCardRemovedFromTable(cardId: number): GameState {
     const cards = this.cardsWithout(cardId);
     return new GameS({ ...this, cards });
-  }
-
-  withEnergyRowWithout(index: number): [GameState, EnergyType] {
-    const [energyRow, energy] = this.energyRowWithout(index);
-    return [new GameS({ ...this, energyRow }), energy];
   }
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
