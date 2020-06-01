@@ -1,6 +1,6 @@
-import { CardLevel, CardInfo } from "../cards/cardInfo";
-import { GameState, GameS, MultiPickerFunction, PickerFunction } from "../gameState";
-import { PlayerID, Game } from "boardgame.io";
+import { CardInfo } from "../cards/cardInfo";
+import { GameState, GameS, PilesCardLevel } from "../gameState";
+import { PlayerID } from "boardgame.io";
 import { EnergyType, repeat } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerState } from "../playerState";
@@ -9,16 +9,25 @@ import Picker from "./picker";
 import MultiPicker from "./multiPicker";
 
 export class From {
-  static TopOfPile(lvl: CardLevel, n: number): MultiPickerFunction<CardInfo> {
-    return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
-      const pickedCards = G.cards
-        .filter((c) => c.level === lvl)
-        .slice(G.visibleCardsLimits[lvl], n + G.visibleCardsLimits[lvl]);
-      const pickedIds = pickedCards.map((c) => c.cardId);
+  static TopOfPile(lvl: PilesCardLevel, n: number): MultiPicker<CardInfo> {
+    return {
+      canPickMultiple: (G: GameState): boolean => {
+        if (G.cards.filter((c) => c.level === lvl).length <= G.visibleCardsLimits[lvl]) return false;
+        return true;
+      },
+      pickMultiple: (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
+        const visibleCardsLimit = G.visibleCardsLimits[lvl];
+        if (G.cards.filter((c) => c.level === lvl).length <= visibleCardsLimit)
+          throw new Error("There are no cards in the pile to be picked");
 
-      const cards = G.cards.filter((c: CardInfo) => !pickedIds.includes(c.cardId));
-      const gAfterPick = new GameS({ ...G, cards });
-      return [gAfterPick, pickedCards];
+        const pickedCards = G.cards.filter((c) => c.level === lvl).slice(visibleCardsLimit, n + visibleCardsLimit);
+
+        const pickedIds = pickedCards.map((c) => c.cardId);
+        const cards = G.cards.filter((c: CardInfo) => !pickedIds.includes(c.cardId));
+
+        const gAfterPick = new GameS({ ...G, cards });
+        return [gAfterPick, pickedCards];
+      },
     };
   }
 

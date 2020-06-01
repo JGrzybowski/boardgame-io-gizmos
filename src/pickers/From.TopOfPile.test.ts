@@ -8,9 +8,11 @@ test("Should remove amount of cards it was asked", () => {
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 2);
 
   //Act
-  const [gameStateAfterPut, pickedCards] = From.TopOfPile(1, 2)(G);
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(gameStateAfterPut.cards).toHaveLength(3);
@@ -23,9 +25,11 @@ test("Should not take more cards from pile", () => {
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 2);
 
   //Act
-  const [gameStateAfterPut] = From.TopOfPile(1, 2)(G);
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(14);
@@ -37,9 +41,11 @@ test("Should skip cards visible on the table", () => {
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 2);
 
   //Act
-  const [gameStateAfterPut] = From.TopOfPile(1, 2)(G);
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(10);
@@ -52,10 +58,11 @@ test("Order is not disrupted", () => {
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 2);
 
   //Act
-  const [gameStateAfterPut] = From.TopOfPile(1, 2)(G);
-
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
   //Assert
   expect(gameStateAfterPut.cards.map((c) => c.cardId)).toMatchObject([10, 11, 14]);
 });
@@ -66,9 +73,11 @@ test("Returns picked cards", () => {
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 2);
 
   //Act
-  const [, pickedCards] = From.TopOfPile(1, 2)(G);
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(pickedCards.map((c) => c.cardId)).toContain(12);
@@ -85,9 +94,11 @@ test("Does not modify the original game state", () => {
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 2);
 
   //Act
-  From.TopOfPile(1, 2)(G);
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(G).toMatchObject(originalGameState);
@@ -99,25 +110,26 @@ test("Returns all remaining cards from pile if there is less of them than asked 
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 5);
 
   //Act
-  const [, pickedCards] = From.TopOfPile(1, 5)(G);
+  expect(picker.canPickMultiple(G)).toBeTruthy();
+  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(pickedCards).toHaveLength(3);
   expect(pickedCards.map((c) => c.cardId)).toMatchObject([12, 13, 14]);
 });
 
-test("Returns empty collection if there are no cards on the pile.", () => {
+test("Throws an Error if there are no cards on the pile.", () => {
   //Arrange
   const G = new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.TopOfPile(1, 5);
 
-  //Act
-  const [, pickedCards] = From.TopOfPile(1, 5)(G);
-
-  //Assert
-  expect(pickedCards).toHaveLength(0);
+  //Act & Assert
+  expect(picker.canPickMultiple(G)).toBeFalsy();
+  expect(() => picker.pickMultiple(G)).toThrowError();
 });
