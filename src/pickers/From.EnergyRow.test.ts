@@ -9,9 +9,11 @@ test("Removes energy with specified index from the energyRow", () => {
   const G = new GameS({
     energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
   });
+  const picker = From.EnergyRow(2);
 
   // Act
-  const [afterPick, pickedEnergy] = From.EnergyRow(2)(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   // Assert
   expect(afterPick.energyRow).toHaveLength(4);
@@ -26,9 +28,11 @@ test("Returns EnergyTypeDictionary with energyType placed on specified index", (
   const G = new GameS({
     energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
   });
+  const picker = From.EnergyRow(2);
 
   // Act
-  const [afterPick, pickedEnergy] = From.EnergyRow(2)(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [, pickedEnergy] = picker.pick(G);
 
   // Assert
   expect(pickedEnergy).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Yellow, 1));
@@ -39,13 +43,26 @@ test("Throws an Error if asked for energy from outside of EnergyRow range", () =
   const G = new GameS({
     energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
   });
+  const picker = From.EnergyRow(5);
 
   // Act & Assert
-  expect(() => From.EnergyRow(5)(G)).toThrowError();
-  expect(() => From.EnergyRow(-1)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
 
-test("Does not modify the original game state", () => {
+test("Throws an Error if asked for energy with negative range", () => {
+  // Arrange
+  const G = new GameS({
+    energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
+  });
+  const picker = From.EnergyRow(-5);
+
+  // Act & Assert
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
+});
+
+test("CanPick does not modify the original game state", () => {
   // Arrange
   const G = new GameS({
     energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
@@ -63,8 +80,37 @@ test("Does not modify the original game state", () => {
     },
   });
 
+  const picker = From.EnergyRow(3);
+
   // Act
-  From.EnergyRow(3)(G);
+  picker.canPick(G);
+
+  // Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Pick does not modify the original game state", () => {
+  // Arrange
+  const G = new GameS({
+    energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
+    players: {
+      "0": new PlayerState({ playerId: "0", energyStorage: new EnergyTypeDictionary(2, 3, 4, 5, 0) }),
+      "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
+    },
+  });
+
+  const originalGameState = new GameS({
+    energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
+    players: {
+      "0": new PlayerState({ playerId: "0", energyStorage: new EnergyTypeDictionary(2, 3, 4, 5, 0) }),
+      "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
+    },
+  });
+
+  const picker = From.EnergyRow(3);
+
+  // Act
+  picker.pick(G);
 
   // Assert
   expect(G).toMatchObject(originalGameState);

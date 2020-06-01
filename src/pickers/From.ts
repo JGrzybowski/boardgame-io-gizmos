@@ -118,14 +118,23 @@ export class From {
     };
   }
 
-  static EnergyRow(index: number): PickerFunction<EnergyTypeDictionary> {
-    return (G: GameState): [GameState, EnergyTypeDictionary] => {
-      if (index < 0) throw new Error("Index must be non negative number");
-      if (index > G.energyRow.length - 1) throw new Error("Index must be in range 0 to length of the EnergyRow array");
-      const [energyRow, selectedEnergy] = ExtractFrom(G.energyRow, WithIndex(index));
-      const newGameState = new GameS({ ...G, energyRow });
-      const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
-      return [newGameState, reduction];
+  static EnergyRow(index: number): Picker<EnergyTypeDictionary> {
+    return {
+      canPick: (G: GameState): boolean => {
+        if (index < 0) return false;
+        if (index > G.energyRow.length - 1) return false;
+        return true;
+      },
+      pick: (G: GameState): [GameState, EnergyTypeDictionary] => {
+        if (index < 0) throw new Error("Index must be non negative number");
+        if (index > G.energyRow.length - 1)
+          throw new Error("Index must be in range 0 to length of the EnergyRow array");
+
+        const [energyRow, selectedEnergy] = ExtractFrom(G.energyRow, WithIndex(index));
+        const newGameState = new GameS({ ...G, energyRow });
+        const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
+        return [newGameState, reduction];
+      },
     };
   }
 
