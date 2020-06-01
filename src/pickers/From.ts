@@ -1,6 +1,6 @@
 import { CardLevel, CardInfo } from "../cards/cardInfo";
 import { GameState, GameS, MultiPickerFunction, PickerFunction } from "../gameState";
-import { PlayerID } from "boardgame.io";
+import { PlayerID, Game } from "boardgame.io";
 import { EnergyType, repeat } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerState } from "../playerState";
@@ -86,19 +86,30 @@ export class From {
     };
   }
 
-  static PlayerArchive(playerId: PlayerID, cardId: number): PickerFunction<CardInfo> {
-    return (G: GameState): [GameState, CardInfo] => {
-      const playerState = G.players[playerId];
-      if (!playerState) throw new Error("There is no player with such ID");
+  static PlayerArchive(playerId: PlayerID, cardId: number): Picker<CardInfo> {
+    return {
+      canPick: (G: GameState): boolean => {
+        const playerState = G.players[playerId];
+        if (!playerState) return false;
 
-      const selectedCards = playerState.archive.filter((c) => c.cardId === cardId);
-      if (selectedCards.length < 1) throw new Error("Card with given id is not in the archive collection.");
-      if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
+        const selectedCards = playerState.archive.filter(CardWithId(cardId));
+        if (selectedCards.length < 1) return false;
+        if (selectedCards.length > 1) return false;
+        return true;
+      },
+      pick: (G: GameState): [GameState, CardInfo] => {
+        const playerState = G.players[playerId];
+        if (!playerState) throw new Error("There is no player with such ID");
 
-      const [archive, selectedCard] = ExtractFrom(playerState.archive, CardWithId(cardId));
-      const playerStateAfter = new PlayerState({ ...playerState, archive });
-      const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
-      return [gAfterPut, selectedCard];
+        const selectedCards = playerState.archive.filter((c) => c.cardId === cardId);
+        if (selectedCards.length < 1) throw new Error("Card with given id is not in the archive collection.");
+        if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
+
+        const [archive, selectedCard] = ExtractFrom(playerState.archive, CardWithId(cardId));
+        const playerStateAfter = new PlayerState({ ...playerState, archive });
+        const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
+        return [gAfterPut, selectedCard];
+      },
     };
   }
 

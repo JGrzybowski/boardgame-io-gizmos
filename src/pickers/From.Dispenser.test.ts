@@ -57,7 +57,7 @@ test("Throws an Error if asked for energy from outside of EnergyRow range", () =
   expect(() => picker.pick(G)).toThrowError();
 });
 
-test("Does not modify the original game state", () => {
+test("CanPick does not modify the original game state", () => {
   // Arrange
   const G = new GameS({
     dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
@@ -79,7 +79,34 @@ test("Does not modify the original game state", () => {
   const picker = From.Dispenser(pickNth(13));
 
   // Act
-  expect(picker.canPick(G)).toBeTruthy();
+  picker.canPick(G);
+
+  // Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Pick does not modify the original game state", () => {
+  // Arrange
+  const G = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+    energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
+    players: {
+      "0": new PlayerState({ playerId: "0", energyStorage: new EnergyTypeDictionary(2, 3, 4, 5, 0) }),
+      "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
+    },
+  });
+
+  const originalGameState = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+    energyRow: [EnergyType.Red, EnergyType.Blue, EnergyType.Yellow, EnergyType.Black, EnergyType.Yellow],
+    players: {
+      "0": new PlayerState({ playerId: "0", energyStorage: new EnergyTypeDictionary(2, 3, 4, 5, 0) }),
+      "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
+    },
+  });
+  const picker = From.Dispenser(pickNth(13));
+
+  // Act
   picker.pick(G);
 
   // Assert

@@ -15,9 +15,11 @@ test("Card with given ID is taken from player's archive collection", () => {
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("0", 11);
 
   //Act
-  const [afterPick, pickedCard] = From.PlayerArchive("0", 11)(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [, pickedCard] = picker.pick(G);
 
   //Assert
   expect(pickedCard).toMatchObject(new TestCard(11, 1));
@@ -35,9 +37,11 @@ test("Preserves other archive cards in the collection", () => {
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("0", 11);
 
   //Act
-  const [afterPick, pickedCard] = From.PlayerArchive("0", 11)(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   //Assert
   expect(afterPick.players["0"].archive).toHaveLength(2);
@@ -57,9 +61,11 @@ test("Throws Error if the player's archive collection does not contain card with
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("0", 21);
 
   //Act & Assert
-  expect(() => From.PlayerArchive("0", 21)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
 
 test("Throws Error if the player's archive collection is empty", () => {
@@ -74,12 +80,14 @@ test("Throws Error if the player's archive collection is empty", () => {
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("0", 21);
 
   //Act & Assert
-  expect(() => From.PlayerArchive("0", 11)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
 
-test("Does not modify the original game state", () => {
+test("CanPick does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     players: {
@@ -102,15 +110,16 @@ test("Does not modify the original game state", () => {
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("0", 11);
 
   //Act
-  From.PlayerArchive("0", 11)(G);
+  expect(picker.canPick(G)).toBeTruthy();
 
   //Assert
   expect(G).toMatchObject(originalGameState);
 });
 
-test("Does not modify the the other player state", () => {
+test("Pick does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     players: {
@@ -133,9 +142,43 @@ test("Does not modify the the other player state", () => {
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("0", 11);
 
   //Act
-  const [afterPick, pickedCard] = From.PlayerArchive("0", 11)(G);
+  expect(picker.pick(G)).toBeTruthy();
+
+  //Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Pick does not modify the the other player state", () => {
+  //Arrange
+  const G = new GameS({
+    players: {
+      "0": new PlayerState({
+        playerId: "0",
+        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archiveLimit: 3,
+      }),
+      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+    },
+  });
+
+  const originalGameState = new GameS({
+    players: {
+      "0": new PlayerState({
+        playerId: "0",
+        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archiveLimit: 3,
+      }),
+      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+    },
+  });
+  const picker = From.PlayerArchive("0", 11);
+
+  //Act
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   //Assert
   expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
@@ -156,7 +199,9 @@ test("Throws an Error if there is no player with given Id", () => {
       "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
+  const picker = From.PlayerArchive("NonExistingPlayer", 11);
 
   //Act & Assert
-  expect(() => From.PlayerArchive("NonExistingPlayer", 11)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
