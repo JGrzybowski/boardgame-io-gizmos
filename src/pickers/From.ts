@@ -6,6 +6,7 @@ import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerState } from "../playerState";
 import { ExtractFrom, WithIndex, CardWithId } from "../cards/cardsCollection";
 import Picker from "./picker";
+import MultiPicker from "./multiPicker";
 
 export class From {
   static TopOfPile(lvl: CardLevel, n: number): MultiPickerFunction<CardInfo> {
@@ -68,38 +69,56 @@ export class From {
     };
   }
 
-  static PlayerResearched(playerId: PlayerID, cardId: number): PickerFunction<CardInfo>;
-  static PlayerResearched(playerId: PlayerID): MultiPickerFunction<CardInfo>;
-  static PlayerResearched(
-    playerId: PlayerID,
-    cardId?: number
-  ): PickerFunction<CardInfo> | MultiPickerFunction<CardInfo> {
+  static PlayerResearched(playerId: PlayerID, cardId: number): Picker<CardInfo>;
+  static PlayerResearched(playerId: PlayerID): MultiPicker<CardInfo>;
+  static PlayerResearched(playerId: PlayerID, cardId?: number): Picker<CardInfo> | MultiPicker<CardInfo> {
     if (cardId) {
-      return (G: GameState): [GameState, CardInfo] => {
+      return {
+        canPick: (G: GameState): boolean => {
+          const playerState = G.players[playerId];
+          if (!playerState) return false;
+
+          const selectedCards = playerState.researched.filter(CardWithId(cardId));
+          if (selectedCards.length < 1) return false;
+          if (selectedCards.length > 1) return false;
+          return true;
+        },
+        pick: (G: GameState): [GameState, CardInfo] => {
+          const playerState = G.players[playerId];
+          if (!playerState) throw new Error("There is no player with such ID");
+
+          const selectedCards = playerState.researched.filter(CardWithId(cardId));
+          if (selectedCards.length < 1) throw new Error("Card with given id is not in the researched collection.");
+          if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
+
+          const [researched, selectedCard] = ExtractFrom(playerState.researched, CardWithId(cardId));
+          const playerStateAfter = new PlayerState({ ...playerState, researched });
+          const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
+          return [gAfterPut, selectedCard];
+        },
+      };
+    }
+    return {
+      canPickMultiple: (G: GameState): boolean => {
+        const playerState = G.players[playerId];
+        if (!playerState) return false;
+
+        const researchedCards = playerState.researched;
+        if (researchedCards.length === 0) return false;
+        return true;
+      },
+      pickMultiple: (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
         const playerState = G.players[playerId];
         if (!playerState) throw new Error("There is no player with such ID");
 
-        const selectedCards = playerState.researched.filter(CardWithId(cardId));
-        if (selectedCards.length < 1) throw new Error("Card with given id is not in the researched collection.");
-        if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
+        const researchedCards = playerState.researched;
+        if (researchedCards.length === 0)
+          throw new Error("The researched collection is empty, you cannot take from it.");
 
-        const [researched, selectedCard] = ExtractFrom(playerState.researched, CardWithId(cardId));
-        const playerStateAfter = new PlayerState({ ...playerState, researched });
+        const playerStateAfter = playerState.withResearchedCleared();
         const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
-        return [gAfterPut, selectedCard];
-      };
-    }
-
-    return (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
-      const playerState = G.players[playerId];
-      if (!playerState) throw new Error("There is no player with such ID");
-
-      const researchedCards = playerState.researched;
-      if (researchedCards.length === 0) throw new Error("The researched collection is empty, you cannot take from it.");
-
-      const playerStateAfter = playerState.withResearchedCleared();
-      const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
-      return [gAfterPut, researchedCards];
+        return [gAfterPut, researchedCards];
+      },
     };
   }
 
@@ -135,7 +154,7 @@ export class From {
       canPick: (G: GameState): boolean => {
         if (energyType === EnergyType.Any) return false;
 
-        const playerState = G.getPlayer(playerId);
+        const playerState = G.players[playerId];
         if (!playerState) return false;
         if (playerState.energyStorage.get(energyType) <= 0) return false;
         return true;
@@ -143,7 +162,7 @@ export class From {
       pick: (G: GameState): [GameState, EnergyTypeDictionary] => {
         if (energyType === EnergyType.Any) throw new Error("Player Energy storage cannot store (Any) energy");
 
-        const playerState = G.getPlayer(playerId);
+        const playerState = G.players[playerId];
         if (!playerState) throw new Error("Player with given id does not exist.");
         if (playerState.energyStorage.get(energyType) <= 0) throw new Error("Selected energy cannot be taken");
 

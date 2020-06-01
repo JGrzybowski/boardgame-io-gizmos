@@ -16,9 +16,11 @@ describe("When card Id was not provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0");
 
     //Act
-    const [afterPick, pickedCards] = From.PlayerResearched("0")(G);
+    expect(picker.canPickMultiple(G)).toBeTruthy();
+    const [, pickedCards] = picker.pickMultiple(G);
 
     //Assert
     expect(pickedCards).toHaveLength(3);
@@ -39,9 +41,11 @@ describe("When card Id was not provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0");
 
     //Act
-    const [afterPick, pickedCards] = From.PlayerResearched("0")(G);
+    expect(picker.canPickMultiple(G)).toBeTruthy();
+    const [afterPick] = picker.pickMultiple(G);
 
     //Assert
     expect(afterPick.players["0"].researched).toHaveLength(0);
@@ -59,12 +63,14 @@ describe("When card Id was not provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0");
 
     //Act & Assert
-    expect(() => From.PlayerResearched("0")(G)).toThrowError();
+    expect(picker.canPickMultiple(G)).toBeFalsy();
+    expect(() => picker.pickMultiple(G)).toThrowError();
   });
 
-  test("Does not modify the original game state", () => {
+  test("CanPick does not modify the original game state", () => {
     //Arrange
     const G = new GameS({
       players: {
@@ -87,15 +93,16 @@ describe("When card Id was not provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0");
 
     //Act
-    From.PlayerResearched("0")(G);
+    picker.canPickMultiple(G);
 
     //Assert
     expect(G).toMatchObject(originalGameState);
   });
 
-  test("Does not modify the the other player state", () => {
+  test("Pick does not modify the original game state", () => {
     //Arrange
     const G = new GameS({
       players: {
@@ -118,9 +125,43 @@ describe("When card Id was not provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0");
 
     //Act
-    const [afterPick, pickedCards] = From.PlayerResearched("0")(G);
+    picker.pickMultiple(G);
+
+    //Assert
+    expect(G).toMatchObject(originalGameState);
+  });
+
+  test("Pick does not modify the the other player state", () => {
+    //Arrange
+    const G = new GameS({
+      players: {
+        "0": new PlayerState({
+          playerId: "0",
+          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researchLimit: 3,
+        }),
+        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+      },
+    });
+
+    const originalGameState = new GameS({
+      players: {
+        "0": new PlayerState({
+          playerId: "0",
+          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researchLimit: 3,
+        }),
+        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+      },
+    });
+    const picker = From.PlayerResearched("0");
+
+    //Act
+    expect(picker.canPickMultiple(G)).toBeTruthy();
+    const [afterPick, pickedCards] = picker.pickMultiple(G);
 
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
@@ -141,9 +182,11 @@ describe("When card Id was not provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("NonExistingPlayer");
 
     //Act & Assert
-    expect(() => From.PlayerResearched("NonExistingPlayer")(G)).toThrowError();
+    expect(picker.canPickMultiple(G)).toBeFalsy();
+    expect(() => picker.pickMultiple(G)).toThrowError();
   });
 });
 
@@ -160,9 +203,11 @@ describe("When card Id was provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0", 11);
 
     //Act
-    const [afterPick, pickedCard] = From.PlayerResearched("0", 11)(G);
+    expect(picker.canPick(G)).toBeTruthy();
+    const [afterPick, pickedCard] = picker.pick(G);
 
     //Assert
     expect(pickedCard).toMatchObject(new TestCard(11, 1));
@@ -180,9 +225,11 @@ describe("When card Id was provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0", 11);
 
     //Act
-    const [afterPick, pickedCard] = From.PlayerResearched("0", 11)(G);
+    expect(picker.canPick(G)).toBeTruthy();
+    const [afterPick, pickedCard] = picker.pick(G);
 
     //Assert
     expect(afterPick.players["0"].researched).toHaveLength(2);
@@ -202,9 +249,11 @@ describe("When card Id was provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0", 21);
 
     //Act & Assert
-    expect(() => From.PlayerResearched("0", 21)(G)).toThrowError();
+    expect(picker.canPick(G)).toBeFalsy();
+    expect(() => picker.pick(G)).toThrowError();
   });
 
   test("Throws Error if the player's researched collection is empty", () => {
@@ -219,12 +268,14 @@ describe("When card Id was provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0", 11);
 
     //Act & Assert
-    expect(() => From.PlayerResearched("0", 11)(G)).toThrowError();
+    expect(picker.canPick(G)).toBeFalsy();
+    expect(() => picker.pick(G)).toThrowError();
   });
 
-  test("Does not modify the original game state", () => {
+  test("CanPick does not modify the original game state", () => {
     //Arrange
     const G = new GameS({
       players: {
@@ -247,9 +298,42 @@ describe("When card Id was provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("0", 11);
 
     //Act
-    From.PlayerResearched("0", 11)(G);
+    picker.canPick(G);
+
+    //Assert
+    expect(G).toMatchObject(originalGameState);
+  });
+
+  test("Pick does not modify the original game state", () => {
+    //Arrange
+    const G = new GameS({
+      players: {
+        "0": new PlayerState({
+          playerId: "0",
+          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researchLimit: 3,
+        }),
+        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+      },
+    });
+
+    const originalGameState = new GameS({
+      players: {
+        "0": new PlayerState({
+          playerId: "0",
+          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researchLimit: 3,
+        }),
+        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+      },
+    });
+    const picker = From.PlayerResearched("0", 11);
+
+    //Act
+    picker.pick(G);
 
     //Assert
     expect(G).toMatchObject(originalGameState);
@@ -279,8 +363,11 @@ describe("When card Id was provided", () => {
       },
     });
 
+    const picker = From.PlayerResearched("0", 11);
+
     //Act
-    const [afterPick, pickedCard] = From.PlayerResearched("0", 11)(G);
+    expect(picker.canPick(G)).toBeTruthy();
+    const [afterPick, pickedCard] = picker.pick(G);
 
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
@@ -301,8 +388,10 @@ describe("When card Id was provided", () => {
         "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
       },
     });
+    const picker = From.PlayerResearched("NonExistingPlayer", 11);
 
     //Act & Assert
-    expect(() => From.PlayerResearched("NonExistingPlayer", 11)(G)).toThrowError();
+    expect(picker.canPick(G)).toBeFalsy();
+    expect(() => picker.pick(G)).toThrowError();
   });
 });
