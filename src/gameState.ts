@@ -57,6 +57,7 @@ export interface GameState {
 
   withShuffeledCards(ctx: GameContext): GameState;
 
+  getPlayer(playerId: string): PlayerState | null;
   visibleCards(level: CardLevel): ReadonlyArray<CardInfo>;
 
   moveCard(from: PickerFunction<CardInfo>, into: PutterFunction<CardInfo>): GameState;
@@ -179,6 +180,11 @@ export class GameS implements GameState {
 
   withShuffeledCards(ctx: GameContext): GameState {
     return new GameS({ ...this, cards: ctx.random?.Shuffle([...this.cards]) });
+  }
+
+  getPlayer(playerId: PlayerID): PlayerState | null {
+    if (!Object.keys(this.players).includes(playerId)) return null;
+    return this.players[playerId];
   }
 
   visibleCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {

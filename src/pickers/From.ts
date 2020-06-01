@@ -130,19 +130,30 @@ export class From {
     };
   }
 
-  static PlayerEnergyStorage(playerId: PlayerID, energyType: EnergyType): PickerFunction<EnergyTypeDictionary> {
-    return (G: GameState): [GameState, EnergyTypeDictionary] => {
-      if (energyType === EnergyType.Any) throw new Error("Player Energy storage cannot store (Any) energy");
+  static PlayerEnergyStorage(playerId: PlayerID, energyType: EnergyType): Picker<EnergyTypeDictionary> {
+    return {
+      canPick: (G: GameState): boolean => {
+        if (energyType === EnergyType.Any) return false;
 
-      const playerState = G.players[playerId];
-      if (playerState.energyStorage.get(energyType) <= 0) throw new Error("Selected energy cannot be taken");
+        const playerState = G.getPlayer(playerId);
+        if (!playerState) return false;
+        if (playerState.energyStorage.get(energyType) <= 0) return false;
+        return true;
+      },
+      pick: (G: GameState): [GameState, EnergyTypeDictionary] => {
+        if (energyType === EnergyType.Any) throw new Error("Player Energy storage cannot store (Any) energy");
 
-      const reduction = EnergyTypeDictionary.fromTypeAndAmount(energyType, 1);
-      const newEnergyStorage = playerState.energyStorage.subtract(reduction);
+        const playerState = G.getPlayer(playerId);
+        if (!playerState) throw new Error("Player with given id does not exist.");
+        if (playerState.energyStorage.get(energyType) <= 0) throw new Error("Selected energy cannot be taken");
 
-      const newPlayerState = new PlayerState({ ...playerState, energyStorage: newEnergyStorage });
-      const newGameState = G.withUpdatedPlayer(playerId, newPlayerState);
-      return [newGameState, reduction];
+        const reduction = EnergyTypeDictionary.fromTypeAndAmount(energyType, 1);
+        const newEnergyStorage = playerState.energyStorage.subtract(reduction);
+
+        const newPlayerState = new PlayerState({ ...playerState, energyStorage: newEnergyStorage });
+        const newGameState = G.withUpdatedPlayer(playerId, newPlayerState);
+        return [newGameState, reduction];
+      },
     };
   }
 

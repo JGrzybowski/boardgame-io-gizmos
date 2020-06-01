@@ -12,9 +12,11 @@ test("Removes one of specified energy from the player's energy storage", () => {
       "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
     },
   });
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Red);
 
   // Act
-  const [afterPick, pickedEnergy] = From.PlayerEnergyStorage("0", EnergyType.Red)(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   // Assert
   expect(afterPick.players["0"].energyStorage.R).toBe(1);
@@ -32,9 +34,11 @@ test("Returns EnergyTypeDictionary with specified energyType", () => {
       "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
     },
   });
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Red);
 
   // Act
-  const [afterPick, pickedEnergy] = From.PlayerEnergyStorage("0", EnergyType.Red)(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [, pickedEnergy] = picker.pick(G);
 
   // Assert
   expect(pickedEnergy).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Red, 1));
@@ -48,9 +52,11 @@ test("Throws an Error if asked for Any Energy", () => {
       "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 1) }),
     },
   });
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Any);
 
   // Act & Assert
-  expect(() => From.PlayerEnergyStorage("0", EnergyType.Any)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
 
 test("Throws an Error if player does not have specified energy in the storage", () => {
@@ -61,12 +67,14 @@ test("Throws an Error if player does not have specified energy in the storage", 
       "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
     },
   });
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Red);
 
   // Act & Assert
-  expect(() => From.PlayerEnergyStorage("0", EnergyType.Red)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
 
-test("Does not modify the original game state", () => {
+test("CanPick does not modify the original game state", () => {
   // Arrange
   const G = new GameS({
     players: {
@@ -83,13 +91,16 @@ test("Does not modify the original game state", () => {
   });
 
   // Act
-  From.PlayerEnergyStorage("0", EnergyType.Red)(G);
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Red);
+
+  // Act
+  picker.canPick(G);
 
   // Assert
   expect(G).toMatchObject(originalGameState);
 });
 
-test("Does not modify the the other player state", () => {
+test("Pick does not modify the original game state", () => {
   // Arrange
   const G = new GameS({
     players: {
@@ -98,8 +109,36 @@ test("Does not modify the the other player state", () => {
     },
   });
 
+  const originalGameState = new GameS({
+    players: {
+      "0": new PlayerState({ playerId: "0", energyStorage: new EnergyTypeDictionary(2, 3, 4, 5, 0) }),
+      "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
+    },
+  });
+
   // Act
-  const [afterPick, pickedEnergy] = From.PlayerEnergyStorage("0", EnergyType.Red)(G);
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Red);
+
+  // Act
+  picker.pick(G);
+
+  // Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Pick does not modify the the other player state", () => {
+  // Arrange
+  const G = new GameS({
+    players: {
+      "0": new PlayerState({ playerId: "0", energyStorage: new EnergyTypeDictionary(2, 3, 4, 5, 0) }),
+      "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
+    },
+  });
+  const picker = From.PlayerEnergyStorage("0", EnergyType.Red);
+
+  // Act
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   // Assert
   expect(afterPick.players["1"]).toMatchObject(G.players["1"]);
@@ -113,7 +152,9 @@ test("Throws an Error if there is no player with given Id", () => {
       "1": new PlayerState({ playerId: "1", energyStorage: new EnergyTypeDictionary(1, 2, 3, 4, 0) }),
     },
   });
+  const picker = From.PlayerEnergyStorage("100", EnergyType.Red);
 
   // Act & Assert
-  expect(() => From.PlayerEnergyStorage("100", EnergyType.Red)(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
