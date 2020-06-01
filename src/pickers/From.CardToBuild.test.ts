@@ -9,9 +9,11 @@ test("Card is taken from the built slot", () => {
     cardToBeBuilt: new TestCard(10, 1),
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.CardToBuild();
 
   //Act
-  const [afterPick, pickedCard] = From.CardToBuild()(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick, pickedCard] = picker.pick(G);
 
   //Assert
   expect(afterPick.cardToBeBuilt).toBeNull();
@@ -25,12 +27,14 @@ test("Throws an error if there is no card in the slot", () => {
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.CardToBuild();
 
   //Act & Assert
-  expect(() => From.CardToBuild()(G)).toThrowError();
+  expect(picker.canPick(G)).toBeFalsy();
+  expect(() => picker.pick(G)).toThrowError();
 });
 
-test("Does not modify the original game state", () => {
+test("CanPick does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
@@ -43,9 +47,32 @@ test("Does not modify the original game state", () => {
     cardToBeBuilt: new TestCard(10, 1),
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.CardToBuild();
 
   //Act
-  From.CardToBuild()(G);
+  picker.canPick(G);
+
+  //Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Pick does not modify the original game state", () => {
+  //Arrange
+  const G = new GameS({
+    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    cardToBeBuilt: new TestCard(10, 1),
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+
+  const originalGameState = new GameS({
+    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    cardToBeBuilt: new TestCard(10, 1),
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+  const picker = From.CardToBuild();
+
+  //Act
+  picker.pick(G);
 
   //Assert
   expect(G).toMatchObject(originalGameState);
@@ -58,9 +85,11 @@ test("Sets Card's cost to null", () => {
     cardToBeBuilt: new TestCard(10, 1),
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.CardToBuild();
 
   //Act
-  const [afterPick] = From.CardToBuild()(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   //Assert
   expect(afterPick.cardToBeBuiltCost).not.toBeUndefined();
@@ -74,9 +103,11 @@ test("Removes only card to be build from cards pile", () => {
     cardToBeBuilt: new TestCard(10, 1),
     visibleCardsLimits: [0, 2, 2, 2],
   });
+  const picker = From.CardToBuild();
 
   //Act
-  const [afterPick] = From.CardToBuild()(G);
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
 
   //Assert
   expect(afterPick.cards.map((c) => c.cardId)).not.toContain(10);

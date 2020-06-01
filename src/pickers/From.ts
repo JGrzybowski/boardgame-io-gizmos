@@ -49,16 +49,22 @@ export class From {
     };
   }
 
-  static CardToBuild(): PickerFunction<CardInfo> {
-    return (G: GameState): [GameState, CardInfo] => {
-      if (!G.cardToBeBuilt) throw new Error("There is no card to be built.");
+  static CardToBuild(): Picker<CardInfo> {
+    return {
+      canPick: (G: GameState): boolean => {
+        if (!G.cardToBeBuilt) return false;
+        return true;
+      },
+      pick: (G: GameState): [GameState, CardInfo] => {
+        if (!G.cardToBeBuilt) throw new Error("There is no card to be built.");
 
-      const newGameState: GameState = new GameS({
-        ...G,
-        cardToBeBuilt: null,
-        cardToBeBuiltCost: null,
-      });
-      return [newGameState, G.cardToBeBuilt];
+        const newGameState: GameState = new GameS({
+          ...G,
+          cardToBeBuilt: null,
+          cardToBeBuiltCost: null,
+        });
+        return [newGameState, G.cardToBeBuilt];
+      },
     };
   }
 
