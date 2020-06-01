@@ -1,4 +1,4 @@
-import { CardInfo } from "./cards/cardInfo";
+import { CardInfo, CardLevel } from "./cards/cardInfo";
 import { EnergyType } from "./basicGameElements";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
@@ -56,6 +56,8 @@ export interface GameState {
   withEnergyAddedToCost(changeTo: EnergyType): GameState;
 
   withShuffeledCards(ctx: GameContext): GameState;
+
+  visibleCards(level: CardLevel): ReadonlyArray<CardInfo>;
 
   moveCard(from: PickerFunction<CardInfo>, into: PutterFunction<CardInfo>): GameState;
   moveCard(from: PickerFunction<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
@@ -177,6 +179,10 @@ export class GameS implements GameState {
 
   withShuffeledCards(ctx: GameContext): GameState {
     return new GameS({ ...this, cards: ctx.random?.Shuffle([...this.cards]) });
+  }
+
+  visibleCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {
+    return this.cards.slice(0, this.visibleCardsLimits[level]);
   }
 
   moveCard(from: PickerFunction<CardInfo>, into: PutterFunction<CardInfo>): GameState;
