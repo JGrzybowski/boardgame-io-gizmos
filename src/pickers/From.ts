@@ -5,6 +5,7 @@ import { EnergyType, repeat } from "../basicGameElements";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerState } from "../playerState";
 import { ExtractFrom, WithIndex, CardWithId } from "../cards/cardsCollection";
+import Picker from "./picker";
 
 export class From {
   static TopOfPile(lvl: CardLevel, n: number): MultiPickerFunction<CardInfo> {
@@ -128,24 +129,34 @@ export class From {
     };
   }
 
-  static Dispenser(selectorFunction: (n: number) => number): PickerFunction<EnergyType> {
-    return (G: GameState): [GameState, EnergyType] => {
-      const n = G.dispenser.R + G.dispenser.U + G.dispenser.B + G.dispenser.Y;
-      const index = selectorFunction(n);
-      if (index < 0 || index > n)
-        throw new Error("The index calculated by the function must be in the index range from 0 to n");
-      const dispenserArray = [
-        ...repeat(EnergyType.Red, G.dispenser.R),
-        ...repeat(EnergyType.Blue, G.dispenser.U),
-        ...repeat(EnergyType.Black, G.dispenser.B),
-        ...repeat(EnergyType.Yellow, G.dispenser.Y),
-      ];
+  static Dispenser(selectorFunction: (n: number) => number): Picker<EnergyType> {
+    return {
+      canPick: (G: GameState): boolean => {
+        const n = G.dispenser.R + G.dispenser.U + G.dispenser.B + G.dispenser.Y;
+        // HACK: Does not save the selected index for later, for random functions that could cause a different index durring pick execution
+        const index = selectorFunction(n);
+        if (index < 0 || index > n) return false;
+        return true;
+      },
+      pick: (G: GameState): [GameState, EnergyType] => {
+        const n = G.dispenser.R + G.dispenser.U + G.dispenser.B + G.dispenser.Y;
+        const index = selectorFunction(n);
+        if (index < 0 || index > n)
+          throw new Error("The index calculated by the function must be in the index range from 0 to n");
 
-      const selectedEnergy = dispenserArray[index];
-      const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
-      const dispenser = G.dispenser.subtract(reduction);
-      const newGameState = new GameS({ ...G, dispenser });
-      return [newGameState, selectedEnergy];
+        const dispenserArray = [
+          ...repeat(EnergyType.Red, G.dispenser.R),
+          ...repeat(EnergyType.Blue, G.dispenser.U),
+          ...repeat(EnergyType.Black, G.dispenser.B),
+          ...repeat(EnergyType.Yellow, G.dispenser.Y),
+        ];
+        const selectedEnergy = dispenserArray[index];
+
+        const reduction = EnergyTypeDictionary.fromTypeAndAmount(selectedEnergy, 1);
+        const dispenser = G.dispenser.subtract(reduction);
+        const newGameState = new GameS({ ...G, dispenser });
+        return [newGameState, selectedEnergy];
+      },
     };
   }
 }
