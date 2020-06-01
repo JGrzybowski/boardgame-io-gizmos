@@ -6,9 +6,8 @@ import { Ctx, PlayerID } from "boardgame.io";
 import { GameContext } from "./gameContext";
 import Picker from "./pickers/picker";
 import MultiPicker from "./pickers/multiPicker";
-
-export type PutterFunction<T> = (destination: GameState, cards: T) => GameState;
-export type MultiPutterFunction<T> = (destination: GameState, cards: ReadonlyArray<T>) => GameState;
+import Putter from "./putters/putter";
+import MultiPutter from "./putters/multiPutter";
 
 function isPicker<T>(x: Picker<T> | MultiPicker<T>): x is Picker<T> {
   if (x as Picker<T>) return true;
@@ -18,12 +17,13 @@ function isMultiPicker<T>(x: Picker<T> | MultiPicker<T>): x is MultiPicker<T> {
   if (x as MultiPicker<T>) return true;
   return false;
 }
-function isPutter<T>(x: Function): x is PutterFunction<T> {
-  if (x as PutterFunction<T>) return true;
+
+function isPutter<T>(x: Putter<T> | MultiPutter<T>): x is Putter<T> {
+  if (x as Putter<T>) return true;
   return false;
 }
-function isMultiPutter<T>(x: Function): x is MultiPutterFunction<T> {
-  if (x as MultiPutterFunction<T>) return true;
+function isMultiPutter<T>(x: Putter<T> | MultiPutter<T>): x is MultiPutter<T> {
+  if (x as MultiPutter<T>) return true;
   return false;
 }
 
@@ -59,11 +59,11 @@ export interface GameState {
 
   visibleCards(level: CardLevel): ReadonlyArray<CardInfo>;
 
-  moveCard(from: Picker<CardInfo>, into: PutterFunction<CardInfo>): GameState;
-  moveCard(from: Picker<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
-  moveCard(from: MultiPicker<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
+  moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
+  moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+  moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
 
-  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: PutterFunction<T>): GameState;
+  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): GameState;
 
   withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
 }
@@ -185,25 +185,36 @@ export class GameS implements GameState {
     return this.cards.slice(0, this.visibleCardsLimits[level]);
   }
 
-  moveCard(from: Picker<CardInfo>, into: PutterFunction<CardInfo>): GameState;
-  moveCard(from: Picker<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
-  moveCard(from: MultiPicker<CardInfo>, into: MultiPutterFunction<CardInfo>): GameState;
+  moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
+  moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
+  moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
   moveCard(
     picker: Picker<CardInfo> | MultiPicker<CardInfo>,
-    putter: PutterFunction<CardInfo> | MultiPutterFunction<CardInfo>
+    putter: Putter<CardInfo> | MultiPutter<CardInfo>
   ): GameState {
     if (isMultiPicker(picker) && isMultiPutter<CardInfo>(putter)) {
       if (!picker.canPickMultiple(this)) throw new Error("");
       const [gAfterPick, pickedCards] = picker.pickMultiple(this);
-      const gAfterPut = putter(gAfterPick, pickedCards);
+
+      if (!putter.canPutMultiple(gAfterPick, pickedCards)) throw new Error("");
+      const gAfterPut = putter.putMultiple(gAfterPick, pickedCards);
+
       return gAfterPut;
     } else if (isPicker(picker) && isMultiPutter<CardInfo>(putter)) {
+      if (!picker.canPick(this)) throw new Error("");
       const [gAfterPick, pickedCard] = picker.pick(this);
-      const gAfterPut = putter(gAfterPick, [pickedCard]);
+
+      if (!putter.canPutMultiple(gAfterPick, [pickedCard])) throw new Error("");
+      const gAfterPut = putter.putMultiple(gAfterPick, [pickedCard]);
+
       return gAfterPut;
     } else if (isPicker(picker) && isPutter<CardInfo>(putter)) {
+      if (!picker.canPick(this)) throw new Error("");
       const [gAfterPick, pickedCard] = picker.pick(this);
-      const gAfterPut = putter(gAfterPick, pickedCard);
+
+      if (!putter.canPut(gAfterPick, pickedCard)) throw new Error("");
+      const gAfterPut = putter.put(gAfterPick, pickedCard);
+
       return gAfterPut;
     } else if (isMultiPicker<CardInfo>(picker) && isPutter<CardInfo>(putter)) {
       throw new Error("Cannot move cards due to wrong picker/putter setup");
@@ -211,10 +222,11 @@ export class GameS implements GameState {
     throw new Error("Unknown args for picker/putter");
   }
 
-  moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: PutterFunction<T>): GameState {
-    if (!from.canPick(this)) throw new Error();
-    const [gAfterPick, pickedEnergy] = from.pick(this);
-    const gAfterPut = to(gAfterPick, pickedEnergy);
+  moveEnergy<T = EnergyType | EnergyTypeDictionary>(picker: Picker<T>, putter: Putter<T>): GameState {
+    if (!picker.canPick(this)) throw new Error();
+    const [gAfterPick, pickedEnergy] = picker.pick(this);
+    if (!putter.canPut(gAfterPick, pickedEnergy)) throw new Error();
+    const gAfterPut = putter.put(gAfterPick, pickedEnergy);
     return gAfterPut;
   }
 

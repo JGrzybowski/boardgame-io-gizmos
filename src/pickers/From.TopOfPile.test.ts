@@ -29,7 +29,7 @@ test("Should not take more cards from pile", () => {
 
   //Act
   expect(picker.canPickMultiple(G)).toBeTruthy();
-  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
+  const [gameStateAfterPut] = picker.pickMultiple(G);
 
   //Assert
   expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(14);
@@ -45,7 +45,7 @@ test("Should skip cards visible on the table", () => {
 
   //Act
   expect(picker.canPickMultiple(G)).toBeTruthy();
-  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
+  const [gameStateAfterPut] = picker.pickMultiple(G);
 
   //Assert
   expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(10);
@@ -62,7 +62,7 @@ test("Order is not disrupted", () => {
 
   //Act
   expect(picker.canPickMultiple(G)).toBeTruthy();
-  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
+  const [gameStateAfterPut] = picker.pickMultiple(G);
   //Assert
   expect(gameStateAfterPut.cards.map((c) => c.cardId)).toMatchObject([10, 11, 14]);
 });
@@ -77,7 +77,7 @@ test("Returns picked cards", () => {
 
   //Act
   expect(picker.canPickMultiple(G)).toBeTruthy();
-  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
+  const [, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(pickedCards.map((c) => c.cardId)).toContain(12);
@@ -98,7 +98,7 @@ test("Does not modify the original game state", () => {
 
   //Act
   expect(picker.canPickMultiple(G)).toBeTruthy();
-  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
+  picker.pickMultiple(G);
 
   //Assert
   expect(G).toMatchObject(originalGameState);
@@ -114,7 +114,7 @@ test("Returns all remaining cards from pile if there is less of them than asked 
 
   //Act
   expect(picker.canPickMultiple(G)).toBeTruthy();
-  const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
+  const [, pickedCards] = picker.pickMultiple(G);
 
   //Assert
   expect(pickedCards).toHaveLength(3);
