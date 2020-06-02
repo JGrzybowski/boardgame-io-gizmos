@@ -10,21 +10,18 @@ import Putter from "./putters/putter";
 import MultiPutter from "./putters/multiPutter";
 
 function isPicker<T>(x: Picker<T> | MultiPicker<T>): x is Picker<T> {
-  if (x as Picker<T>) return true;
-  return false;
+  return (x as Picker<T>).pick !== undefined;
 }
 function isMultiPicker<T>(x: Picker<T> | MultiPicker<T>): x is MultiPicker<T> {
-  if (x as MultiPicker<T>) return true;
-  return false;
+  return (x as MultiPicker<T>).pickMultiple !== undefined;
 }
 
 function isPutter<T>(x: Putter<T> | MultiPutter<T>): x is Putter<T> {
-  if (x as Putter<T>) return true;
-  return false;
+  return (x as Putter<T>).put !== undefined;
 }
+
 function isMultiPutter<T>(x: Putter<T> | MultiPutter<T>): x is MultiPutter<T> {
-  if (x as MultiPutter<T>) return true;
-  return false;
+  return (x as MultiPutter<T>).putMultiple !== undefined;
 }
 
 export type PilesCardLevel = 1 | 2 | 3;
