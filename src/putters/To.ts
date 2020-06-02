@@ -1,7 +1,7 @@
-import { MultiPutterFunction, GameState, GameS, PutterFunction } from "../gameState";
+import { GameState, GameS } from "../gameState";
 import { CardInfo } from "../cards/cardInfo";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
-import { PlayerID, Game } from "boardgame.io";
+import { PlayerID } from "boardgame.io";
 import { PlayerState } from "../playerState";
 import { EnergyType } from "../basicGameElements";
 import MultiPutter from "./multiPutter";
@@ -10,7 +10,7 @@ import Putter from "./putter";
 export class To {
   static BottomOfPile(): MultiPutter<CardInfo> {
     return {
-      canPutMultiple: (G: GameState): boolean => {
+      canPutMultiple: (): boolean => {
         return true;
       },
       putMultiple: (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
@@ -128,7 +128,7 @@ export class To {
 
   static EnergyRow(): Putter<EnergyType> {
     return {
-      canPut: (G: GameState, energyType: EnergyType) => {
+      canPut: (G: GameState, energyType: EnergyType): boolean => {
         if (energyType === EnergyType.Any) return false;
         if (G.energyRow.length >= G.energyRowSize) return false;
         return true;
@@ -152,6 +152,7 @@ export class To {
 
         const playerState = G.players[playerId];
         if (!playerState) return false;
+        //TODO check if storage has capacity
 
         return true;
       },

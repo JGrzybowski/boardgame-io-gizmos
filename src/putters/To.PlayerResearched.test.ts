@@ -13,9 +13,11 @@ test("Cards are put into cards revealed to the player", () => {
   });
 
   const cardsToPut = [new TestCard(15, 1), new TestCard(20, 2)];
+  const putter = To.PlayerResearched("0");
 
   //Act
-  const afterPut = To.PlayerResearched("0")(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.players["0"].researched).toHaveLength(3);
@@ -40,9 +42,11 @@ test("Does not change the other players", () => {
   });
 
   const cardsToPut = [new TestCard(15, 1), new TestCard(20, 2)];
+  const putter = To.PlayerResearched("0");
 
   //Act
-  const afterPut = To.PlayerResearched("0")(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.players["1"]).toMatchObject(originalGameState.players["1"]);
@@ -61,9 +65,11 @@ test("Does not remove any other cards previously owned by the player", () => {
   });
 
   const cardsToPut = [new TestCard(15, 1), new TestCard(20, 2)];
+  const putter = To.PlayerResearched("0");
 
   //Act
-  const afterPut = To.PlayerResearched("0")(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.players["0"].machines).toHaveLength(1);
@@ -80,16 +86,18 @@ test("Does not remove any other cards previously researched by the player", () =
   });
 
   const cardsToPut = [new TestCard(15, 1), new TestCard(12, 2)];
+  const putter = To.PlayerResearched("0");
 
   //Act
-  const afterPut = To.PlayerResearched("0")(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.players["0"].researched).toHaveLength(3);
   expect(afterPut.players["0"].researched.map((c) => c.cardId)).toContain(11);
 });
 
-test("Does not modify the original game state", () => {
+test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     players: {
@@ -106,9 +114,36 @@ test("Does not modify the original game state", () => {
   });
 
   const cardsToPut = [new TestCard(15, 1)];
+  const putter = To.PlayerResearched("0");
 
   //Act
-  To.PlayerResearched("0")(G, cardsToPut);
+  putter.canPutMultiple(G, cardsToPut);
+
+  //Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Put does not modify the original game state", () => {
+  //Arrange
+  const G = new GameS({
+    players: {
+      "0": new PlayerState({ playerId: "0", researched: [new TestCard(11, 1)], researchLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+    },
+  });
+
+  const originalGameState = new GameS({
+    players: {
+      "0": new PlayerState({ playerId: "0", researched: [new TestCard(11, 1)], researchLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+    },
+  });
+
+  const cardsToPut = [new TestCard(15, 1)];
+  const putter = To.PlayerResearched("0");
+
+  //Act
+  putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(G).toMatchObject(originalGameState);
@@ -124,9 +159,11 @@ test("Throws an Error if the total number of cards in player's researched would 
   });
 
   const cardsToPut = [new TestCard(15, 1)];
+  const putter = To.PlayerResearched("0");
 
   //Act & Assert
-  expect(() => To.PlayerResearched("0")(G, cardsToPut)).toThrowError();
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeFalsy();
+  expect(() => putter.putMultiple(G, cardsToPut)).toThrowError();
 });
 
 test("Throws an Error if there is no player with given Id", () => {
@@ -139,7 +176,9 @@ test("Throws an Error if there is no player with given Id", () => {
   });
 
   const cardsToPut = [new TestCard(15, 1)];
+  const putter = To.PlayerResearched("NonExistingPlayer");
 
   //Act & Assert
-  expect(() => To.PlayerResearched("NonExistingPlayer")(G, cardsToPut)).toThrowError();
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeFalsy();
+  expect(() => putter.putMultiple(G, cardsToPut)).toThrowError();
 });

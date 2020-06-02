@@ -2,24 +2,18 @@ import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { To } from "./To";
 import { GameS } from "../gameState";
 
-test("throws an error if trying to add Any energy", () => {
-  // Arrange
-  const G = new GameS({
-    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
-  });
-
-  // Act && Assert
-  expect(() => To.Dispenser()(G, new EnergyTypeDictionary(1, 2, 3, 4, 2))).toThrowError();
-});
-
 test("Adds provided energy to dispenser's totals", () => {
   // Arrange
   const G = new GameS({
     dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
   });
 
+  const putter = To.Dispenser();
+  const energyToPut = new EnergyTypeDictionary(1, 2, 3, 4, 0);
+
   // Act
-  const afterPut = To.Dispenser()(G, new EnergyTypeDictionary(1, 2, 3, 4, 0));
+  expect(putter.canPut(G, energyToPut)).toBeTruthy();
+  const afterPut = putter.put(G, energyToPut);
 
   // Assert
   expect(afterPut.dispenser.R).toBe(6);
@@ -29,17 +23,35 @@ test("Adds provided energy to dispenser's totals", () => {
   expect(afterPut.dispenser.Any).toBe(0);
 });
 
-test("throws error if provided zero energy", () => {
+test("throws an error if trying to add Any energy", () => {
   // Arrange
   const G = new GameS({
     dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
   });
 
+  const putter = To.Dispenser();
+  const energyToPut = new EnergyTypeDictionary(1, 2, 3, 4, 2);
+
+  // Act
   // Act && Assert
-  expect(() => To.Dispenser()(G, new EnergyTypeDictionary(0, 0, 0, 0, 0))).toThrowError();
+  expect(putter.canPut(G, energyToPut)).toBeFalsy();
+  expect(() => putter.put(G, new EnergyTypeDictionary(1, 2, 3, 4, 2))).toThrowError();
 });
 
-test("Does not modify original game state", () => {
+test("throws error if provided zero energy", () => {
+  // Arrange
+  const G = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+  });
+  const putter = To.Dispenser();
+  const energyToPut = new EnergyTypeDictionary(0, 0, 0, 0, 0);
+
+  // Act && Assert
+  expect(putter.canPut(G, energyToPut)).toBeFalsy();
+  expect(() => putter.put(G, new EnergyTypeDictionary(0, 0, 0, 0, 0))).toThrowError();
+});
+
+test("CanPut does not modify original game state", () => {
   // Arrange
   const G = new GameS({
     dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
@@ -49,8 +61,31 @@ test("Does not modify original game state", () => {
     dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
   });
 
+  const putter = To.Dispenser();
+  const energyToPut = new EnergyTypeDictionary(1, 2, 3, 4, 0);
+
   // Act
-  const afterPut = To.Dispenser()(G, new EnergyTypeDictionary(1, 2, 3, 4, 0));
+  putter.canPut(G, energyToPut);
+
+  // Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Put does not modify original game state", () => {
+  // Arrange
+  const G = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+  });
+
+  const originalGameState = new GameS({
+    dispenser: new EnergyTypeDictionary(5, 5, 5, 5, 0),
+  });
+
+  const putter = To.Dispenser();
+  const energyToPut = new EnergyTypeDictionary(1, 2, 3, 4, 0);
+
+  // Act
+  putter.put(G, energyToPut);
 
   // Assert
   expect(G).toMatchObject(originalGameState);

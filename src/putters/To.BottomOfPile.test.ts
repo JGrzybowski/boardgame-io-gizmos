@@ -9,9 +9,11 @@ test("Increases number of cards on the table", () => {
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const putter = To.BottomOfPile();
 
   //Act
-  const afterPut = To.BottomOfPile()(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.cards).toHaveLength(8);
@@ -24,9 +26,11 @@ test("Adds given cards to the pile", () => {
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const putter = To.BottomOfPile();
 
   //Act
-  const afterPut = To.BottomOfPile()(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.cards.map((c) => c.cardId)).toContain(15);
@@ -41,15 +45,17 @@ test("Leaves the previous cards of the pile on the top and in the same order", (
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const putter = To.BottomOfPile();
 
   //Act
-  const afterPut = To.BottomOfPile()(G, cardsToPut);
+  expect(putter.canPutMultiple(G, cardsToPut)).toBeTruthy();
+  const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(afterPut.cards.slice(0, G.cards.length).map((c) => c.cardId)).toMatchObject([10, 11, 12, 13, 14]);
 });
 
-test("Does not modify the original game state", () => {
+test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
@@ -60,9 +66,30 @@ test("Does not modify the original game state", () => {
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const putter = To.BottomOfPile();
 
   //Act
-  To.BottomOfPile()(G, cardsToPut);
+  putter.canPutMultiple(G, cardsToPut);
+
+  //Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Put does not modify the original game state", () => {
+  //Arrange
+  const G = new GameS({
+    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+  const originalGameState = new GameS({
+    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+  const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const putter = To.BottomOfPile();
+
+  //Act
+  putter.putMultiple(G, cardsToPut);
 
   //Assert
   expect(G).toMatchObject(originalGameState);

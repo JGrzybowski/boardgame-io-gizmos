@@ -11,11 +11,12 @@ test("Card is put into card into card slot", () => {
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
-
   const cardToPut = new TestCard(15, 1);
+  const putter = To.CardToBuild();
 
   //Act
-  const afterPut = To.CardToBuild()(G, cardToPut);
+  expect(putter.canPut(G, cardToPut)).toBeTruthy();
+  const afterPut = putter.put(G, cardToPut);
 
   //Assert
   expect(afterPut.cardToBeBuilt).not.toBeNull();
@@ -31,12 +32,14 @@ test("Throws error if the card to be built slot is occupied", () => {
   });
 
   const cardToPut = new TestCard(17, 1);
+  const putter = To.CardToBuild();
 
   //Act & Assert
-  expect(() => To.CardToBuild()(G, cardToPut)).toThrowError();
+  expect(putter.canPut(G, cardToPut)).toBeFalsy();
+  expect(() => putter.put(G, cardToPut)).toThrowError();
 });
 
-test("Does not modify the original game state", () => {
+test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
     cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
@@ -51,9 +54,34 @@ test("Does not modify the original game state", () => {
   });
 
   const cardToPut = new TestCard(15, 1);
+  const putter = To.CardToBuild();
 
   //Act
-  const afterPut = To.CardToBuild()(G, cardToPut);
+  putter.canPut(G, cardToPut);
+
+  //Assert
+  expect(G).toMatchObject(originalGameState);
+});
+
+test("Put does not modify the original game state", () => {
+  //Arrange
+  const G = new GameS({
+    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    cardToBeBuilt: null,
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+
+  const originalGameState = new GameS({
+    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    cardToBeBuilt: null,
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+
+  const cardToPut = new TestCard(15, 1);
+  const putter = To.CardToBuild();
+
+  //Act
+  putter.put(G, cardToPut);
 
   //Assert
   expect(G).toMatchObject(originalGameState);
@@ -68,9 +96,11 @@ test("Sets Up Cards cost", () => {
   });
 
   const cardToPut = new TestCardWithCost(15, 1, EnergyType.Red, 3);
+  const putter = To.CardToBuild();
 
   //Act
-  const afterPut = To.CardToBuild()(G, cardToPut);
+  expect(putter.canPut(G, cardToPut)).toBeTruthy();
+  const afterPut = putter.put(G, cardToPut);
 
   //Assert
   expect(afterPut.cardToBeBuiltCost).not.toBeUndefined();
