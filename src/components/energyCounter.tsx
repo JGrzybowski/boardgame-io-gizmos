@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { EnergyOrb } from "./energyOrb";
 

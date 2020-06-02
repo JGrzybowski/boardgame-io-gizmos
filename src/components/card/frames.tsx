@@ -1,5 +1,5 @@
 import React from "react";
-import { EnergyType } from "../../basicGameElements";
+import { EnergyType } from "../../energyType";
 import { accentBorder } from "../colorDictionary";
 
 export function SingleColorFrame(energyType: EnergyType): JSX.Element {

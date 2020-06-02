@@ -1,7 +1,7 @@
 import React from "react";
 import { CardInfo } from "../../cards/cardInfo";
 import { upperFrame, triggerBoxBorder, triggerBox } from "../colorDictionary";
-import { EnergyType } from "../../basicGameElements";
+import { EnergyType } from "../../energyType";
 import { TriggerType } from "../../cards/triggerType";
 import { EnergySymbol } from "./energySymbol";
 import { CostCircle } from "./costCircle";

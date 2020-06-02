@@ -8,7 +8,6 @@ import { actionStage } from "./stages/actionStage";
 import { activationStage } from "./stages/activationStage";
 import { paymentStage } from "./stages/paymentStage";
 import { researchStage } from "./stages/researchStage";
-import { initialDispenser } from "./basicGameElements";
 import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { From } from "./pickers/From";
@@ -28,7 +27,7 @@ export function* range(from: number, to: number): Generator<number> {
 }
 
 const InitialGameState: GameState = new GameS({
-  energyRow: initialDispenser,
+  energyRow: [],
   dispenser: new EnergyTypeDictionary(13, 13, 13, 13, 0),
 
   cards: CardsList,

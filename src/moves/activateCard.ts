@@ -4,7 +4,7 @@ import { GameContext } from "../gameContext";
 import { PlayerMove } from "./playerMove";
 import { TriggerType } from "../cards/triggerType";
 import { CardInfo } from "../cards/cardInfo";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 
 export function activateCard(
   G: GameState,

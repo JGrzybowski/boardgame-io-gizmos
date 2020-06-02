@@ -1,7 +1,7 @@
 import { CardInfo, CardLevel } from "./cardInfo";
 import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
 import { CardEffect } from "./cardEffect";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { EnergyType } from "../../basicGameElements";
+import { EnergyType } from "../../energyType";
 
 export const EnergySymbol: React.FC<EnergyType> = (energyType) => {
   const energySvgLink =

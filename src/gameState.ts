@@ -1,5 +1,5 @@
 import { CardInfo, CardLevel } from "./cards/cardInfo";
-import { EnergyType } from "./basicGameElements";
+import { EnergyType } from "./energyType";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerState } from "./playerState";
 import { Ctx, PlayerID } from "boardgame.io";

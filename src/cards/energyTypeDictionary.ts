@@ -1,4 +1,4 @@
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 
 export class EnergyTypeDictionary {
   constructor(

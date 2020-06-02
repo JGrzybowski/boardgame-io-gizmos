@@ -3,7 +3,7 @@ import { PlayerState } from "../playerState";
 import { GameContext } from "../gameContext";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { Client } from "boardgame.io/client";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import Gizmos from "../game";
 import { Game } from "boardgame.io";
 import { activationStage } from "../stages/activationStage";

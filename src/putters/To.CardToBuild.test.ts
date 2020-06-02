@@ -2,7 +2,7 @@ import { TestCard, TestCardWithCost } from "../test/TestCard";
 import { GameS } from "../gameState";
 import { To } from "./To";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 
 test("Card is put into card into card slot", () => {
   //Arrange

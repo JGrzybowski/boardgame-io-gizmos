@@ -1,4 +1,4 @@
-import { EnergyType } from "./basicGameElements";
+import { EnergyType } from "./energyType";
 import { CardInfo } from "./cards/cardInfo";
 import { InitialCard } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";

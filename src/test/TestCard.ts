@@ -1,6 +1,6 @@
 import { CardInfo, CardLevel } from "../cards/cardInfo";
 import { TriggerType } from "../cards/triggerType";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 
 export class TestCard extends CardInfo {
   constructor(cardId: number, lvl: CardLevel) {

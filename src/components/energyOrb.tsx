@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 
 export const EnergyOrb: React.FC<{
   energyType: EnergyType;

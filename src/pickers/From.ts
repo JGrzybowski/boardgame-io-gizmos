@@ -1,12 +1,16 @@
 import { CardInfo } from "../cards/cardInfo";
 import { GameState, GameS, PilesCardLevel } from "../gameState";
 import { PlayerID } from "boardgame.io";
-import { EnergyType, repeat } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerState } from "../playerState";
 import { ExtractFrom, WithIndex, CardWithId } from "../cards/cardsCollection";
 import Picker from "./picker";
 import MultiPicker from "./multiPicker";
+
+function* repeat<T>(x: T, n: number): Generator<T> {
+  while (n-- > 0) yield x;
+}
 
 export class From {
   static TopOfPile(lvl: PilesCardLevel, n: number): MultiPicker<CardInfo> {

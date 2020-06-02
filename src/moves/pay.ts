@@ -3,7 +3,7 @@ import { GameContext } from "../gameContext";
 import { PlayerMove } from "./playerMove";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { PlayerState } from "../playerState";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 
 function payMove(G: GameState, ctx: GameContext, payment: EnergyType): GameState | string {

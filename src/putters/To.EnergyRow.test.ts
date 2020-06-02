@@ -1,6 +1,6 @@
 import { To } from "./To";
 import { GameS } from "../gameState";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 
 test("Adds provided energy at the end of energy row", () => {
   // Arrange

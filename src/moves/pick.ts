@@ -16,10 +16,11 @@ function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameStat
   const playerState: PlayerState = G.players[ctx.playerID];
   if (!playerState.canAddEnergy()) return INVALID_MOVE;
 
-  const newGameState = G.moveEnergy(From.EnergyRow(energyIndex), To.PlayerEnergyStorage(ctx.playerID)).moveEnergy(
-    From.Dispenser(RandomIndex(ctx)),
-    To.EnergyRow()
-  );
+  const newGameState = G
+    // Move energy with given index to player's storage
+    .moveEnergy(From.EnergyRow(energyIndex), To.PlayerEnergyStorage(ctx.playerID))
+    // Add a new random energy to the energy row
+    .moveEnergy(From.Dispenser(RandomIndex(ctx)), To.EnergyRow());
 
   //TODO activate all cards that activate on pick trigger
   //.withCardsActivated(new TriggerCriteria("Pick", energy);

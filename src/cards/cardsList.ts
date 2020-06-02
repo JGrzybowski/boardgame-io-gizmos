@@ -1,7 +1,7 @@
 import { CardInfo } from "./cardInfo";
 import { CardWithFileEffect } from "./cardWithFileEffect";
 import { CardWithTakeEnergyEffect } from "./cardWithTakeEnergyEffect";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
 import { UpgradeEffectCard, UpgradeEffectFunction } from "./upgradeEffectCard";
 import { ConvertEffect, ConvertEffectCard } from "./convertEffectCard";

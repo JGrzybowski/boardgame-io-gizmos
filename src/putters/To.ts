@@ -3,7 +3,7 @@ import { CardInfo } from "../cards/cardInfo";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
 import { PlayerState } from "../playerState";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import MultiPutter from "./multiPutter";
 import Putter from "./putter";
 

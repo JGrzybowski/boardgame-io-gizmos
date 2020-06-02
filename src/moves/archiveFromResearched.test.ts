@@ -1,6 +1,6 @@
 import { GameState, GameS } from "../gameState";
 import { TestCardWithCost, TestCard } from "../test/TestCard";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { PlayerState } from "../playerState";
 import { Game } from "boardgame.io";
 import { GameContext } from "../gameContext";

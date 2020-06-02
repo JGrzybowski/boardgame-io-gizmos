@@ -4,7 +4,7 @@ import { CardStack } from "./cardStack";
 import { EnergyCounter } from "./energyCounter";
 import { PlayerState } from "../playerState";
 import { Card, MiniCard } from "./card";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { PlayerLimits } from "./playerLimits";
 import { TriggerType } from "../cards/triggerType";
 

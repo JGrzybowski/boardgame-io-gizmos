@@ -1,4 +1,4 @@
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
 import { GameContext } from "../gameContext";
 import { GameState } from "../gameState";

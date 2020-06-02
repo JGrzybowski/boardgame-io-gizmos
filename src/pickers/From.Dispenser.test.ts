@@ -1,7 +1,7 @@
 import { GameS } from "../gameState";
 import { PlayerState } from "../playerState";
 import { From } from "./From";
-import { EnergyType } from "../basicGameElements";
+import { EnergyType } from "../energyType";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 
 function pickNth(n: number) {
