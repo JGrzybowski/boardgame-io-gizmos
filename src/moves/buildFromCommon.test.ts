@@ -30,7 +30,7 @@ function GameWithInitialTestScenario(): Game<GameState, GameContext> {
   return { ...Gizmos, setup: (): GameState => InitialTestScenario() };
 }
 
-function TestClient(game: Game<GameState, GameContext>) {
+function TestClient(game: Game<GameState, GameContext>): any {
   return Client({ game, numPlayers: 2, playerID: "0" });
 }
 

@@ -35,11 +35,11 @@ function GameWithInitialTestScenario(): Game<GameState, GameContext> {
   return { ...Gizmos, setup: (): GameState => InitialTestScenario() };
 }
 
-function TestClient(game: Game<GameState, GameContext>) {
+function TestClient(game: Game<GameState, GameContext>): any {
   return Client({ game, numPlayers: 2, playerID: "0" });
 }
 
-test("removes specified card", () => {
+test("removes specified card from researched", () => {
   // Arrange
   const GameCustomScenario = GameWithInitialTestScenario();
   const client = TestClient(GameCustomScenario);
@@ -94,9 +94,7 @@ test("remaining cards are put on the bottom of the pile", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  const bottomOfThePile = afterMove.cards.slice(afterMove.cards.length - 4);
-  expect(bottomOfThePile.map((c) => c.cardId)).toContain(10);
-  expect(bottomOfThePile.map((c) => c.cardId)).toContain(11);
+  const bottomOfThePile = afterMove.cards.slice(-2);
   expect(bottomOfThePile.map((c) => c.cardId)).toContain(13);
   expect(bottomOfThePile.map((c) => c.cardId)).toContain(14);
 });

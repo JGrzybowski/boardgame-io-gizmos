@@ -40,7 +40,6 @@ export interface GameState {
   readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
 
-  withCardRemovedFromTable(cardId: number): GameState;
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
@@ -54,7 +53,7 @@ export interface GameState {
 
   withShuffeledCards(ctx: GameContext): GameState;
 
-  visibleCards(level: CardLevel): ReadonlyArray<CardInfo>;
+  visibleCards(level?: CardLevel): ReadonlyArray<CardInfo>;
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
   moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
@@ -123,11 +122,6 @@ export class GameS implements GameState {
     return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
   }
 
-  withCardRemovedFromTable(cardId: number): GameState {
-    const cards = this.cardsWithout(cardId);
-    return new GameS({ ...this, cards });
-  }
-
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
     return new GameS({ ...this, cardToBeBuilt, cardToBeBuiltCost });
   }
@@ -179,7 +173,8 @@ export class GameS implements GameState {
   }
 
   visibleCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {
-    return this.cards.slice(0, this.visibleCardsLimits[level]);
+    if (level) return this.cards.slice(0, this.visibleCardsLimits[level]);
+    return this.visibleCards(1).concat(this.visibleCards(2)).concat(this.visibleCards(3));
   }
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
