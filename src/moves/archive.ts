@@ -9,20 +9,19 @@ import { From } from "../pickers/From";
 import { To } from "../putters/To";
 
 function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState | string {
-  const playerState: PlayerState = ctx.player?.get();
+  if (!ctx.playerID) return INVALID_MOVE;
+  const playerId = ctx.playerID;
+  const playerState: PlayerState = G.players[playerId];
   if (!playerState.canArchiveAnotherCard()) return INVALID_MOVE;
 
-  const selectedCard = GetFirstOrNull(G.cards, CardWithId(cardId));
+  const selectedCard = GetFirstOrNull(G.visibleCards(), CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
 
-  // remove card from common area
-  const newGameState = G.withCardRemovedFromTable(cardId);
-  // add card to player's archive
-  const newPlayerState = playerState.withAddedCardToArchive(selectedCard);
+  // take card from common area and add it to player's archive
+  const newGameState = G.moveCard(From.Table(cardId), To.PlayerArchive(playerId));
   //TODO activate all cards that activate on archive trigger
   //.withCardsActivated(new TriggerCriteria("Archive", selectedCard);
 
-  ctx.player?.set(newPlayerState);
   ctx.events?.setStage?.(activationStage.name);
   return newGameState;
 }
