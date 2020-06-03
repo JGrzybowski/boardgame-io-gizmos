@@ -8,6 +8,7 @@ import Picker from "./pickers/picker";
 import MultiPicker from "./pickers/multiPicker";
 import Putter from "./putters/putter";
 import MultiPutter from "./putters/multiPutter";
+import { CardWithLevel } from "./cards/cardsCollection";
 
 function isPicker<T>(x: Picker<T> | MultiPicker<T>): x is Picker<T> {
   return (x as Picker<T>).pick !== undefined;
@@ -53,12 +54,14 @@ export interface GameState {
 
   withShuffeledCards(ctx: GameContext): GameState;
 
+  pileCards(level: CardLevel): ReadonlyArray<CardInfo>;
   visibleCards(level?: CardLevel): ReadonlyArray<CardInfo>;
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
   moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
   moveCard(from: MultiPicker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
 
+  canMoveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): boolean;
   moveEnergy<T = EnergyType | EnergyTypeDictionary>(from: Picker<T>, to: Putter<T>): GameState;
 
   withUpdatedPlayer(playerId: string, playerStateAfter: PlayerState): GameState;
@@ -172,8 +175,13 @@ export class GameS implements GameState {
     return new GameS({ ...this, cards: ctx.random?.Shuffle([...this.cards]) });
   }
 
+  pileCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {
+    if (level) return this.cards.filter(CardWithLevel(level)).slice(this.visibleCardsLimits[level]);
+    return this.visibleCards(1).concat(this.visibleCards(2)).concat(this.visibleCards(3));
+  }
+
   visibleCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {
-    if (level) return this.cards.slice(0, this.visibleCardsLimits[level]);
+    if (level) return this.cards.filter(CardWithLevel(level)).slice(0, this.visibleCardsLimits[level]);
     return this.visibleCards(1).concat(this.visibleCards(2)).concat(this.visibleCards(3));
   }
 
@@ -212,6 +220,13 @@ export class GameS implements GameState {
       throw new Error("Cannot move cards due to wrong picker/putter setup");
     }
     throw new Error("Unknown args for picker/putter");
+  }
+
+  canMoveEnergy<T = EnergyType | EnergyTypeDictionary>(picker: Picker<T>, putter: Putter<T>): boolean {
+    if (!picker.canPick(this)) return false;
+    const [gAfterPick, pickedEnergy] = picker.pick(this);
+    if (!putter.canPut(gAfterPick, pickedEnergy)) return false;
+    return true;
   }
 
   moveEnergy<T = EnergyType | EnergyTypeDictionary>(picker: Picker<T>, putter: Putter<T>): GameState {

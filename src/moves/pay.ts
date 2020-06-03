@@ -2,29 +2,30 @@ import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { PlayerMove } from "./playerMove";
 import { INVALID_MOVE } from "boardgame.io/core";
-import { PlayerState } from "../playerState";
 import { EnergyType } from "../energyType";
-import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
+import { From } from "../pickers/From";
+import { To } from "../putters/To";
 
 function payMove(G: GameState, ctx: GameContext, payment: EnergyType): GameState | string {
-  const playerState: PlayerState = ctx.player?.get();
+  if (payment === EnergyType.Any) return INVALID_MOVE;
+  if (!ctx.playerID) return INVALID_MOVE;
+  const playerId = ctx.playerID;
 
-  if (!G.cardToBeBuilt || !G.cardToBeBuiltCost) return INVALID_MOVE;
-
-  if (!playerState.hasDeclaredEnergy(payment)) return INVALID_MOVE;
-
-  //jest za co płacić więc albo koszt ma kolor albo any
   const cardCost = G.cardToBeBuiltCost;
+  if (!cardCost) return INVALID_MOVE;
+
   const energyToReduce =
     cardCost?.get(payment) > 0 ? payment : cardCost?.get(EnergyType.Any) > 0 ? EnergyType.Any : null;
-
   if (!energyToReduce) return INVALID_MOVE;
-  if (!EnergyTypeDictionary.canPayFor(payment, energyToReduce)) return INVALID_MOVE;
 
-  const newPlayerState = playerState.withRemovedEnergy(payment);
-  const newGameState = G.withEnergyRemovedFromCost(energyToReduce);
+  if (!G.canMoveEnergy(From.PlayerEnergyStorage(playerId, payment), To.Dispenser())) return INVALID_MOVE;
+  const newGameState = G
+    // move players energy to dispenser
+    .moveEnergy(From.PlayerEnergyStorage(playerId, payment), To.Dispenser())
+    // TODO: Replace with something like Copy.To? or addtional To.CardToBeBuildCost
+    // reduce the cost
+    .withEnergyRemovedFromCost(energyToReduce);
 
-  ctx.player?.set(newPlayerState);
   return newGameState;
 }
 

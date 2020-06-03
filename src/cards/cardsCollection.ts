@@ -1,4 +1,4 @@
-import { CardInfo } from "./cardInfo";
+import { CardInfo, CardLevel } from "./cardInfo";
 import { GameContext } from "../gameContext";
 
 export function GetFirstOrNull<T>(array: ReadonlyArray<T>, filter: (t: T, i: number) => boolean): T | null {
@@ -15,6 +15,10 @@ export function ExtractFrom<T>(array: ReadonlyArray<T>, filter: (t: T, i: number
 
 export function CardWithId(cardId: number): (card: CardInfo) => boolean {
   return (card: CardInfo): boolean => card.cardId === cardId;
+}
+
+export function CardWithLevel(cardLevel: CardLevel): (card: CardInfo) => boolean {
+  return (card: CardInfo): boolean => card.level === cardLevel;
 }
 
 export function WithIndex<T>(index: number): (element: T, i: number) => boolean {
