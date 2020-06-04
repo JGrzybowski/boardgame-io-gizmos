@@ -4,13 +4,8 @@ import { PlayerMove } from "./playerMove";
 import { INVALID_MOVE } from "boardgame.io/core";
 
 function cancelBuildMove(G: GameState, ctx: GameContext): GameState | string {
-  if (!G.previousStageName || !G.playerStateBeforeBuild || !G.gameStateBeforeBuild) return INVALID_MOVE;
-
-  // move revealed cards to the bottom of deck from revealed cards
-  const oldPlayerState = G.playerStateBeforeBuild;
+  if (!G.previousStageName || !G.gameStateBeforeBuild) return INVALID_MOVE;
   const oldGameState = G.gameStateBeforeBuild;
-
-  ctx.player?.set(oldPlayerState);
   ctx.events?.setStage?.(G.previousStageName);
   return oldGameState;
 }

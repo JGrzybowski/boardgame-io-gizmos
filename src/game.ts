@@ -1,9 +1,8 @@
-import { CardInfo } from "./cards/cardInfo";
 import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
 import { GameState, GameS } from "./gameState";
 import { GameContext } from "./gameContext";
-import { Game } from "boardgame.io";
+import { Game, PlayerID } from "boardgame.io";
 import { actionStage } from "./stages/actionStage";
 import { activationStage } from "./stages/activationStage";
 import { paymentStage } from "./stages/paymentStage";
@@ -12,14 +11,16 @@ import { CardsList } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { From } from "./pickers/From";
 import { To } from "./putters/To";
-import { RandomIndex } from "./cards/cardsCollection";
+import { RandomIndex, CardWithLevel } from "./cards/cardsCollection";
 
-function SomeoneHas16Machines(ctx: GameContext): boolean {
-  return ctx.player?.get().machines.length === 16;
+function SomeoneHas16Machines(G: GameState): boolean {
+  return Object.keys(G.players).some((playerId: PlayerID) => G.players[playerId].machines.length === 16);
 }
 
-function SomeoneHas4MachinesOf_III_Level(ctx: GameContext): boolean {
-  return ctx.player?.get().machines.filter((c: CardInfo) => c.level === 3).length === 4;
+function SomeoneHas4MachinesOf_III_Level(G: GameState): boolean {
+  return Object.keys(G.players).some(
+    (playerId: PlayerID) => G.players[playerId].machines.filter(CardWithLevel(3)).length === 4
+  );
 }
 
 export function* range(from: number, to: number): Generator<number> {
@@ -65,7 +66,7 @@ const Gizmos: Game<GameState, GameContext> = {
   },
 
   endIf: (G: GameState, ctx: GameContext) => {
-    if (SomeoneHas16Machines(ctx) || SomeoneHas4MachinesOf_III_Level(ctx)) {
+    if (SomeoneHas16Machines(G) || SomeoneHas4MachinesOf_III_Level(G)) {
       // TODO count victory points
       // const winnerIndex = G.victoryPoints.indexOf(Math.max(...arr));
       return { winner: 0 };

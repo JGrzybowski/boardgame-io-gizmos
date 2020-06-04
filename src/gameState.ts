@@ -38,7 +38,7 @@ export interface GameState {
   readonly visibleCardsLimits: ReadonlyArray<number>;
 
   readonly previousStageName: string | null;
-  readonly playerStateBeforeBuild: PlayerState | null;
+  //readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
 
   withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
@@ -47,7 +47,7 @@ export interface GameState {
 
   withCardToBeBuiltCleared(): GameState;
 
-  withPlayerAndGameStateSaved(ctx: Ctx): GameState;
+  withGameStateSaved(ctx: Ctx): GameState;
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
   withEnergyAddedToCost(changeTo: EnergyType): GameState;
@@ -77,7 +77,7 @@ export interface GameStateData {
   readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
   readonly visibleCardsLimits?: ReadonlyArray<number>;
   readonly previousStageName?: string | null;
-  readonly playerStateBeforeBuild?: PlayerState | null;
+  //readonly playerStateBeforeBuild?: PlayerState | null;
   readonly gameStateBeforeBuild?: GameState | null;
 }
 
@@ -93,7 +93,7 @@ export class GameS implements GameState {
       cardToBeBuiltCost = null,
       visibleCardsLimits = [0, 4, 3, 2],
       previousStageName = null,
-      playerStateBeforeBuild = null,
+      //playerStateBeforeBuild = null,
       gameStateBeforeBuild = null,
     } = initialGameState;
     this.energyRow = energyRow;
@@ -105,7 +105,7 @@ export class GameS implements GameState {
     this.cardToBeBuiltCost = cardToBeBuiltCost;
     this.visibleCardsLimits = visibleCardsLimits;
     this.previousStageName = previousStageName;
-    this.playerStateBeforeBuild = playerStateBeforeBuild;
+    //this.playerStateBeforeBuild = playerStateBeforeBuild;
     this.gameStateBeforeBuild = gameStateBeforeBuild;
   }
 
@@ -118,7 +118,7 @@ export class GameS implements GameState {
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null = null;
   readonly visibleCardsLimits: ReadonlyArray<number> = [0, 4, 3, 2];
   readonly previousStageName: string | null = null;
-  readonly playerStateBeforeBuild: PlayerState | null = null;
+  //readonly playerStateBeforeBuild: PlayerState | null = null;
   readonly gameStateBeforeBuild: GameState | null = null;
 
   cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
@@ -162,11 +162,10 @@ export class GameS implements GameState {
     return new GameS({ ...this, cardToBeBuiltCost });
   }
 
-  withPlayerAndGameStateSaved(ctx: GameContext): GameState {
+  withGameStateSaved(ctx: GameContext): GameState {
     return new GameS({
       ...this,
       gameStateBeforeBuild: this,
-      playerStateBeforeBuild: ctx.player?.get(),
       previousStageName: ctx.activePlayers?.[ctx.currentPlayer] ?? null,
     });
   }
