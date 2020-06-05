@@ -17,7 +17,7 @@ function SomeoneHas16Machines(G: GameState): boolean {
   return Object.keys(G.players).some((playerId: PlayerID) => G.players[playerId].machines.length === 16);
 }
 
-function SomeoneHas4MachinesOf_III_Level(G: GameState): boolean {
+function SomeoneHas4MachinesOfThirdLevel(G: GameState): boolean {
   return Object.keys(G.players).some(
     (playerId: PlayerID) => G.players[playerId].machines.filter(CardWithLevel(3)).length === 4
   );
@@ -66,7 +66,7 @@ const Gizmos: Game<GameState, GameContext> = {
   },
 
   endIf: (G: GameState, ctx: GameContext) => {
-    if (SomeoneHas16Machines(G) || SomeoneHas4MachinesOf_III_Level(G)) {
+    if (SomeoneHas16Machines(G) || SomeoneHas4MachinesOfThirdLevel(G)) {
       // TODO count victory points
       // const winnerIndex = G.victoryPoints.indexOf(Math.max(...arr));
       return { winner: 0 };

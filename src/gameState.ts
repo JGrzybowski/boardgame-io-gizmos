@@ -45,8 +45,6 @@ export interface GameState {
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
 
-  withCardToBeBuiltCleared(): GameState;
-
   withGameStateSaved(ctx: Ctx): GameState;
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState;
@@ -132,16 +130,6 @@ export class GameS implements GameState {
   withCardsPutOnBottom(returnedCards: ReadonlyArray<CardInfo>): GameState {
     const cards = [...this.cards, ...returnedCards];
     return new GameS({ ...this, cards });
-  }
-
-  withCardToBeBuiltCleared(): GameState {
-    const cards = this.cardToBeBuilt ? this.cardsWithout(this.cardToBeBuilt?.cardId) : this.cards;
-    return new GameS({
-      ...this,
-      cards: cards,
-      cardToBeBuilt: null,
-      cardToBeBuiltCost: null,
-    });
   }
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
