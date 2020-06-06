@@ -43,7 +43,7 @@ export class From {
         if (selectedCards.length > 1) return false;
 
         const [, selectedCard] = ExtractFrom(G.cards, CardWithId(cardId));
-        const isCardVisible = G.visibleCards(selectedCard.level).filter(CardWithId(cardId)).length === 1;
+        const isCardVisible = G.visibleCardsOfLevel(selectedCard.level).filter(CardWithId(cardId)).length === 1;
         if (!isCardVisible) return false;
 
         return true;
@@ -54,7 +54,7 @@ export class From {
         if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
 
         const [cards, selectedCard] = ExtractFrom(G.cards, CardWithId(cardId));
-        const isCardVisible = G.visibleCards(selectedCard.level).filter(CardWithId(cardId)).length === 1;
+        const isCardVisible = G.visibleCardsOfLevel(selectedCard.level).filter(CardWithId(cardId)).length === 1;
         if (!isCardVisible) throw new Error("This move should pick exactly one card and it must be visible.");
 
         const gAfterPick = new GameS({ ...G, cards });

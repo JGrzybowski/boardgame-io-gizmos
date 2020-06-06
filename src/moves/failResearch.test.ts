@@ -66,9 +66,9 @@ test("Moves Cards to the proper pile on the table", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.pileCards(1).slice(-3)).toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
-  expect(afterMove.pileCards(1).slice(-3)).toContainEqual(new TestCardWithCost(13, 1, EnergyType.Red, 4));
-  expect(afterMove.pileCards(1).slice(-3)).toContainEqual(new TestCardWithCost(14, 1, EnergyType.Red, 5));
+  expect(afterMove.pileCardsOfLevel(1).slice(-3)).toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.pileCardsOfLevel(1).slice(-3)).toContainEqual(new TestCardWithCost(13, 1, EnergyType.Red, 4));
+  expect(afterMove.pileCardsOfLevel(1).slice(-3)).toContainEqual(new TestCardWithCost(14, 1, EnergyType.Red, 5));
 });
 
 test("Moves to activation stage", () => {

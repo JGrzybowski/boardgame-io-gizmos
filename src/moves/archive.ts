@@ -14,7 +14,7 @@ function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState 
   const playerState: PlayerState = G.players[playerId];
   if (!playerState.canArchiveAnotherCard()) return INVALID_MOVE;
 
-  const selectedCard = GetFirstOrNull(G.visibleCards(), CardWithId(cardId));
+  const selectedCard = GetFirstOrNull(G.visibleCardsOfLevel(), CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
 
   // take card from common area and add it to player's archive

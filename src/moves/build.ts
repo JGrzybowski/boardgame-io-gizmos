@@ -5,21 +5,21 @@ import { GameContext } from "../gameContext";
 import { PlayerState } from "../playerState";
 import { PlayerMove } from "./playerMove";
 import { paymentStage } from "../stages/paymentStage";
-import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { From } from "../pickers/From";
 import { To } from "../putters/To";
 import { CardWithId, GetFirstOrNull } from "../cards/cardsCollection";
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   if (G.cardToBeBuilt) return INVALID_MOVE;
-  const selectedCard = GetFirstOrNull(G.visibleCards(), CardWithId(cardId));
+  const selectedCard = GetFirstOrNull(G.visibleCardsOfLevel(), CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
   if (G.cardToBeBuilt || G.cardToBeBuiltCost) return INVALID_MOVE;
 
-  const newGameState = G.withGameStateSaved(ctx).withCardToBeBuilt(
-    selectedCard,
-    EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
-  );
+  const newGameState = G.withGameStateSaved(ctx).moveCard(From.Table(cardId), To.CardToBuild());
+  // .withCardToBeBuilt(
+  //   selectedCard,
+  //   EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
+  // );
 
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;

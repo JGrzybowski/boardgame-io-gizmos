@@ -30,7 +30,9 @@ export type PilesCardLevel = 1 | 2 | 3;
 export interface GameState {
   readonly energyRow: ReadonlyArray<EnergyType>;
   readonly dispenser: EnergyTypeDictionary;
-  readonly cards: ReadonlyArray<CardInfo>;
+  // readonly cards: ReadonlyArray<CardInfo>;
+  readonly visibleCards: ReadonlyArray<CardInfo>;
+  readonly pileCards: ReadonlyArray<CardInfo>;
   readonly players: { [id: string]: PlayerState };
   readonly energyRowSize: number;
   readonly cardToBeBuilt: CardInfo | null;
@@ -49,8 +51,8 @@ export interface GameState {
 
   withShuffeledCards(ctx: GameContext): GameState;
 
-  pileCards(level: CardLevel): ReadonlyArray<CardInfo>;
-  visibleCards(level?: CardLevel): ReadonlyArray<CardInfo>;
+  pileCardsOfLevel(level: CardLevel): ReadonlyArray<CardInfo>;
+  visibleCardsOfLevel(level?: CardLevel): ReadonlyArray<CardInfo>;
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;
   moveCard(from: Picker<CardInfo>, into: MultiPutter<CardInfo>): GameState;
@@ -66,6 +68,8 @@ export interface GameStateData {
   readonly energyRow?: ReadonlyArray<EnergyType>;
   readonly dispenser?: EnergyTypeDictionary;
   readonly cards?: ReadonlyArray<CardInfo>;
+  readonly visibleCards?: ReadonlyArray<CardInfo>;
+  readonly pileCards?: ReadonlyArray<CardInfo>;
   readonly players?: { [id: string]: PlayerState };
   readonly energyRowSize?: number;
   readonly cardToBeBuilt?: CardInfo | null;
@@ -80,7 +84,9 @@ export class GameS implements GameState {
     const {
       energyRow = [],
       dispenser = new EnergyTypeDictionary(13, 13, 13, 13, 0),
-      cards = [],
+      // cards = [],
+      visibleCards = [],
+      pileCards = [],
       players = {},
       energyRowSize = 6,
       cardToBeBuilt = null,
@@ -91,7 +97,9 @@ export class GameS implements GameState {
     } = initialGameState;
     this.energyRow = energyRow;
     this.dispenser = dispenser;
-    this.cards = cards;
+    // this.cards = cards;
+    this.visibleCards = visibleCards;
+    this.pileCards = pileCards;
     this.players = players;
     this.energyRowSize = energyRowSize;
     this.cardToBeBuilt = cardToBeBuilt;
@@ -103,7 +111,9 @@ export class GameS implements GameState {
 
   readonly energyRow: ReadonlyArray<EnergyType> = [];
   readonly dispenser: EnergyTypeDictionary = new EnergyTypeDictionary(13, 13, 13, 13, 0);
-  readonly cards: ReadonlyArray<CardInfo> = [];
+  // readonly cards: ReadonlyArray<CardInfo> = [];
+  readonly visibleCards: ReadonlyArray<CardInfo> = [];
+  readonly pileCards: ReadonlyArray<CardInfo> = [];
   readonly players: { [id: string]: PlayerState } = {};
   readonly energyRowSize: number = 6;
   readonly cardToBeBuilt: CardInfo | null = null;
@@ -143,17 +153,17 @@ export class GameS implements GameState {
   }
 
   withShuffeledCards(ctx: GameContext): GameState {
-    return new GameS({ ...this, cards: ctx.random?.Shuffle([...this.cards]) });
+    return new GameS({ ...this, pileCards: ctx.random?.Shuffle([...this.pileCards]) });
   }
 
-  pileCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {
-    if (level) return this.cards.filter(CardWithLevel(level)).slice(this.visibleCardsLimits[level]);
-    return this.visibleCards(1).concat(this.visibleCards(2)).concat(this.visibleCards(3));
+  pileCardsOfLevel(level: PilesCardLevel): ReadonlyArray<CardInfo> {
+    if (level) return this.pileCards.filter(CardWithLevel(level)).slice(this.visibleCardsLimits[level]);
+    return this.visibleCardsOfLevel(1).concat(this.visibleCardsOfLevel(2)).concat(this.visibleCardsOfLevel(3));
   }
 
-  visibleCards(level: PilesCardLevel): ReadonlyArray<CardInfo> {
-    if (level) return this.cards.filter(CardWithLevel(level)).slice(0, this.visibleCardsLimits[level]);
-    return this.visibleCards(1).concat(this.visibleCards(2)).concat(this.visibleCards(3));
+  visibleCardsOfLevel(level: PilesCardLevel): ReadonlyArray<CardInfo> {
+    if (level) return this.visibleCards.filter(CardWithLevel(level)).slice(0, this.visibleCardsLimits[level]);
+    return this.visibleCardsOfLevel(1).concat(this.visibleCardsOfLevel(2)).concat(this.visibleCardsOfLevel(3));
   }
 
   moveCard(from: Picker<CardInfo>, into: Putter<CardInfo>): GameState;

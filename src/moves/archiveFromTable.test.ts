@@ -66,8 +66,8 @@ test("removes card from table", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.pileCards(1)).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
-  expect(afterMove.visibleCards(1)).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.pileCardsOfLevel(1)).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.visibleCardsOfLevel(1)).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
 });
 
 test("Puts another card from pile on the table", () => {
@@ -80,8 +80,8 @@ test("Puts another card from pile on the table", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.visibleCards(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
-  expect(afterMove.visibleCards(1)).toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
 });
 
 test("Returns invalid move if player's archive limit has been reached", () => {

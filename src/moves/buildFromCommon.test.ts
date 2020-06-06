@@ -34,21 +34,7 @@ function TestClient(game: Game<GameState, GameContext>): any {
   return Client({ game, numPlayers: 2, playerID: "0" });
 }
 
-test("card is not removed from table", () => {
-  // Arrange
-  const GameCustomScenario = GameWithInitialTestScenario();
-  const client = TestClient(GameCustomScenario);
-
-  // Act
-  client.moves.buildFromCommonAction(11);
-
-  // Assert
-  const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cards).toHaveLength(5);
-  expect(afterMove.cards.map((c) => c.cardId)).toContain(11);
-});
-
-test("card is copied into build slot", () => {
+test("selected card is moved into the build slot", () => {
   // Arrange
   const GameCustomScenario = GameWithInitialTestScenario();
   const client = TestClient(GameCustomScenario);
@@ -61,7 +47,7 @@ test("card is copied into build slot", () => {
   expect(afterMove.cardToBeBuilt).toMatchObject(new TestCardWithCost(11, 1, EnergyType.Red, 2));
 });
 
-test("no new card is visible", () => {
+test("does not cause another card to be shown", () => {
   // Arrange
   const GameCustomScenario = GameWithInitialTestScenario();
   const client = TestClient(GameCustomScenario);
@@ -71,9 +57,8 @@ test("no new card is visible", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  const visibleCardsAfter = afterMove.cards.slice(0, afterMove.visibleCardsLimits[1]);
-  expect(visibleCardsAfter[0]).toMatchObject(new TestCardWithCost(10, 1, EnergyType.Red, 1));
-  expect(visibleCardsAfter[1]).toMatchObject(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.visibleCardsOfLevel(1)).toHaveLength(1);
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
 });
 
 test("card cost is set up", () => {

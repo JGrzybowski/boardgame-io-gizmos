@@ -86,14 +86,14 @@ test("puts other researched cards on the bottom of the pile", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.visibleCards(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
-  expect(afterMove.visibleCards(1)).toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
 
-  expect(afterMove.visibleCards(1)).not.toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
-  expect(afterMove.pileCards(1)).not.toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.visibleCardsOfLevel(1)).not.toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.pileCardsOfLevel(1)).not.toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
 
-  expect(afterMove.pileCards(1).slice(-2)).toContainEqual(new TestCardWithCost(13, 1, EnergyType.Red, 4));
-  expect(afterMove.pileCards(1).slice(-2)).toContainEqual(new TestCardWithCost(14, 1, EnergyType.Red, 5));
+  expect(afterMove.pileCardsOfLevel(1).slice(-2)).toContainEqual(new TestCardWithCost(13, 1, EnergyType.Red, 4));
+  expect(afterMove.pileCardsOfLevel(1).slice(-2)).toContainEqual(new TestCardWithCost(14, 1, EnergyType.Red, 5));
 });
 
 test("Returns invalid move if player's archive limit has been reached", () => {

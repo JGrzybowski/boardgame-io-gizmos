@@ -172,7 +172,7 @@ test("Returns card to it's space on the table if the build is from table", () =>
 
   // Assert
   const afterCancelBuildState: GameState = client.store.getState().G;
-  expect(afterCancelBuildState.visibleCards(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 2));
+  expect(afterCancelBuildState.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 2));
 });
 
 test("Returns card to it's space on the researched if the build is from researched", () => {
