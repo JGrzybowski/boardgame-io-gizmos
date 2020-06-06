@@ -5,8 +5,6 @@ import Gizmos from "../game";
 import { Client } from "boardgame.io/client";
 import { GameContext } from "../gameContext";
 import { EnergyType } from "../energyType";
-import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
-import { researchStage } from "../stages/researchStage";
 import { Game } from "boardgame.io";
 import { activationStage } from "../stages/activationStage";
 

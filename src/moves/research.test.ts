@@ -22,7 +22,7 @@ function GameWithInitialTestScenario(): Game<GameState, GameContext> {
   return { ...Gizmos, setup: (): GameState => InitialTestScenario() };
 }
 
-function TestClient(game: Game<GameState, GameContext>) {
+function TestClient(game: Game<GameState, GameContext>): any {
   return Client({ game, numPlayers: 2, playerID: "0" });
 }
 
@@ -36,7 +36,8 @@ test("Moves cards from pile to the active player researched collection", () => {
 
   //Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cards).toHaveLength(2);
+  expect(afterMove.visibleCards(1)).toHaveLength(2);
+  expect(afterMove.pileCards(1)).toHaveLength(0);
 
   const afterPlayerState = afterMove.players["0"];
   expect(afterPlayerState.researchLimit).toBe(3);
@@ -58,7 +59,8 @@ test.skip("Cannot be undone", () => {
 
   //Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cards).toHaveLength(2);
+  expect(afterMove.visibleCards(1)).toHaveLength(2);
+  expect(afterMove.pileCards(1)).toHaveLength(0);
 
   const afterPlayerState = afterMove.players["0"];
   expect(afterPlayerState.researchLimit).toBe(3);

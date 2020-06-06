@@ -66,7 +66,8 @@ test("removes card from table", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cards).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.pileCards(1)).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.visibleCards(1)).not.toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
 });
 
 test("Puts another card from pile on the table", () => {

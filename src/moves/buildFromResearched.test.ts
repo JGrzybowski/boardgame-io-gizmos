@@ -94,7 +94,7 @@ test("remaining cards are put on the bottom of the pile", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  const bottomOfThePile = afterMove.cards.slice(-2);
+  const bottomOfThePile = afterMove.pileCards(1).slice(-2);
   expect(bottomOfThePile.map((c) => c.cardId)).toContain(13);
   expect(bottomOfThePile.map((c) => c.cardId)).toContain(14);
 });
