@@ -9,7 +9,8 @@ import { Game } from "boardgame.io";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     players: {
       "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)], researchLimit: 3 }),
       "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)], researchLimit: 3 }),

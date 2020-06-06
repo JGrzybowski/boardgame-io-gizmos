@@ -16,20 +16,17 @@ export class From {
   static TopOfPile(lvl: PilesCardLevel, n: number): MultiPicker<CardInfo> {
     return {
       canPickMultiple: (G: GameState): boolean => {
-        if (G.cards.filter((c) => c.level === lvl).length <= G.visibleCardsLimits[lvl]) return false;
+        if (G.pileCardsOfLevel(lvl).length < 1) return false;
         return true;
       },
       pickMultiple: (G: GameState): [GameState, ReadonlyArray<CardInfo>] => {
-        const visibleCardsLimit = G.visibleCardsLimits[lvl];
-        if (G.cards.filter((c) => c.level === lvl).length <= visibleCardsLimit)
-          throw new Error("There are no cards in the pile to be picked");
+        if (G.pileCardsOfLevel(lvl).length < 1) throw new Error("There are no cards in the pile to be picked");
 
-        const pickedCards = G.cards.filter((c) => c.level === lvl).slice(visibleCardsLimit, n + visibleCardsLimit);
-
+        const pickedCards = G.pileCardsOfLevel(lvl).slice(0, n);
         const pickedIds = pickedCards.map((c) => c.cardId);
-        const cards = G.cards.filter((c: CardInfo) => !pickedIds.includes(c.cardId));
+        const pileCards = G.pileCards.filter((c: CardInfo) => !pickedIds.includes(c.cardId));
 
-        const gAfterPick = new GameS({ ...G, cards });
+        const gAfterPick = new GameS({ ...G, pileCards });
         return [gAfterPick, pickedCards];
       },
     };

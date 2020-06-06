@@ -5,7 +5,14 @@ import { TestCard } from "../test/TestCard";
 test("Should remove amount of cards it was asked", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 2);
@@ -15,14 +22,21 @@ test("Should remove amount of cards it was asked", () => {
   const [gameStateAfterPut, pickedCards] = picker.pickMultiple(G);
 
   //Assert
-  expect(gameStateAfterPut.cards).toHaveLength(3);
+  expect(gameStateAfterPut.visibleCards).toHaveLength(2);
   expect(pickedCards).toHaveLength(2);
 });
 
 test("Should not take more cards from pile", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 2);
@@ -32,13 +46,23 @@ test("Should not take more cards from pile", () => {
   const [gameStateAfterPut] = picker.pickMultiple(G);
 
   //Assert
-  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(14);
+  expect(gameStateAfterPut.pileCards).toHaveLength(3);
+  expect(gameStateAfterPut.pileCards).toContainEqual(new TestCard(14, 1));
+  expect(gameStateAfterPut.pileCards).toContainEqual(new TestCard(15, 1));
+  expect(gameStateAfterPut.pileCards).toContainEqual(new TestCard(16, 1));
 });
 
 test("Should skip cards visible on the table", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 2);
@@ -48,14 +72,22 @@ test("Should skip cards visible on the table", () => {
   const [gameStateAfterPut] = picker.pickMultiple(G);
 
   //Assert
-  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(10);
-  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toContain(11);
+  expect(gameStateAfterPut.visibleCards).toHaveLength(2);
+  expect(gameStateAfterPut.visibleCards).toContainEqual(new TestCard(10, 1));
+  expect(gameStateAfterPut.visibleCards).toContainEqual(new TestCard(11, 1));
 });
 
 test("Order is not disrupted", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 2);
@@ -64,13 +96,20 @@ test("Order is not disrupted", () => {
   expect(picker.canPickMultiple(G)).toBeTruthy();
   const [gameStateAfterPut] = picker.pickMultiple(G);
   //Assert
-  expect(gameStateAfterPut.cards.map((c) => c.cardId)).toMatchObject([10, 11, 14]);
+  expect(gameStateAfterPut.pileCards.map((c) => c.cardId)).toMatchObject([14, 15, 16]);
 });
 
 test("Returns picked cards", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 2);
@@ -80,18 +119,33 @@ test("Returns picked cards", () => {
   const [, pickedCards] = picker.pickMultiple(G);
 
   //Assert
-  expect(pickedCards.map((c) => c.cardId)).toContain(12);
-  expect(pickedCards.map((c) => c.cardId)).toContain(13);
+  expect(pickedCards).toHaveLength(2);
+  expect(pickedCards).toContainEqual(new TestCard(12, 1));
+  expect(pickedCards).toContainEqual(new TestCard(13, 1));
 });
 
 test("Does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const originalGameState = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [
+      new TestCard(12, 1),
+      new TestCard(13, 1),
+      new TestCard(14, 1),
+      new TestCard(15, 1),
+      new TestCard(16, 1),
+    ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 2);
@@ -107,7 +161,8 @@ test("Does not modify the original game state", () => {
 test("Returns all remaining cards from pile if there is less of them than asked number ", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 5);
@@ -124,7 +179,8 @@ test("Returns all remaining cards from pile if there is less of them than asked 
 test("Throws an Error if there are no cards on the pile.", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 5);
