@@ -38,10 +38,7 @@ export interface GameState {
   readonly visibleCardsLimits: ReadonlyArray<number>;
 
   readonly previousStageName: string | null;
-  //readonly playerStateBeforeBuild: PlayerState | null;
   readonly gameStateBeforeBuild: GameState | null;
-
-  withCardsPutOnBottom(cards: ReadonlyArray<CardInfo>): GameState;
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState;
 
@@ -75,7 +72,6 @@ export interface GameStateData {
   readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
   readonly visibleCardsLimits?: ReadonlyArray<number>;
   readonly previousStageName?: string | null;
-  //readonly playerStateBeforeBuild?: PlayerState | null;
   readonly gameStateBeforeBuild?: GameState | null;
 }
 
@@ -91,7 +87,6 @@ export class GameS implements GameState {
       cardToBeBuiltCost = null,
       visibleCardsLimits = [0, 4, 3, 2],
       previousStageName = null,
-      //playerStateBeforeBuild = null,
       gameStateBeforeBuild = null,
     } = initialGameState;
     this.energyRow = energyRow;
@@ -103,7 +98,6 @@ export class GameS implements GameState {
     this.cardToBeBuiltCost = cardToBeBuiltCost;
     this.visibleCardsLimits = visibleCardsLimits;
     this.previousStageName = previousStageName;
-    //this.playerStateBeforeBuild = playerStateBeforeBuild;
     this.gameStateBeforeBuild = gameStateBeforeBuild;
   }
 
@@ -116,20 +110,10 @@ export class GameS implements GameState {
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null = null;
   readonly visibleCardsLimits: ReadonlyArray<number> = [0, 4, 3, 2];
   readonly previousStageName: string | null = null;
-  //readonly playerStateBeforeBuild: PlayerState | null = null;
   readonly gameStateBeforeBuild: GameState | null = null;
-
-  cardsWithout(cardId: number): ReadonlyArray<CardInfo> {
-    return this.cards.filter((c: CardInfo) => c.cardId !== cardId);
-  }
 
   withCardToBeBuilt(cardToBeBuilt: CardInfo, cardToBeBuiltCost: EnergyTypeDictionary): GameState {
     return new GameS({ ...this, cardToBeBuilt, cardToBeBuiltCost });
-  }
-
-  withCardsPutOnBottom(returnedCards: ReadonlyArray<CardInfo>): GameState {
-    const cards = [...this.cards, ...returnedCards];
-    return new GameS({ ...this, cards });
   }
 
   withEnergyRemovedFromCost(paidFor: EnergyType): GameState {
