@@ -6,12 +6,12 @@
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
-        "boardgame.io": "^0.39.11",
-        "prettier": "^2.0.4",
+        "boardgame.io": "^0.39.12",
+        "prettier": "^2.0.5",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.1",
-        "typescript": "^3.8.3",
+        "typescript": "^3.9.5",
         "typescript-tslint-plugin": "^0.5.5"
     },
     "scripts": {

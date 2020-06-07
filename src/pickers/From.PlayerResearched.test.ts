@@ -161,7 +161,7 @@ describe("When card Id was not provided", () => {
 
     //Act
     expect(picker.canPickMultiple(G)).toBeTruthy();
-    const [afterPick, pickedCards] = picker.pickMultiple(G);
+    const [afterPick] = picker.pickMultiple(G);
 
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
@@ -207,7 +207,7 @@ describe("When card Id was provided", () => {
 
     //Act
     expect(picker.canPick(G)).toBeTruthy();
-    const [afterPick, pickedCard] = picker.pick(G);
+    const [, pickedCard] = picker.pick(G);
 
     //Assert
     expect(pickedCard).toMatchObject(new TestCard(11, 1));
@@ -229,7 +229,7 @@ describe("When card Id was provided", () => {
 
     //Act
     expect(picker.canPick(G)).toBeTruthy();
-    const [afterPick, pickedCard] = picker.pick(G);
+    const [afterPick] = picker.pick(G);
 
     //Assert
     expect(afterPick.players["0"].researched).toHaveLength(2);
@@ -367,7 +367,7 @@ describe("When card Id was provided", () => {
 
     //Act
     expect(picker.canPick(G)).toBeTruthy();
-    const [afterPick, pickedCard] = picker.pick(G);
+    const [afterPick] = picker.pick(G);
 
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
