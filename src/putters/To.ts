@@ -14,8 +14,8 @@ export class To {
         return true;
       },
       putMultiple: (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
-        const cards = [...G.cards, ...newCards];
-        const gAfterPut = new GameS({ ...G, cards });
+        const pileCards = [...G.pileCards, ...newCards];
+        const gAfterPut = new GameS({ ...G, pileCards });
         return gAfterPut;
       },
     };
