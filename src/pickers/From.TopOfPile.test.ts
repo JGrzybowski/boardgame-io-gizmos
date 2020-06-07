@@ -162,7 +162,7 @@ test("Returns all remaining cards from pile if there is less of them than asked 
   //Arrange
   const G = new GameS({
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.TopOfPile(1, 5);

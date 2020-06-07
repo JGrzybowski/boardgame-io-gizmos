@@ -157,12 +157,12 @@ export class GameS implements GameState {
   }
 
   pileCardsOfLevel(level: PilesCardLevel): ReadonlyArray<CardInfo> {
-    if (level) return this.pileCards.filter(CardWithLevel(level)).slice(this.visibleCardsLimits[level]);
+    if (level) return this.pileCards.filter(CardWithLevel(level));
     return this.visibleCardsOfLevel(1).concat(this.visibleCardsOfLevel(2)).concat(this.visibleCardsOfLevel(3));
   }
 
   visibleCardsOfLevel(level: PilesCardLevel): ReadonlyArray<CardInfo> {
-    if (level) return this.visibleCards.filter(CardWithLevel(level)).slice(0, this.visibleCardsLimits[level]);
+    if (level) return this.visibleCards.filter(CardWithLevel(level));
     return this.visibleCardsOfLevel(1).concat(this.visibleCardsOfLevel(2)).concat(this.visibleCardsOfLevel(3));
   }
 
