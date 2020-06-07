@@ -35,26 +35,18 @@ export class From {
   static Table(cardId: number): Picker<CardInfo> {
     return {
       canPick: (G: GameState): boolean => {
-        const selectedCards = G.cards.filter(CardWithId(cardId));
+        const selectedCards = G.visibleCards.filter(CardWithId(cardId));
         if (selectedCards.length < 1) return false;
         if (selectedCards.length > 1) return false;
-
-        const [, selectedCard] = ExtractFrom(G.cards, CardWithId(cardId));
-        const isCardVisible = G.visibleCardsOfLevel(selectedCard.level).filter(CardWithId(cardId)).length === 1;
-        if (!isCardVisible) return false;
-
         return true;
       },
       pick: (G: GameState): [GameState, CardInfo] => {
-        const selectedCards = G.cards.filter(CardWithId(cardId));
+        const selectedCards = G.visibleCards.filter(CardWithId(cardId));
         if (selectedCards.length < 1) throw new Error("Card with given id is not on the table.");
         if (selectedCards.length > 1) throw new Error("There is more than one card with given id");
 
-        const [cards, selectedCard] = ExtractFrom(G.cards, CardWithId(cardId));
-        const isCardVisible = G.visibleCardsOfLevel(selectedCard.level).filter(CardWithId(cardId)).length === 1;
-        if (!isCardVisible) throw new Error("This move should pick exactly one card and it must be visible.");
-
-        const gAfterPick = new GameS({ ...G, cards });
+        const [visibleCards, selectedCard] = ExtractFrom(G.visibleCards, CardWithId(cardId));
+        const gAfterPick = new GameS({ ...G, visibleCards });
         return [gAfterPick, selectedCard];
       },
     };
