@@ -11,15 +11,15 @@ import { CardWithId, GetFirstOrNull } from "../cards/cardsCollection";
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   if (G.cardToBeBuilt) return INVALID_MOVE;
-  const selectedCard = GetFirstOrNull(G.visibleCardsOfLevel(), CardWithId(cardId));
+  const selectedCard = GetFirstOrNull(G.visibleCards, CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
   if (G.cardToBeBuilt || G.cardToBeBuiltCost) return INVALID_MOVE;
 
-  const newGameState = G.withGameStateSaved(ctx).moveCard(From.Table(cardId), To.CardToBuild());
-  // .withCardToBeBuilt(
-  //   selectedCard,
-  //   EnergyTypeDictionary.fromTypeAndAmount(selectedCard?.color, selectedCard?.cost)
-  // );
+  const newGameState = G
+    // save state before building
+    .withGameStateSaved(ctx)
+    // move card from the table to the build zone
+    .moveCard(From.Table(cardId), To.CardToBuild());
 
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;

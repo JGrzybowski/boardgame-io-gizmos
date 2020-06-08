@@ -14,11 +14,16 @@ function archiveMove(G: GameState, ctx: GameContext, cardId: number): GameState 
   const playerState: PlayerState = G.players[playerId];
   if (!playerState.canArchiveAnotherCard()) return INVALID_MOVE;
 
-  const selectedCard = GetFirstOrNull(G.visibleCardsOfLevel(), CardWithId(cardId));
+  const selectedCard = GetFirstOrNull(G.visibleCards, CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
+  if (selectedCard.level === 0) return INVALID_MOVE;
 
-  // take card from common area and add it to player's archive
-  const newGameState = G.moveCard(From.Table(cardId), To.PlayerArchive(playerId));
+  const newGameState = G
+    // take card from common area and add it to player's archive
+    .moveCard(From.Table(cardId), To.PlayerArchive(playerId))
+    // put another card visibly on the table
+    .moveCard(From.TopOfPile(selectedCard.level, 1), To.VisibleCards());
+
   //TODO activate all cards that activate on archive trigger
   //.withCardsActivated(new TriggerCriteria("Archive", selectedCard);
 

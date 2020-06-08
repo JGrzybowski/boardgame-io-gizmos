@@ -1,4 +1,4 @@
-import { GameState, GameS } from "../gameState";
+import { GameState, GameS, PilesCardLevel } from "../gameState";
 import { CardInfo } from "../cards/cardInfo";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
@@ -16,6 +16,46 @@ export class To {
       putMultiple: (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
         const pileCards = [...G.pileCards, ...newCards];
         const gAfterPut = new GameS({ ...G, pileCards });
+        return gAfterPut;
+      },
+    };
+  }
+
+  static VisibleCards(): MultiPutter<CardInfo> {
+    return {
+      canPutMultiple: (G: GameState, newCards: ReadonlyArray<CardInfo>): boolean => {
+        const levelCounts = newCards.reduce(
+          (arr, card) => {
+            arr[card.level] = arr[card.level] + 1;
+            return arr;
+          },
+          [0, 0, 0, 0]
+        );
+
+        for (let level = 0; level <= 3; level++) {
+          const supposedNumberOfCards = G.visibleCardsOfLevel(level as PilesCardLevel).length + levelCounts[level];
+          if (G.visibleCardsLimits[level] < supposedNumberOfCards) return false;
+        }
+
+        return true;
+      },
+      putMultiple: (G: GameState, newCards: ReadonlyArray<CardInfo>): GameState => {
+        const levelCounts = newCards.reduce(
+          (arr, card) => {
+            arr[card.level] = arr[card.level] + 1;
+            return arr;
+          },
+          [0, 0, 0, 0]
+        );
+
+        for (let level = 0; level <= 3; level++) {
+          const supposedNumberOfCards = G.visibleCardsOfLevel(level as PilesCardLevel).length + levelCounts[level];
+          if (G.visibleCardsLimits[level] < supposedNumberOfCards)
+            throw new Error("Limit of visible cards would be exeeced");
+        }
+
+        const visibleCards = [...G.visibleCards, ...newCards];
+        const gAfterPut = new GameS({ ...G, visibleCards });
         return gAfterPut;
       },
     };

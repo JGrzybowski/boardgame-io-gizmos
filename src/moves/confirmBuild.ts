@@ -1,4 +1,4 @@
-import { GameState, PilesCardLevel } from "../gameState";
+import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { PlayerMove } from "./playerMove";
 import { INVALID_MOVE } from "boardgame.io/core";
@@ -15,14 +15,12 @@ function confirmBuildMove(G: GameState, ctx: GameContext): GameState | string {
   if (!playerState) return INVALID_MOVE;
 
   const cardToBuild = G.cardToBeBuilt;
+  if (cardToBuild.level === 0) return INVALID_MOVE;
   //move built card to player's machines
   let newGameState = G.moveCard(From.CardToBuild(), To.PlayerCards(ctx.playerID));
 
   if (newGameState.visibleCardsOfLevel(cardToBuild.level).length < newGameState.visibleCardsLimits[cardToBuild.level])
-    newGameState = newGameState.moveCard(
-      From.TopOfPile(cardToBuild.level as PilesCardLevel, 1),
-      To.VisibleCards(cardToBuild.level)
-    );
+    newGameState = newGameState.moveCard(From.TopOfPile(cardToBuild.level, 1), To.VisibleCards());
   //TODO activate all cards that activate on archive trigger
   //.withCardsActivated(new TriggerCriteria("Build", selectedCard);
 

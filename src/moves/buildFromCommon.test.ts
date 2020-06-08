@@ -57,7 +57,7 @@ test("does not cause another card to be shown", () => {
   // Assert
   const afterMove: GameState = client.store.getState().G;
   expect(afterMove.visibleCardsOfLevel(1)).toHaveLength(1);
-  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
 });
 
 test("card cost is set up", () => {

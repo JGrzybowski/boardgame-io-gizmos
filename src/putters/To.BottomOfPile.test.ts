@@ -2,7 +2,7 @@ import { TestCard } from "../test/TestCard";
 import { GameS } from "../gameState";
 import { To } from "./To";
 
-test("Increases number of cards on the table", () => {
+test("Increases number of cards in the pile", () => {
   //Arrange
   const G = new GameS({
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
