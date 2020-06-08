@@ -77,7 +77,7 @@ test("No cards in the pile returns invalid move", () => {
     ...Gizmos,
     setup: (ctx: GameContext): GameState => {
       const G = new GameS({
-        cards: [new TestCard(10, 1), new TestCard(11, 1)],
+        visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
         players: {
           "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)], researchLimit: 3 }),
           "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)], researchLimit: 3 }),

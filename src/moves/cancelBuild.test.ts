@@ -27,9 +27,8 @@ function InitialTestScenario(): GameState {
         energyStorageCapacity: 5,
       }),
     },
-    cards: [
-      new TestCardWithCost(10, 1, EnergyType.Red, 2),
-      new TestCardWithCost(11, 1, EnergyType.Red, 2),
+    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 2), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    pileCards: [
       new TestCardWithCost(12, 1, EnergyType.Red, 2),
       new TestCardWithCost(13, 1, EnergyType.Red, 2),
       new TestCardWithCost(14, 1, EnergyType.Red, 2),

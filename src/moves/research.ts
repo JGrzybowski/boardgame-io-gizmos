@@ -12,7 +12,7 @@ function researchMove(G: GameState, ctx: GameContext, cardLevel: CardLevel): Gam
   const playerState: PlayerState = G.players[ctx.currentPlayer];
   if (!playerState.canResearch()) return INVALID_MOVE;
   if (cardLevel === 0) return INVALID_MOVE;
-  if (G.cards.filter((c) => c.level === cardLevel).length <= G.visibleCardsLimits[cardLevel]) return INVALID_MOVE;
+  if (G.pileCardsOfLevel(cardLevel).length < 1) return INVALID_MOVE;
 
   const newGameState = G.moveCard(
     From.TopOfPile(cardLevel, playerState.researchLimit),

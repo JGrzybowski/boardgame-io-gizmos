@@ -11,7 +11,6 @@ import { actionStage } from "../stages/actionStage";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    cards: [],
     players: {
       "0": new PlayerState({
         playerId: "0",
@@ -36,7 +35,7 @@ function GameWithInitialTestScenario(): Game<GameState, GameContext> {
   return { ...Gizmos, setup: (): GameState => InitialTestScenario() };
 }
 
-function TestClient(game: Game<GameState, GameContext>) {
+function TestClient(game: Game<GameState, GameContext>): any {
   return Client({ game, numPlayers: 2, playerID: "0" });
 }
 

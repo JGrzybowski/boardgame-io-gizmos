@@ -30,7 +30,6 @@ export type PilesCardLevel = 1 | 2 | 3;
 export interface GameState {
   readonly energyRow: ReadonlyArray<EnergyType>;
   readonly dispenser: EnergyTypeDictionary;
-  // readonly cards: ReadonlyArray<CardInfo>;
   readonly visibleCards: ReadonlyArray<CardInfo>;
   readonly pileCards: ReadonlyArray<CardInfo>;
   readonly players: { [id: string]: PlayerState };
@@ -67,7 +66,6 @@ export interface GameState {
 export interface GameStateData {
   readonly energyRow?: ReadonlyArray<EnergyType>;
   readonly dispenser?: EnergyTypeDictionary;
-  readonly cards?: ReadonlyArray<CardInfo>;
   readonly visibleCards?: ReadonlyArray<CardInfo>;
   readonly pileCards?: ReadonlyArray<CardInfo>;
   readonly players?: { [id: string]: PlayerState };
@@ -84,7 +82,6 @@ export class GameS implements GameState {
     const {
       energyRow = [],
       dispenser = new EnergyTypeDictionary(13, 13, 13, 13, 0),
-      // cards = [],
       visibleCards = [],
       pileCards = [],
       players = {},
@@ -97,7 +94,6 @@ export class GameS implements GameState {
     } = initialGameState;
     this.energyRow = energyRow;
     this.dispenser = dispenser;
-    // this.cards = cards;
     this.visibleCards = visibleCards;
     this.pileCards = pileCards;
     this.players = players;
@@ -111,7 +107,6 @@ export class GameS implements GameState {
 
   readonly energyRow: ReadonlyArray<EnergyType> = [];
   readonly dispenser: EnergyTypeDictionary = new EnergyTypeDictionary(13, 13, 13, 13, 0);
-  // readonly cards: ReadonlyArray<CardInfo> = [];
   readonly visibleCards: ReadonlyArray<CardInfo> = [];
   readonly pileCards: ReadonlyArray<CardInfo> = [];
   readonly players: { [id: string]: PlayerState } = {};

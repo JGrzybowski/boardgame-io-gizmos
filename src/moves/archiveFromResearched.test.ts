@@ -96,9 +96,8 @@ test("puts other researched cards on the bottom of the pile", () => {
 test("Returns invalid move if player's archive limit has been reached", () => {
   // Arrange
   const initialGameState = new GameS({
-    cards: [
-      new TestCardWithCost(10, 1, EnergyType.Red, 1),
-      new TestCardWithCost(11, 1, EnergyType.Red, 2),
+    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    pileCards: [
       new TestCardWithCost(12, 1, EnergyType.Red, 3),
       new TestCardWithCost(13, 1, EnergyType.Red, 4),
       new TestCardWithCost(14, 1, EnergyType.Red, 5),
@@ -134,9 +133,8 @@ test("Returns invalid move if player's archive limit has been reached", () => {
 test("Returns invalid move if player's archive ability has been blocked", () => {
   // Arrange
   const initialGameState = new GameS({
-    cards: [
-      new TestCardWithCost(10, 1, EnergyType.Red, 1),
-      new TestCardWithCost(11, 1, EnergyType.Red, 2),
+    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    pileCards: [
       new TestCardWithCost(12, 1, EnergyType.Red, 3),
       new TestCardWithCost(13, 1, EnergyType.Red, 4),
       new TestCardWithCost(14, 1, EnergyType.Red, 5),

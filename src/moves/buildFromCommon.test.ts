@@ -11,9 +11,8 @@ import { Game } from "boardgame.io";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    cards: [
-      new TestCardWithCost(10, 1, EnergyType.Red, 1),
-      new TestCardWithCost(11, 1, EnergyType.Red, 2),
+    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    pileCards: [
       new TestCardWithCost(12, 1, EnergyType.Red, 3),
       new TestCardWithCost(13, 1, EnergyType.Red, 4),
       new TestCardWithCost(14, 1, EnergyType.Red, 5),
@@ -107,7 +106,7 @@ test("returns invalid move if slot is occupied", () => {
     ...Gizmos,
     setup: (ctx: GameContext): GameState => {
       const G = new GameS({
-        cards: [new TestCard(10, 1), new TestCard(11, 1)],
+        visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
         players: {
           "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)], researchLimit: 3 }),
           "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)], researchLimit: 3 }),

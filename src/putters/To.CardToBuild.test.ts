@@ -7,7 +7,8 @@ import { EnergyType } from "../energyType";
 test("Card is put into card into card slot", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -26,7 +27,8 @@ test("Card is put into card into card slot", () => {
 test("Throws error if the card to be built slot is occupied", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(15, 1),
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -42,13 +44,15 @@ test("Throws error if the card to be built slot is occupied", () => {
 test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
   const originalGameState = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -66,13 +70,15 @@ test("CanPut does not modify the original game state", () => {
 test("Put does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
   const originalGameState = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -90,7 +96,8 @@ test("Put does not modify the original game state", () => {
 test("Sets Up Cards cost", () => {
   //Arrange
   const G = new GameS({
-    cards: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });

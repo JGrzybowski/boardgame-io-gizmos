@@ -31,7 +31,7 @@ const InitialGameState: GameState = new GameS({
   energyRow: [],
   dispenser: new EnergyTypeDictionary(13, 13, 13, 13, 0),
 
-  cards: CardsList,
+  pileCards: CardsList,
   players: { "0": new PlayerState({ playerId: "0" }) },
 
   energyRowSize: 6,
