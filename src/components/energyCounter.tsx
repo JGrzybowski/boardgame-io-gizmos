@@ -12,7 +12,8 @@ export const EnergyCounter: React.FC<{
     .filter((et) => showAny || et !== EnergyType.Any)
     .map((e) => (
       <div key={e} className="numeric-value" style={{ fontSize: "x-large", margin: "3px", flexGrow: 1 }}>
-        <EnergyOrb energyType={e} onClick={onClick && onClick(e)} /> {energyCount.get(e)}
+        <EnergyOrb energyType={e} onClick={onClick && onClick(e)} style={{ width: "70px", height: "70px" }} />{" "}
+        {energyCount.get(e)}
       </div>
     ));
 

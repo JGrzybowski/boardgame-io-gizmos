@@ -80,10 +80,6 @@ export class PlayerState {
   readonly isArchivingBlocked: boolean = false;
   readonly isResearchBlocked: boolean = false;
 
-  static WithId(playerId: PlayerID): PlayerState {
-    return new PlayerState({ playerId });
-  }
-
   canArchiveAnotherCard(): boolean {
     if (this.isArchivingBlocked) return false;
     return this.archive.length < this.archiveLimit;

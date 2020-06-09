@@ -1,4 +1,3 @@
-import { PluginPlayer } from "boardgame.io/plugins";
 import { PlayerState } from "./playerState";
 import { GameState, GameS } from "./gameState";
 import { GameContext } from "./gameContext";
@@ -42,15 +41,17 @@ const Gizmos: Game<GameState, GameContext> = {
   name: "gizmos",
 
   setup: (ctx) => {
-    const G = [...range(0, InitialGameState.energyRowSize - 1)].reduce(
-      (g: GameState) => g.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.EnergyRow()),
-      InitialGameState.withShuffeledCards(ctx)
-    );
+    const G = [...range(0, InitialGameState.energyRowSize)]
+      .reduce(
+        (g: GameState) => g.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.EnergyRow()),
+        InitialGameState.withShuffeledCards(ctx)
+      )
+      .moveCard(From.TopOfPile(1, InitialGameState.visibleCardsLimits[1]), To.VisibleCards())
+      .moveCard(From.TopOfPile(2, InitialGameState.visibleCardsLimits[2]), To.VisibleCards())
+      .moveCard(From.TopOfPile(3, InitialGameState.visibleCardsLimits[3]), To.VisibleCards());
     ctx.events?.setStage?.(actionStage.name);
     return G;
   },
-
-  plugins: [PluginPlayer({ setup: (playerId) => PlayerState.WithId(playerId) })],
 
   turn: {
     onBegin: (G, ctx): GameState => {

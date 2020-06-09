@@ -11,14 +11,13 @@ const GizmosClient = Client({
   board: GizmosBoard,
   debug: true,
   numPlayers: 1,
-  multiplayer: Local(),
+  multiplayer: Local({ bots: {} }),
 });
 
 export const App: React.FC = () => {
   return (
     <div className="App">
       <GizmosClient debug={false} playerID="0" />
-      {/* <GizmosBoard gameClient={client} /> */}
     </div>
   );
 };

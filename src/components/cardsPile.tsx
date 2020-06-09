@@ -2,6 +2,7 @@ import React from "react";
 import { CardInfo } from "../cards/cardInfo";
 import { Card } from "./card";
 import { CardBack } from "./cardBack";
+import { CardWithLevel } from "../cards/cardsCollection";
 
 export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo>; moves: any }> = ({ cards, moves }) => {
   const flexStyle: React.CSSProperties = {
@@ -19,18 +20,9 @@ export const CardsPile: React.FC<{ cards: ReadonlyArray<CardInfo>; moves: any }>
       OnArchiveButtonClick={() => moves.archiveAction(c.cardId)}
     />
   );
-  const level1Cards = cards
-    .filter((c: CardInfo) => c.level === 1)
-    .slice(0, 4)
-    .map(renderCard);
-  const level2Cards = cards
-    .filter((c: CardInfo) => c.level === 2)
-    .slice(0, 3)
-    .map(renderCard);
-  const level3Cards = cards
-    .filter((c: CardInfo) => c.level === 3)
-    .slice(0, 2)
-    .map(renderCard);
+  const level1Cards = cards.filter(CardWithLevel(1)).map(renderCard);
+  const level2Cards = cards.filter(CardWithLevel(2)).map(renderCard);
+  const level3Cards = cards.filter(CardWithLevel(3)).map(renderCard);
 
   return (
     <div style={{ alignSelf: "stretch", justifySelf: "stretch" }}>

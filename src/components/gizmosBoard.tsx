@@ -29,7 +29,7 @@ interface BoardProps {
 }
 
 export const GizmosBoard: React.FC<BoardProps> = (props) => {
-  const { G, ctx, moves, events, plugins } = props;
+  const { G, ctx, moves, events, playerID } = props;
 
   const commonAreaGridStyle: React.CSSProperties = {
     display: "flex",
@@ -51,25 +51,21 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
         "localPlayer localPlayer infoBar"`,
   };
 
-  const energyRail = G.energyRow
-    .slice(0, G.energyRowSize)
-    .map((energy, index) => (
-      <EnergyOrb
-        energyType={energy}
-        key={`${index}${energy}`}
-        onClick={() => moves.pickAction(index)}
-        style={{ width: "150px" }}
-      />
-    ));
+  const energyRail = G.energyRow.map((energy, index) => (
+    <EnergyOrb
+      energyType={energy}
+      key={`${index}${energy}`}
+      onClick={() => moves.pickAction(index)}
+      style={{ width: "150px", height: "150px" }}
+    />
+  ));
 
-  const playerState: PlayerState = plugins.player.data.players[ctx.currentPlayer];
-  const newPlayerState: PlayerState = G.players[ctx.currentPlayer];
-  console.log(plugins.player.data.players[ctx.currentPlayer]);
+  const playerState: PlayerState = G.players[playerID];
 
   return (
     <div style={styles1players}>
       <div id="commonArea" style={{ ...commonAreaGridStyle, gridArea: "commonArea" }}>
-        <CardsPile cards={G.cards} moves={moves} />
+        <CardsPile cards={G.visibleCards} moves={moves} />
         <div
           style={{
             display: "flex",
@@ -95,7 +91,7 @@ export const GizmosBoard: React.FC<BoardProps> = (props) => {
         }}
       >
         <CardStack>
-          {newPlayerState.researched.map((card) => (
+          {playerState.researched.map((card) => (
             <Card
               key={card.cardId}
               {...card}
