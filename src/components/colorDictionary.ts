@@ -13,21 +13,21 @@ export const accentBorder = {
 };
 
 export const corners = {
-  brown: "d8cdab",
-  gray: "cecccb",
+  brown: "#d8cdab",
+  gray: "#cecccb",
 };
 
 export const upperFrame = {
-  brown: "b7a770",
-  gray: "a3a2a1",
+  brown: "#b7a770",
+  gray: "#a3a2a1",
 };
 
 export const triggerBox = {
-  brown: "8b7e54",
-  gray: "747471",
+  brown: "#8b7e54",
+  gray: "#747471",
 };
 
 export const triggerBoxBorder = {
-  brown: "736845",
-  gray: "595957",
+  brown: "#736845",
+  gray: "#595957",
 };
