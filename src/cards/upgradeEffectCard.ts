@@ -3,6 +3,7 @@ import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
 import { GameContext } from "../gameContext";
 import { GameState } from "../gameState";
+import { INVALID_MOVE } from "boardgame.io/core";
 
 export class UpgradeEffectCard extends CardInfo<any> {
   constructor(
@@ -23,9 +24,12 @@ export function UpgradeEffectFunction(
   storage = 0,
   archive = 0,
   research = 0
-): GameState {
-  const playerState = Ctx.player.get().withLimitsChangedBy(storage, archive, research);
-  Ctx.player.set(playerState);
+): GameState | string {
+  const playerId = Ctx.playerID;
+  if (!playerId) return INVALID_MOVE;
+  const playerState = G.players[playerId];
+  if (!playerState) return INVALID_MOVE;
 
-  return G;
+  const newGameState = G.withUpdatedPlayer(playerId, playerState.withLimitsChangedBy(storage, archive, research));
+  return newGameState;
 }

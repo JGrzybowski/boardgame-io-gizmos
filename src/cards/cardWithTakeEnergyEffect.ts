@@ -4,17 +4,28 @@ import { GameContext } from "../gameContext";
 import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
 import { CardEffect } from "./cardEffect";
+import { From } from "../pickers/From";
+import { RandomIndex } from "./cardsCollection";
+import { To } from "../putters/To";
 
 type TakeEnergyLimit = 1 | 2 | 3;
 
-const energyRowVisibilityLimit = 6;
-
 export class TakeEnergyEffect extends CardEffect {
   canBeResolved(G: GameState, ctx: GameContext): boolean {
-    return ctx.player?.get().canAddEnergy();
+    const playerId = ctx.playerID;
+    if (!playerId) return false;
+    const playerState = G.players[playerId];
+    if (!playerState) return false;
+
+    return playerState.canAddEnergy();
   }
 
   gameStateAfterEffect(G: GameState, ctx: GameContext): GameState {
+    const playerId = ctx.playerID;
+    if (!playerId) throw new Error("Player Id was not provided");
+    const playerState = G.players[playerId];
+    if (!playerState) throw new Error("Provided player Id is not in the game");
+
     // TODO change to G.WithoutRandomEnergy(): [GameState, EnergyType]
     const numberOfEnergyToSelectFrom = G.energyRow.length - energyRowVisibilityLimit;
     const takenIndex = (ctx.random?.Die(numberOfEnergyToSelectFrom) ?? 1) + energyRowVisibilityLimit - 1;

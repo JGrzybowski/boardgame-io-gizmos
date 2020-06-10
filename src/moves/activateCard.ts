@@ -12,7 +12,10 @@ export function activateCard(
   cardId: number,
   additionalCardCondition?: (card: CardInfo) => boolean
 ): GameState | string {
-  const playerState = ctx.player.get();
+  const playerId = ctx.playerID;
+  if (!playerId) return INVALID_MOVE;
+  const playerState = G.players[playerId];
+  if (!playerState) return INVALID_MOVE;
 
   const selectedCard = ctx.player?.get().findCardInMachines(cardId);
   const cardIsActive = playerState.activeCards.filter((cid) => cid === cardId);
@@ -30,7 +33,11 @@ export function getActiveCard<T extends CardInfo>(
   cardId: number,
   additionalCardCondition?: (card: CardInfo) => boolean
 ): T | null {
-  const playerState = ctx.player.get();
+  const playerId = ctx.playerID;
+  if (!playerId) throw new Error("Player Id was not provided");
+  const playerState = G.players[playerId];
+  if (!playerState) throw new Error("Provided player Id is not in the game");
+
   const selectedCard = playerState.findCardInMachines(cardId);
   const cardIsActive = playerState.activeCards.filter((cid) => cid === cardId);
 

@@ -8,7 +8,8 @@ import { CardEffect } from "./cardEffect";
 
 class FileActionEffect extends CardEffect {
   canBeResolved(G: GameState, ctx: GameContext): boolean {
-    return ctx.player?.get().canArchiveAnotherCard();
+    if (ctx.playerID) return G.players[ctx.playerID]?.canArchiveAnotherCard();
+    return false;
   }
   gameStateAfterEffect(G: GameState, ctx: GameContext, cardId = -1): GameState | string {
     return archiveAction.move(G, ctx, cardId);
