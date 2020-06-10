@@ -26,11 +26,8 @@ export class TakeEnergyEffect extends CardEffect {
     const playerState = G.players[playerId];
     if (!playerState) throw new Error("Provided player Id is not in the game");
 
-    // TODO change to G.WithoutRandomEnergy(): [GameState, EnergyType]
-    const numberOfEnergyToSelectFrom = G.energyRow.length - energyRowVisibilityLimit;
-    const takenIndex = (ctx.random?.Die(numberOfEnergyToSelectFrom) ?? 1) + energyRowVisibilityLimit - 1;
-    const energyRow = G.energyRow.filter((e, idx) => idx !== takenIndex);
-    return { ...G, energyRow };
+    const newGameState = G.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.PlayerEnergyStorage(playerId));
+    return newGameState;
   }
 
   constructor(public readonly howMany: TakeEnergyLimit) {

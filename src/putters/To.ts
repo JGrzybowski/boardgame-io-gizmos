@@ -7,6 +7,17 @@ import { EnergyType } from "../energyType";
 import MultiPutter from "./multiPutter";
 import Putter from "./putter";
 
+function isEnergyTypeDictionary<T>(x: unknown): x is EnergyTypeDictionary {
+  const asDict = x as EnergyTypeDictionary;
+  return (
+    asDict.R !== undefined &&
+    asDict.U !== undefined &&
+    asDict.B !== undefined &&
+    asDict.Y !== undefined &&
+    asDict.Any !== undefined
+  );
+}
+
 export class To {
   static BottomOfPile(): MultiPutter<CardInfo> {
     return {
@@ -184,9 +195,13 @@ export class To {
     };
   }
 
-  static PlayerEnergyStorage(playerId: PlayerID): Putter<EnergyTypeDictionary> {
+  static PlayerEnergyStorage(playerId: PlayerID): Putter<EnergyTypeDictionary> & Putter<EnergyType> {
     return {
-      canPut: (G: GameState, energyAmounts: EnergyTypeDictionary): boolean => {
+      canPut: (G: GameState, energy: EnergyTypeDictionary | EnergyType): boolean => {
+        const energyAmounts: EnergyTypeDictionary = isEnergyTypeDictionary(energy)
+          ? energy
+          : EnergyTypeDictionary.fromTypeAndAmount(energy, 1);
+
         if (energyAmounts.isPaid()) return false;
         if (energyAmounts.Any !== 0) return false;
 
@@ -196,8 +211,12 @@ export class To {
 
         return true;
       },
-      put: (G: GameState, energyAmounts: EnergyTypeDictionary): GameState => {
-        if (energyAmounts.isPaid()) throw new Error("Cannot add zer0 energy to player's energy storage");
+      put: (G: GameState, energy: EnergyTypeDictionary | EnergyType): GameState => {
+        const energyAmounts: EnergyTypeDictionary = isEnergyTypeDictionary(energy)
+          ? energy
+          : EnergyTypeDictionary.fromTypeAndAmount(energy, 1);
+
+        if (energyAmounts.isPaid()) throw new Error("Cannot add zero energy to player's energy storage");
         if (energyAmounts.Any !== 0) throw new Error("Cannot add energy of type Any to player's energy storage");
 
         const playerState = G.players[playerId];

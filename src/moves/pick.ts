@@ -7,6 +7,7 @@ import { GameContext } from "../gameContext";
 import { From } from "../pickers/From";
 import { To } from "../putters/To";
 import { RandomIndex } from "../cards/cardsCollection";
+import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 
 function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameState | string {
   if (energyIndex >= G.energyRow.length) return INVALID_MOVE;
@@ -18,7 +19,7 @@ function pickMove(G: GameState, ctx: GameContext, energyIndex: number): GameStat
 
   const newGameState = G
     // Move energy with given index to player's storage
-    .moveEnergy(From.EnergyRow(energyIndex), To.PlayerEnergyStorage(ctx.playerID))
+    .moveEnergy<EnergyTypeDictionary>(From.EnergyRow(energyIndex), To.PlayerEnergyStorage(ctx.playerID))
     // Add a new random energy to the energy row
     .moveEnergy(From.Dispenser(RandomIndex(ctx)), To.EnergyRow());
 
