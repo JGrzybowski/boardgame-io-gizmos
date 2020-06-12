@@ -72,7 +72,7 @@ export class To {
     };
   }
 
-  static CardToBuild(): Putter<CardInfo> {
+  static CardToBuild(source: "Archive" | "Table" | "Research"): Putter<CardInfo> {
     return {
       canPut: (G: GameState): boolean => {
         if (G.cardToBeBuilt) return false;
@@ -82,7 +82,7 @@ export class To {
         if (G.cardToBeBuilt) throw new Error("Only one card can be put to Card to be built slot");
 
         const cardToBeBuiltCost = EnergyTypeDictionary.fromTypeAndAmount(cardToBeBuilt.color, cardToBeBuilt.cost);
-        const gAfterPut = new GameS({ ...G, cardToBeBuilt, cardToBeBuiltCost });
+        const gAfterPut = new GameS({ ...G, cardToBeBuilt, cardToBeBuiltCost, cardToBeBuiltSource: source });
         return gAfterPut;
       },
     };

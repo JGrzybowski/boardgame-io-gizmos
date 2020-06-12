@@ -13,7 +13,7 @@ test("Card is put into card into card slot", () => {
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const cardToPut = new TestCard(15, 1);
-  const putter = To.CardToBuild();
+  const putter = To.CardToBuild("Table");
 
   //Act
   expect(putter.canPut(G, cardToPut)).toBeTruthy();
@@ -34,7 +34,7 @@ test("Throws error if the card to be built slot is occupied", () => {
   });
 
   const cardToPut = new TestCard(17, 1);
-  const putter = To.CardToBuild();
+  const putter = To.CardToBuild("Table");
 
   //Act & Assert
   expect(putter.canPut(G, cardToPut)).toBeFalsy();
@@ -58,7 +58,7 @@ test("CanPut does not modify the original game state", () => {
   });
 
   const cardToPut = new TestCard(15, 1);
-  const putter = To.CardToBuild();
+  const putter = To.CardToBuild("Table");
 
   //Act
   putter.canPut(G, cardToPut);
@@ -84,7 +84,7 @@ test("Put does not modify the original game state", () => {
   });
 
   const cardToPut = new TestCard(15, 1);
-  const putter = To.CardToBuild();
+  const putter = To.CardToBuild("Table");
 
   //Act
   putter.put(G, cardToPut);
@@ -103,7 +103,7 @@ test("Sets Up Cards cost", () => {
   });
 
   const cardToPut = new TestCardWithCost(15, 1, EnergyType.Red, 3);
-  const putter = To.CardToBuild();
+  const putter = To.CardToBuild("Table");
 
   //Act
   expect(putter.canPut(G, cardToPut)).toBeTruthy();
@@ -113,4 +113,26 @@ test("Sets Up Cards cost", () => {
   expect(afterPut.cardToBeBuiltCost).not.toBeUndefined();
   expect(afterPut.cardToBeBuiltCost).not.toBeNull();
   expect(afterPut.cardToBeBuiltCost).toMatchObject(EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Red, 3));
+});
+
+test.each(["Archive", "Table", "Research"])("Sets Up Cards source", (source) => {
+  //Arrange
+  const G = new GameS({
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    cardToBeBuilt: null,
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+
+  const cardToPut = new TestCardWithCost(15, 1, EnergyType.Red, 3);
+  const putter = To.CardToBuild(source);
+
+  //Act
+  expect(putter.canPut(G, cardToPut)).toBeTruthy();
+  const afterPut = putter.put(G, cardToPut);
+
+  //Assert
+  expect(afterPut.cardToBeBuiltSource).not.toBeUndefined();
+  expect(afterPut.cardToBeBuiltSource).not.toBeNull();
+  expect(afterPut.cardToBeBuiltSource).toBe(source);
 });

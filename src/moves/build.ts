@@ -11,6 +11,7 @@ import { CardWithId, GetFirstOrNull } from "../cards/cardsCollection";
 
 function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameState | string {
   if (G.cardToBeBuilt) return INVALID_MOVE;
+
   const selectedCard = GetFirstOrNull(G.visibleCards, CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
   if (G.cardToBeBuilt || G.cardToBeBuiltCost) return INVALID_MOVE;
@@ -19,7 +20,7 @@ function buildFromCommon(G: GameState, ctx: GameContext, cardId: number): GameSt
     // save state before building
     .withGameStateSaved(ctx)
     // move card from the table to the build zone
-    .moveCard(From.Table(cardId), To.CardToBuild());
+    .moveCard(From.Table(cardId), To.CardToBuild("Table"));
 
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
@@ -31,14 +32,14 @@ function buildFromArchive(G: GameState, ctx: GameContext, cardId: number): GameS
   const playerId = ctx.playerID;
   const playerState: PlayerState = G.players[playerId];
 
-  const selectedCard: CardInfo | null = playerState.findCardInTheArchive(cardId);
+  const selectedCard: CardInfo | null = GetFirstOrNull(playerState.archive, CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
 
   const newGameState = G
     // save state before building
     .withGameStateSaved(ctx)
     // move card from the archive to the build zone
-    .moveCard(From.PlayerArchive(playerId, cardId), To.CardToBuild());
+    .moveCard(From.PlayerArchive(playerId, cardId), To.CardToBuild("Archive"));
 
   ctx.events?.setStage?.(paymentStage.name);
   return newGameState;
@@ -57,7 +58,7 @@ function buildFromResearched(G: GameState, ctx: GameContext, cardId: number): Ga
     // save state before building
     .withGameStateSaved(ctx)
     // move card from the researched to the build zone
-    .moveCard(From.PlayerResearched(playerId, cardId), To.CardToBuild())
+    .moveCard(From.PlayerResearched(playerId, cardId), To.CardToBuild("Research"))
     // move the other cards from the researched to the bottom of the pile
     .moveCard(From.PlayerResearched(playerId), To.BottomOfPile());
 

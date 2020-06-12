@@ -34,8 +34,11 @@ export interface GameState {
   readonly pileCards: ReadonlyArray<CardInfo>;
   readonly players: { [id: string]: PlayerState };
   readonly energyRowSize: number;
+
   readonly cardToBeBuilt: CardInfo | null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null;
+  readonly cardToBeBuiltSource: "Archive" | "Table" | "Research" | null;
+
   readonly visibleCardsLimits: ReadonlyArray<number>;
 
   readonly previousStageName: string | null;
@@ -72,6 +75,7 @@ export interface GameStateData {
   readonly energyRowSize?: number;
   readonly cardToBeBuilt?: CardInfo | null;
   readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
+  readonly cardToBeBuiltSource?: "Archive" | "Table" | "Research" | null;
   readonly visibleCardsLimits?: ReadonlyArray<number>;
   readonly previousStageName?: string | null;
   readonly gameStateBeforeBuild?: GameState | null;
@@ -88,6 +92,7 @@ export class GameS implements GameState {
       energyRowSize = 6,
       cardToBeBuilt = null,
       cardToBeBuiltCost = null,
+      cardToBeBuiltSource = null,
       visibleCardsLimits = [0, 4, 3, 2],
       previousStageName = null,
       gameStateBeforeBuild = null,
@@ -100,6 +105,7 @@ export class GameS implements GameState {
     this.energyRowSize = energyRowSize;
     this.cardToBeBuilt = cardToBeBuilt;
     this.cardToBeBuiltCost = cardToBeBuiltCost;
+    this.cardToBeBuiltSource = cardToBeBuiltSource;
     this.visibleCardsLimits = visibleCardsLimits;
     this.previousStageName = previousStageName;
     this.gameStateBeforeBuild = gameStateBeforeBuild;
@@ -113,6 +119,7 @@ export class GameS implements GameState {
   readonly energyRowSize: number = 6;
   readonly cardToBeBuilt: CardInfo | null = null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null = null;
+  readonly cardToBeBuiltSource: "Archive" | "Table" | "Research" | null;
   readonly visibleCardsLimits: ReadonlyArray<number> = [0, 4, 3, 2];
   readonly previousStageName: string | null = null;
   readonly gameStateBeforeBuild: GameState | null = null;

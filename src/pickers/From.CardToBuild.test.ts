@@ -8,6 +8,7 @@ test("Card is taken from the built slot", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.CardToBuild();
@@ -27,6 +28,7 @@ test("Throws an error if there is no card in the slot", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: null,
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.CardToBuild();
@@ -42,6 +44,7 @@ test("CanPick does not modify the original game state", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
@@ -49,6 +52,7 @@ test("CanPick does not modify the original game state", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.CardToBuild();
@@ -66,6 +70,7 @@ test("Pick does not modify the original game state", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
@@ -73,6 +78,7 @@ test("Pick does not modify the original game state", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.CardToBuild();
@@ -90,6 +96,7 @@ test("Sets Card's cost to null", () => {
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
     cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const picker = From.CardToBuild();
@@ -101,4 +108,24 @@ test("Sets Card's cost to null", () => {
   //Assert
   expect(afterPick.cardToBeBuiltCost).not.toBeUndefined();
   expect(afterPick.cardToBeBuiltCost).toBeNull();
+});
+
+test("Sets Card's source to null", () => {
+  //Arrange
+  const G = new GameS({
+    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    cardToBeBuilt: new TestCard(10, 1),
+    cardToBeBuiltSource: "Table",
+    visibleCardsLimits: [0, 2, 2, 2],
+  });
+  const picker = From.CardToBuild();
+
+  //Act
+  expect(picker.canPick(G)).toBeTruthy();
+  const [afterPick] = picker.pick(G);
+
+  //Assert
+  expect(afterPick.cardToBeBuiltSource).not.toBeUndefined();
+  expect(afterPick.cardToBeBuiltSource).toBeNull();
 });

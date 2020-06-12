@@ -65,6 +65,7 @@ export class From {
           ...G,
           cardToBeBuilt: null,
           cardToBeBuiltCost: null,
+          cardToBeBuiltSource: null,
         });
         return [newGameState, G.cardToBeBuilt];
       },
