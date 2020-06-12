@@ -37,7 +37,7 @@ function archiveFromResearchedMove(G: GameState, ctx: GameContext, cardId: numbe
   const playerState: PlayerState = G.players[playerId];
   if (!playerState.canArchiveAnotherCard()) return INVALID_MOVE;
 
-  const selectedCard = playerState.findCardInTheResearched(cardId);
+  const selectedCard = GetFirstOrNull(playerState.researched, CardWithId(cardId));
   if (!selectedCard) return INVALID_MOVE;
 
   const newGameState = G

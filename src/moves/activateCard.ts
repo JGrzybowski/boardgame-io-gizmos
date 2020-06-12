@@ -5,6 +5,7 @@ import { PlayerMove } from "./playerMove";
 import { TriggerType } from "../cards/triggerType";
 import { CardInfo } from "../cards/cardInfo";
 import { EnergyType } from "../energyType";
+import { GetFirstOrNull, CardWithId } from "../cards/cardsCollection";
 
 export function activateCard(
   G: GameState,
@@ -17,7 +18,7 @@ export function activateCard(
   const playerState = G.players[playerId];
   if (!playerState) return INVALID_MOVE;
 
-  const selectedCard = ctx.player?.get().findCardInMachines(cardId);
+  const selectedCard = GetFirstOrNull(playerState.machines, CardWithId(cardId));
   const cardIsActive = playerState.activeCards.filter((cid) => cid === cardId);
 
   if (!selectedCard || !cardIsActive) return INVALID_MOVE;
@@ -25,27 +26,6 @@ export function activateCard(
   if (!selectedCard.effect.canBeResolved(G, ctx)) return INVALID_MOVE;
 
   return selectedCard.effect.gameStateAfterEffect(G, ctx);
-}
-
-export function getActiveCard<T extends CardInfo>(
-  G: GameState,
-  ctx: GameContext,
-  cardId: number,
-  additionalCardCondition?: (card: CardInfo) => boolean
-): T | null {
-  const playerId = ctx.playerID;
-  if (!playerId) throw new Error("Player Id was not provided");
-  const playerState = G.players[playerId];
-  if (!playerState) throw new Error("Provided player Id is not in the game");
-
-  const selectedCard = playerState.findCardInMachines(cardId);
-  const cardIsActive = playerState.activeCards.filter((cid) => cid === cardId);
-
-  if (!selectedCard || !cardIsActive) return null;
-  if (additionalCardCondition && !additionalCardCondition(selectedCard)) return null;
-  if (!selectedCard.effect.canBeResolved(G, ctx)) return null;
-
-  return selectedCard as T;
 }
 
 export const activateConverterCardAction: PlayerMove = {

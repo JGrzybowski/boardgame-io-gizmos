@@ -1,4 +1,3 @@
-import { EnergyType } from "./energyType";
 import { CardInfo } from "./cards/cardInfo";
 import { InitialCard } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
@@ -94,99 +93,12 @@ export class PlayerState {
     return this.energyStorage.sum() < this.energyStorageCapacity;
   }
 
-  findCardInTheArchive(cardId: number): CardInfo | null {
-    const selectedCard = this.archive.find((c) => c.cardId === cardId);
-    return !selectedCard ? null : selectedCard;
-  }
-
-  findCardInMachines(cardId: number): CardInfo | null {
-    const selectedCard = this.machines.find((c) => c.cardId === cardId);
-    return !selectedCard ? null : selectedCard;
-  }
-
-  findCardInTheResearched(cardId: number): CardInfo | null {
-    const selectedCard = this.researched.find((c) => c.cardId === cardId);
-    return !selectedCard ? null : selectedCard;
-  }
-
-  hasDeclaredEnergy(energy: EnergyType): boolean {
-    return this.energyStorage.get(energy) > 0;
-  }
-
-  energyStorageWith(energy: EnergyType): EnergyTypeDictionary {
-    return this.energyStorage.withAmountToPayWithEnergyTypeSetTo(energy, this.energyStorage.get(energy) + 1);
-  }
-
-  private archiveWith(card: CardInfo): ReadonlyArray<CardInfo> {
-    return [...this.archive, card];
-  }
-
-  archiveWithout(cardId: number): ReadonlyArray<CardInfo> {
-    return this.archive.filter((c) => c.cardId !== cardId);
-  }
-
-  machinesWith(card: CardInfo): ReadonlyArray<CardInfo> {
-    return [...this.machines, card];
-  }
-
-  researchedWithout(cardId: number): ReadonlyArray<CardInfo> {
-    return this.researched.filter((c) => c.cardId !== cardId);
-  }
-
-  withAddedCardToArchive(card: CardInfo): PlayerState {
-    const archive = this.archiveWith(card);
-    return new PlayerState({ ...this, archive });
-  }
-
-  withAddedCardToMachines(card: CardInfo): PlayerState {
-    const machines = this.machinesWith(card);
-    return new PlayerState({ ...this, machines });
-  }
-
-  withRemovedCardFromArchive(cardId: number): PlayerState {
-    const card = this.findCardInTheArchive(cardId);
-    if (!card) throw new Error("Card was not found");
-    const archive = this.archiveWithout(cardId);
-    return new PlayerState({ ...this, archive });
-  }
-
-  withRemovedCardFromResearched(cardId: number): PlayerState {
-    const card = this.findCardInTheResearched(cardId);
-    if (!card) throw new Error("Card was not found");
-    const researched = this.researchedWithout(cardId);
-    return new PlayerState({ ...this, researched });
-  }
-
-  withResearchedCleared(): PlayerState {
-    const researched: ReadonlyArray<CardInfo> = [];
-    return new PlayerState({ ...this, researched });
-  }
-
-  withCardsAddedToResearched(cards: ReadonlyArray<CardInfo>): PlayerState {
-    const researched = [...this.researched, ...cards];
-    return new PlayerState({ ...this, researched });
-  }
-
-  withRemovedEnergy(payment: EnergyType): PlayerState {
-    const newValue = this.energyStorage.get(payment) - 1;
-    const energyStorage = this.energyStorage.withAmountToPayWithEnergyTypeSetTo(payment, newValue);
-    return new PlayerState({ ...this, energyStorage });
-  }
-
   withLimitsChangedBy(storage: number, archive: number, research: number): PlayerState {
     const archiveLimit = this.archiveLimit + archive;
     const energyStorageCapacity = this.energyStorageCapacity + storage;
     const researchLimit = this.researchLimit + research;
 
     return new PlayerState({ ...this, archiveLimit, energyStorageCapacity, researchLimit });
-  }
-
-  withCardActive(cardId: number): PlayerState {
-    const card = this.findCardInMachines(cardId);
-    if (!card) throw new Error("Card was not found");
-    if (this.usedCards.filter((cId) => cId === cardId)) throw new Error("Card was already used");
-    const activeCards = [...this.activeCards, cardId];
-    return new PlayerState({ ...this, activeCards });
   }
 
   withUsedCard(cardId: number): PlayerState {

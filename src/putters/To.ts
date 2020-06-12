@@ -98,10 +98,8 @@ export class To {
         const playerState = G.players[playerId];
         if (!playerState) throw new Error("There is no player with such id");
 
-        const playerStateAfter = newCards.reduce(
-          (p: PlayerState, card: CardInfo) => p.withAddedCardToMachines(card),
-          playerState
-        );
+        const machines = [...playerState.machines, ...newCards];
+        const playerStateAfter = new PlayerState({ ...playerState, machines });
 
         const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
         return gAfterPut;
@@ -126,10 +124,8 @@ export class To {
         if (playerState.archiveLimit < playerState.archive.length + newCards.length)
           throw new Error("The amount of new cards would cause to go above archive limit.");
 
-        const playerStateAfter = newCards.reduce(
-          (p: PlayerState, card: CardInfo) => p.withAddedCardToArchive(card),
-          playerState
-        );
+        const archive = [...playerState.archive, ...newCards];
+        const playerStateAfter = new PlayerState({ ...playerState, archive });
 
         const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
         return gAfterPut;
@@ -151,7 +147,9 @@ export class To {
 
         if (playerState.researchLimit < playerState.researched.length + newCards.length)
           throw new Error("The amount of new cards would cause to go above research limit.");
-        const playerStateAfter = playerState.withCardsAddedToResearched(newCards);
+
+        const researched = [...playerState.researched, ...newCards];
+        const playerStateAfter = new PlayerState({ ...playerState, researched });
 
         const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
         return gAfterPut;

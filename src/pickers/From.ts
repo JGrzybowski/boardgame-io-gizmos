@@ -118,7 +118,7 @@ export class From {
         if (researchedCards.length === 0)
           throw new Error("The researched collection is empty, you cannot take from it.");
 
-        const playerStateAfter = playerState.withResearchedCleared();
+        const playerStateAfter = new PlayerState({ ...playerState, researched: [] });
         const gAfterPut = G.withUpdatedPlayer(playerId, playerStateAfter);
         return [gAfterPut, researchedCards];
       },
