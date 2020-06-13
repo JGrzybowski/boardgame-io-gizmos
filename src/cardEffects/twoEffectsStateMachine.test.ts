@@ -13,9 +13,7 @@ test.each`
   const status: CardStatus = testInput.status;
   const action: StateMachineFunctionName = testInput.action;
   const expectedNewStatus: CardStatus = testInput.expectedNewStatus;
-  const stateMachine: TwoEffectsStateMachine = new TwoEffectsStateMachine(status);
-  const newStateMachine: TwoEffectsStateMachine = stateMachine[action]();
-  expect(newStateMachine.status).toBe(expectedNewStatus);
+  expect(TwoEffectsStateMachine[action](status)).toBe(expectedNewStatus);
 });
 
 test.each`
@@ -31,7 +29,5 @@ test.each`
 `("$status --$action--> $status (does not change the status)", (testInput) => {
   const status: CardStatus = testInput.status;
   const action: StateMachineFunctionName = testInput.action;
-  const stateMachine: TwoEffectsStateMachine = new TwoEffectsStateMachine(status);
-  const newStateMachine: TwoEffectsStateMachine = stateMachine[action]();
-  expect(newStateMachine.status).toBe(status);
+  expect(TwoEffectsStateMachine[action](status)).toBe(status);
 });

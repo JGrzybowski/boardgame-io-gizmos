@@ -7,58 +7,54 @@ export enum CardStatus {
 }
 
 export class TwoEffectsStateMachine {
-  constructor(readonly status: CardStatus) {}
-
-  afterUsingEffect1(): TwoEffectsStateMachine {
-    switch (this.status) {
+  static afterUsingEffect1(status: CardStatus): CardStatus {
+    switch (status) {
       case CardStatus.Active:
-        return new TwoEffectsStateMachine(CardStatus.Used1Effect);
+        return CardStatus.Used1Effect;
       case CardStatus.Used2Effect:
-        return new TwoEffectsStateMachine(CardStatus.Used);
+        return CardStatus.Used;
       default:
-        return new TwoEffectsStateMachine(this.status);
+        return status;
     }
   }
 
-  afterUsingEffect2(): TwoEffectsStateMachine {
-    switch (this.status) {
+  static afterUsingEffect2(status: CardStatus): CardStatus {
+    switch (status) {
       case CardStatus.Active:
-        return new TwoEffectsStateMachine(CardStatus.Used2Effect);
+        return CardStatus.Used2Effect;
       case CardStatus.Used1Effect:
-        return new TwoEffectsStateMachine(CardStatus.Used);
+        return CardStatus.Used;
       default:
-        return new TwoEffectsStateMachine(this.status);
+        return status;
     }
   }
 
-  afterActivation(): TwoEffectsStateMachine {
-    switch (this.status) {
+  static afterActivation(status: CardStatus): CardStatus {
+    switch (status) {
       case CardStatus.Inactive:
-        return new TwoEffectsStateMachine(CardStatus.Active);
+        return CardStatus.Active;
       default:
-        return new TwoEffectsStateMachine(this.status);
+        return status;
     }
   }
 }
 
 export class OneEffectStateMachine {
-  constructor(readonly status: CardStatus) {}
-
-  afterUsingEffect(): OneEffectStateMachine {
-    switch (this.status) {
+  static afterUsingEffect1(status: CardStatus): OneEffectStateMachine {
+    switch (status) {
       case CardStatus.Active:
-        return new OneEffectStateMachine(CardStatus.Used);
+        return CardStatus.Used;
       default:
-        return new OneEffectStateMachine(this.status);
+        return status;
     }
   }
 
-  afterActivation(): OneEffectStateMachine {
-    switch (this.status) {
+  static afterActivation(status: CardStatus): OneEffectStateMachine {
+    switch (status) {
       case CardStatus.Inactive:
-        return new OneEffectStateMachine(CardStatus.Active);
+        return CardStatus.Active;
       default:
-        return new OneEffectStateMachine(this.status);
+        return status;
     }
   }
 }
