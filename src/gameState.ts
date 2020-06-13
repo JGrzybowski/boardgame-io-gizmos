@@ -26,6 +26,10 @@ function isMultiPutter<T>(x: Putter<T> | MultiPutter<T>): x is MultiPutter<T> {
 }
 
 export type PilesCardLevel = 1 | 2 | 3;
+export type BuildSource = "Archive" | "Table" | "Research";
+export function isBuildSource(x: string): x is BuildSource {
+  return x === "Archive" || x === "Table" || x === "Research";
+}
 
 export interface GameState {
   readonly energyRow: ReadonlyArray<EnergyType>;
@@ -37,7 +41,7 @@ export interface GameState {
 
   readonly cardToBeBuilt: CardInfo | null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null;
-  readonly cardToBeBuiltSource: "Archive" | "Table" | "Research" | null;
+  readonly cardToBeBuiltSource: BuildSource | null;
 
   readonly visibleCardsLimits: ReadonlyArray<number>;
 
@@ -75,7 +79,7 @@ export interface GameStateData {
   readonly energyRowSize?: number;
   readonly cardToBeBuilt?: CardInfo | null;
   readonly cardToBeBuiltCost?: EnergyTypeDictionary | null;
-  readonly cardToBeBuiltSource?: "Archive" | "Table" | "Research" | null;
+  readonly cardToBeBuiltSource?: BuildSource | null;
   readonly visibleCardsLimits?: ReadonlyArray<number>;
   readonly previousStageName?: string | null;
   readonly gameStateBeforeBuild?: GameState | null;
@@ -119,7 +123,7 @@ export class GameS implements GameState {
   readonly energyRowSize: number = 6;
   readonly cardToBeBuilt: CardInfo | null = null;
   readonly cardToBeBuiltCost: EnergyTypeDictionary | null = null;
-  readonly cardToBeBuiltSource: "Archive" | "Table" | "Research" | null;
+  readonly cardToBeBuiltSource: BuildSource | null;
   readonly visibleCardsLimits: ReadonlyArray<number> = [0, 4, 3, 2];
   readonly previousStageName: string | null = null;
   readonly gameStateBeforeBuild: GameState | null = null;

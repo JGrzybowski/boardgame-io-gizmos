@@ -1,5 +1,5 @@
 import { TestCard, TestCardWithCost } from "../test/TestCard";
-import { GameS } from "../gameState";
+import { GameS, isBuildSource } from "../gameState";
 import { To } from "./To";
 import { EnergyTypeDictionary } from "../cards/energyTypeDictionary";
 import { EnergyType } from "../energyType";
@@ -117,6 +117,8 @@ test("Sets Up Cards cost", () => {
 
 test.each(["Archive", "Table", "Research"])("Sets Up Cards source", (source) => {
   //Arrange
+  if (!isBuildSource(source)) throw new Error(`The selected source ${source} is not a BuildSource`);
+
   const G = new GameS({
     visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
     pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
