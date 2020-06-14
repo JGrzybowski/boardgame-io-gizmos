@@ -2,6 +2,10 @@ import { CardInfo } from "./cards/cardInfo";
 import { InitialCard } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
+import { CardStatus, TwoEffectsStateMachine, OneEffectStateMachine } from "./cardEffects/cardStatus";
+import { EnergyType, isEnergyType } from "./energyType";
+import { CardWithTriggerType } from "./cards/cardsCollection";
+import { TriggerType } from "./cards/triggerType";
 
 const initialEnergyStorageCapacity = 5;
 const initialArchiveLimit = 1;
@@ -21,6 +25,7 @@ interface PlayerStateData {
   archive?: ReadonlyArray<CardInfo>;
   researched?: ReadonlyArray<CardInfo>;
 
+  machineStatuses?: { readonly [cardId: number]: CardStatus };
   activeCards?: ReadonlyArray<number>;
   usedCards?: ReadonlyArray<number>;
 
@@ -38,6 +43,7 @@ export class PlayerState {
       archiveLimit = initialArchiveLimit,
       researchLimit = initialResearchLimit,
       machines = [InitialCard],
+      machineStatuses = {},
       archive = [],
       researched = [],
       activeCards = [],
@@ -54,6 +60,7 @@ export class PlayerState {
     this.machines = machines;
     this.archive = archive;
     this.researched = researched;
+    this.machineStatuses = machineStatuses;
     this.activeCards = activeCards;
     this.usedCards = usedCards;
     this.isArchivingBlocked = isArchivingBlocked;
@@ -73,6 +80,7 @@ export class PlayerState {
   readonly archive: ReadonlyArray<CardInfo>;
   readonly researched: ReadonlyArray<CardInfo>;
 
+  readonly machineStatuses: { readonly [cardId: number]: CardStatus };
   readonly activeCards: ReadonlyArray<number>;
   readonly usedCards: ReadonlyArray<number>;
 
@@ -99,6 +107,28 @@ export class PlayerState {
     const researchLimit = this.researchLimit + research;
 
     return new PlayerState({ ...this, archiveLimit, energyStorageCapacity, researchLimit });
+  }
+
+  withCardsActivatedBy(triggerType: TriggerType, triggerDetails: CardInfo | EnergyType): PlayerState {
+    const cardsToActivate = this.machines.filter(CardWithTriggerType(triggerType));
+    const machineStatuses = { ...this.machineStatuses };
+    cardsToActivate.forEach((card) => {
+      const stateBeforeActivation = machineStatuses[card.cardId];
+
+      let triggerConditionMet = false;
+      if (triggerType === TriggerType.Pick && isEnergyType(triggerDetails))
+        triggerConditionMet = card.pickTriggerCondition?.(triggerDetails) ?? false;
+      else if (triggerType === TriggerType.Build && triggerDetails instanceof CardInfo)
+        triggerConditionMet = card.buildTriggerCondition?.(triggerDetails) ?? false;
+      else if (triggerType === TriggerType.Archive && triggerDetails instanceof CardInfo)
+        triggerConditionMet = card.archiveTriggerCondition?.(triggerDetails) ?? false;
+
+      if (triggerConditionMet)
+        machineStatuses[card.cardId] = card.secondaryEffect
+          ? TwoEffectsStateMachine.afterActivation(stateBeforeActivation)
+          : OneEffectStateMachine.afterActivation(stateBeforeActivation);
+    });
+    return new PlayerState({ ...this, machineStatuses });
   }
 
   withUsedCard(cardId: number): PlayerState {

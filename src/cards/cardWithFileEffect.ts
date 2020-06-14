@@ -1,21 +1,7 @@
 import { CardInfo, CardLevel, CardEffectFunction } from "./cardInfo";
-import { GameState } from "../gameState";
-import { archiveAction } from "../moves/archive";
-import { GameContext } from "../gameContext";
 import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
-import { CardEffect } from "./cardEffect";
-
-class FileActionEffect extends CardEffect {
-  canBeResolved(G: GameState, ctx: GameContext): boolean {
-    if (ctx.playerID) return G.players[ctx.playerID]?.canArchiveAnotherCard();
-    return false;
-  }
-  gameStateAfterEffect(G: GameState, ctx: GameContext, cardId = -1): GameState | string {
-    return archiveAction.move(G, ctx, cardId);
-  }
-}
-export const fileEffect: FileActionEffect = new FileActionEffect();
+import { FileActionEffect, fileEffect } from "../cardEffects/fileActionEffect";
 
 export class CardWithFileEffect extends CardInfo<FileActionEffect> {
   constructor(
