@@ -23,9 +23,9 @@ export function activateCard(
 
   if (!selectedCard || !cardIsActive) return INVALID_MOVE;
   if (additionalCardCondition && !additionalCardCondition(selectedCard)) return INVALID_MOVE;
-  if (!selectedCard.effect.canBeResolved(G, ctx)) return INVALID_MOVE;
+  if (!selectedCard.primaryEffect?.canBeResolved(G, ctx)) return INVALID_MOVE;
 
-  return selectedCard.effect.gameStateAfterEffect(G, ctx);
+  return selectedCard.primaryEffect.gameStateAfterEffect(G, ctx);
 }
 
 export const activateConverterCardAction: PlayerMove = {

@@ -1,5 +1,6 @@
 import { CardInfo, CardLevel } from "./cardInfo";
 import { GameContext } from "../gameContext";
+import { TriggerType } from "./triggerType";
 
 export function GetFirstOrNull<T>(array: ReadonlyArray<T>, filter: (t: T, i: number) => boolean): T | null {
   const foundElement = array.find(filter);
@@ -19,6 +20,10 @@ export function CardWithId(cardId: number): (card: CardInfo) => boolean {
 
 export function CardWithLevel(cardLevel: CardLevel): (card: CardInfo) => boolean {
   return (card: CardInfo): boolean => card.level === cardLevel;
+}
+
+export function CardWithTriggerType(triggerType: TriggerType): (card: CardInfo) => boolean {
+  return (card: CardInfo): boolean => card.type === triggerType;
 }
 
 export function WithIndex<T>(index: number): (element: T, i: number) => boolean {

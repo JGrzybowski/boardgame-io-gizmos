@@ -5,17 +5,23 @@ import { TriggerType } from "./triggerType";
 import { CardEffect } from "./cardEffect";
 
 export type CardLevel = 0 | 1 | 2 | 3;
-export type CardEffectFunction = ((G: GameState, ctx: GameContext, ...data: any) => GameState | string) | null;
+export type CardEffectFunction = (G: GameState, ctx: GameContext) => GameState | string;
 
-export abstract class CardInfo<T extends CardEffect = any> {
-  protected constructor(
-    public readonly cardId: number,
-    public readonly type: TriggerType,
-    public readonly oneTimeEffect: CardEffectFunction,
-    public readonly effect: T, // (G, ctx) => G
-    public readonly victoryPoints: number,
-    public readonly color: EnergyType,
-    public readonly cost: number,
-    public readonly level: CardLevel
-  ) {}
+export interface CardInfo {
+  readonly cardId: number;
+  readonly type: TriggerType;
+
+  readonly victoryPoints: number;
+  readonly color: EnergyType;
+  readonly cost: number;
+  readonly level: CardLevel;
+
+  readonly oneTimeEffect?: CardEffectFunction;
+  readonly endGameEffect?: CardEffectFunction;
+  readonly primaryEffect?: CardEffect;
+  readonly secondaryEffect?: CardEffect;
+
+  readonly buildTriggerCondition?: (card: CardInfo) => boolean;
+  readonly pickTriggerCondition?: (energy: EnergyType) => boolean;
+  readonly archiveTriggerCondition?: (card: CardInfo) => boolean;
 }
