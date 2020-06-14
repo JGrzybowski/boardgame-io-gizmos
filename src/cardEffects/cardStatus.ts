@@ -40,7 +40,7 @@ export class TwoEffectsStateMachine {
 }
 
 export class OneEffectStateMachine {
-  static afterUsingEffect1(status: CardStatus): OneEffectStateMachine {
+  static afterUsingEffect1(status: CardStatus): CardStatus {
     switch (status) {
       case CardStatus.Active:
         return CardStatus.Used;
@@ -49,7 +49,7 @@ export class OneEffectStateMachine {
     }
   }
 
-  static afterActivation(status: CardStatus): OneEffectStateMachine {
+  static afterActivation(status: CardStatus): CardStatus {
     switch (status) {
       case CardStatus.Inactive:
         return CardStatus.Active;
