@@ -112,22 +112,25 @@ export class PlayerState {
   withCardsActivatedBy(triggerType: TriggerType, triggerDetails: CardInfo | EnergyType): PlayerState {
     const cardsToActivate = this.machines.filter(CardWithTriggerType(triggerType));
     const machineStatuses = { ...this.machineStatuses };
-    cardsToActivate.forEach((card) => {
-      const stateBeforeActivation = machineStatuses[card.cardId];
+    cardsToActivate
+      .filter((card) => card.type === triggerType)
+      .forEach((card) => {
+        const stateBeforeActivation = machineStatuses[card.cardId];
 
-      let triggerConditionMet = false;
-      if (triggerType === TriggerType.Pick && isEnergyType(triggerDetails))
-        triggerConditionMet = card.pickTriggerCondition?.(triggerDetails) ?? false;
-      else if (triggerType === TriggerType.Build && isCardInfo(triggerDetails))
-        triggerConditionMet = card.buildTriggerCondition?.(triggerDetails) ?? false;
-      else if (triggerType === TriggerType.Archive && isCardInfo(triggerDetails))
-        triggerConditionMet = card.archiveTriggerCondition?.(triggerDetails) ?? false;
+        const triggerConditionMet =
+          (triggerType === TriggerType.Pick && isEnergyType(triggerDetails)
+            ? card.pickTriggerCondition?.(triggerDetails)
+            : triggerType === TriggerType.Build && isCardInfo(triggerDetails)
+            ? card.buildTriggerCondition?.(triggerDetails)
+            : triggerType === TriggerType.Archive && isCardInfo(triggerDetails)
+            ? card.archiveTriggerCondition?.(triggerDetails)
+            : false) ?? false;
 
-      if (triggerConditionMet)
-        machineStatuses[card.cardId] = card.secondaryEffect
-          ? TwoEffectsStateMachine.afterActivation(stateBeforeActivation)
-          : OneEffectStateMachine.afterActivation(stateBeforeActivation);
-    });
+        if (triggerConditionMet)
+          machineStatuses[card.cardId] = card.secondaryEffect
+            ? TwoEffectsStateMachine.afterActivation(stateBeforeActivation)
+            : OneEffectStateMachine.afterActivation(stateBeforeActivation);
+      });
     return new PlayerState({ ...this, machineStatuses });
   }
 
