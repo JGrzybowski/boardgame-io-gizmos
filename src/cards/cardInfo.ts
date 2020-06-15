@@ -26,7 +26,7 @@ export interface CardInfo {
   readonly archiveTriggerCondition?: (card: CardInfo) => boolean;
 }
 
-export function isCardInfo(x: CardInfo | EnergyType): x is CardInfo {
+export function isCardInfo(x: any): x is CardInfo {
   return (
     x instanceof Object &&
     "cardId" in x &&

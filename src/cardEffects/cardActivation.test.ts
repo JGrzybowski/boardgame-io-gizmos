@@ -3,7 +3,6 @@ import { EnergyType } from "../energyType";
 import { TestCard } from "../test/TestCard";
 import { PlayerState } from "../playerState";
 import { CardStatus } from "./cardStatus";
-import { CardInfo } from "../cards/cardInfo";
 import { GameState } from "../gameState";
 import { CardEffect } from "../cards/cardEffect";
 import { CardWithId } from "../cards/cardsCollection";
@@ -16,6 +15,34 @@ const effectStub: CardEffect = {
 function EnergyOfType(energyType: EnergyType): (e: EnergyType) => boolean {
   return (e: EnergyType): boolean => e === energyType;
 }
+
+test.each([effectStub, undefined])("Activates converter cards on Converter Trigger", (secondaryEffect) => {
+  //Arrange
+  const playerState = new PlayerState({
+    playerId: "0",
+    machines: [
+      {
+        cardId: 10,
+        type: TriggerType.Converter,
+        victoryPoints: 0,
+        level: 1,
+        cost: 2,
+        color: EnergyType.Red,
+        primaryEffect: effectStub,
+        secondaryEffect: secondaryEffect,
+      },
+    ],
+    machineStatuses: {
+      "10": CardStatus.Inactive,
+    },
+  });
+
+  //Act
+  const playerStateAfterActivation = playerState.withCardsActivatedBy(TriggerType.Converter);
+
+  //Assert
+  expect(playerStateAfterActivation.machineStatuses[10]).toBe(CardStatus.Active);
+});
 
 describe("For single effect cards:", () => {
   test.each`

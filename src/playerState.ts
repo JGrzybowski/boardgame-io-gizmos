@@ -109,7 +109,7 @@ export class PlayerState {
     return new PlayerState({ ...this, archiveLimit, energyStorageCapacity, researchLimit });
   }
 
-  withCardsActivatedBy(triggerType: TriggerType, triggerDetails: CardInfo | EnergyType): PlayerState {
+  withCardsActivatedBy(triggerType: TriggerType, triggerDetails?: CardInfo | EnergyType): PlayerState {
     const cardsToActivate = this.machines.filter(CardWithTriggerType(triggerType));
     const machineStatuses = { ...this.machineStatuses };
     cardsToActivate
@@ -124,7 +124,7 @@ export class PlayerState {
             ? card.buildTriggerCondition?.(triggerDetails)
             : triggerType === TriggerType.Archive && isCardInfo(triggerDetails)
             ? card.archiveTriggerCondition?.(triggerDetails)
-            : false) ?? false;
+            : triggerType === TriggerType.Converter) ?? false;
 
         if (triggerConditionMet)
           machineStatuses[card.cardId] = card.secondaryEffect
