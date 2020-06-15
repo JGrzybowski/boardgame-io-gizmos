@@ -9,10 +9,10 @@ test("Card with given ID is taken from player's archive collection", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 11);
@@ -22,7 +22,7 @@ test("Card with given ID is taken from player's archive collection", () => {
   const [, pickedCard] = picker.pick(G);
 
   //Assert
-  expect(pickedCard).toMatchObject(new TestCard(11, 1));
+  expect(pickedCard).toMatchObject(TestCard(11, 1));
 });
 
 test("Preserves other archive cards in the collection", () => {
@@ -31,10 +31,10 @@ test("Preserves other archive cards in the collection", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 11);
@@ -55,10 +55,10 @@ test("Throws Error if the player's archive collection does not contain card with
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 21);
@@ -77,7 +77,7 @@ test("Throws Error if the player's archive collection is empty", () => {
         archive: [],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 21);
@@ -93,10 +93,10 @@ test("CanPick does not modify the original game state", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
 
@@ -104,10 +104,10 @@ test("CanPick does not modify the original game state", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 11);
@@ -125,10 +125,10 @@ test("Pick does not modify the original game state", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
 
@@ -136,10 +136,10 @@ test("Pick does not modify the original game state", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 11);
@@ -157,10 +157,10 @@ test("Pick does not modify the the other player state", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
 
@@ -168,10 +168,10 @@ test("Pick does not modify the the other player state", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("0", 11);
@@ -183,7 +183,7 @@ test("Pick does not modify the the other player state", () => {
   //Assert
   expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
   expect(afterPick.players["1"]).toMatchObject(
-    new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 })
+    new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 })
   );
 });
 
@@ -193,10 +193,10 @@ test("Throws an Error if there is no player with given Id", () => {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        archive: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+        archive: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
         archiveLimit: 3,
       }),
-      "1": new PlayerState({ playerId: "1", archive: [new TestCard(21, 2)], archiveLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", archive: [TestCard(21, 2)], archiveLimit: 3 }),
     },
   });
   const picker = From.PlayerArchive("NonExistingPlayer", 11);

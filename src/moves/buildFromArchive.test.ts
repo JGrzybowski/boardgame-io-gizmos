@@ -14,18 +14,18 @@ function InitialTestScenario(): GameState {
     players: {
       "0": new PlayerState({
         playerId: "0",
-        machines: [new TestCard(16, 1)],
+        machines: [TestCard(16, 1)],
         researched: [],
         archive: [
-          new TestCardWithCost(10, 1, EnergyType.Red, 1),
-          new TestCardWithCost(11, 1, EnergyType.Red, 2),
-          new TestCardWithCost(12, 1, EnergyType.Red, 3),
-          new TestCardWithCost(13, 1, EnergyType.Red, 4),
-          new TestCardWithCost(14, 1, EnergyType.Red, 5),
+          TestCardWithCost(10, 1, EnergyType.Red, 1),
+          TestCardWithCost(11, 1, EnergyType.Red, 2),
+          TestCardWithCost(12, 1, EnergyType.Red, 3),
+          TestCardWithCost(13, 1, EnergyType.Red, 4),
+          TestCardWithCost(14, 1, EnergyType.Red, 5),
         ],
         archiveLimit: 5,
       }),
-      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
+      "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)] }),
     },
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -63,7 +63,7 @@ test("card is moved into build slot", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cardToBeBuilt).toMatchObject(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.cardToBeBuilt).toMatchObject(TestCardWithCost(12, 1, EnergyType.Red, 3));
 });
 
 test("card cost is set up", () => {

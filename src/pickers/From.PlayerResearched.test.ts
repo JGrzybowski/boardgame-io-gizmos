@@ -10,10 +10,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0");
@@ -35,10 +35,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0");
@@ -60,7 +60,7 @@ describe("When card Id was not provided", () => {
           researched: [],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0");
@@ -76,10 +76,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -87,10 +87,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0");
@@ -108,10 +108,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -119,10 +119,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0");
@@ -140,10 +140,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -151,10 +151,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0");
@@ -166,7 +166,7 @@ describe("When card Id was not provided", () => {
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
     expect(afterPick.players["1"]).toMatchObject(
-      new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 })
+      new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 })
     );
   });
 
@@ -176,10 +176,10 @@ describe("When card Id was not provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("NonExistingPlayer");
@@ -197,10 +197,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0", 11);
@@ -210,7 +210,7 @@ describe("When card Id was provided", () => {
     const [, pickedCard] = picker.pick(G);
 
     //Assert
-    expect(pickedCard).toMatchObject(new TestCard(11, 1));
+    expect(pickedCard).toMatchObject(TestCard(11, 1));
   });
 
   test("Preserves other researched cards in the collection", () => {
@@ -219,10 +219,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0", 11);
@@ -243,10 +243,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0", 21);
@@ -265,7 +265,7 @@ describe("When card Id was provided", () => {
           researched: [],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0", 11);
@@ -281,10 +281,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -292,10 +292,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0", 11);
@@ -313,10 +313,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -324,10 +324,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("0", 11);
@@ -345,10 +345,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -356,10 +356,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
 
@@ -372,7 +372,7 @@ describe("When card Id was provided", () => {
     //Assert
     expect(afterPick.players["1"]).toMatchObject(originalGameState.players["1"]);
     expect(afterPick.players["1"]).toMatchObject(
-      new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 })
+      new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 })
     );
   });
 
@@ -382,10 +382,10 @@ describe("When card Id was provided", () => {
       players: {
         "0": new PlayerState({
           playerId: "0",
-          researched: [new TestCard(10, 1), new TestCard(11, 1), new TestCard(12, 1)],
+          researched: [TestCard(10, 1), TestCard(11, 1), TestCard(12, 1)],
           researchLimit: 3,
         }),
-        "1": new PlayerState({ playerId: "1", researched: [new TestCard(21, 2)], researchLimit: 3 }),
+        "1": new PlayerState({ playerId: "1", researched: [TestCard(21, 2)], researchLimit: 3 }),
       },
     });
     const picker = From.PlayerResearched("NonExistingPlayer", 11);

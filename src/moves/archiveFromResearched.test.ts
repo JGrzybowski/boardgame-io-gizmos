@@ -10,24 +10,24 @@ import { researchStage } from "../stages/researchStage";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 1), TestCardWithCost(11, 1, EnergyType.Red, 2)],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 3),
-      new TestCardWithCost(13, 1, EnergyType.Red, 4),
-      new TestCardWithCost(14, 1, EnergyType.Red, 5),
-      new TestCardWithCost(15, 1, EnergyType.Red, 6),
-      new TestCardWithCost(16, 1, EnergyType.Red, 7),
+      TestCardWithCost(12, 1, EnergyType.Red, 3),
+      TestCardWithCost(13, 1, EnergyType.Red, 4),
+      TestCardWithCost(14, 1, EnergyType.Red, 5),
+      TestCardWithCost(15, 1, EnergyType.Red, 6),
+      TestCardWithCost(16, 1, EnergyType.Red, 7),
     ],
     players: {
       "0": new PlayerState({
         playerId: "0",
-        machines: [new TestCard(21, 2)],
+        machines: [TestCard(21, 2)],
         researched: [],
         researchLimit: 3,
         archive: [],
         archiveLimit: 2,
       }),
-      "1": new PlayerState({ playerId: "1", machines: [new TestCard(22, 2)] }),
+      "1": new PlayerState({ playerId: "1", machines: [TestCard(22, 2)] }),
     },
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -54,7 +54,7 @@ test("moves card into player's archive", () => {
   // Assert
   const afterMove: GameState = client.store.getState().G;
   const afterPlayerState: PlayerState = afterMove.players["0"];
-  expect(afterPlayerState.archive).toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterPlayerState.archive).toContainEqual(TestCardWithCost(12, 1, EnergyType.Red, 3));
 });
 
 test("removes all the cards from researched", () => {
@@ -83,35 +83,35 @@ test("puts other researched cards on the bottom of the pile", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
-  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(TestCardWithCost(10, 1, EnergyType.Red, 1));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(TestCardWithCost(11, 1, EnergyType.Red, 2));
 
-  expect(afterMove.visibleCardsOfLevel(1)).not.toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
-  expect(afterMove.pileCardsOfLevel(1)).not.toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.visibleCardsOfLevel(1)).not.toContainEqual(TestCardWithCost(12, 1, EnergyType.Red, 3));
+  expect(afterMove.pileCardsOfLevel(1)).not.toContainEqual(TestCardWithCost(12, 1, EnergyType.Red, 3));
 
-  expect(afterMove.pileCardsOfLevel(1).slice(-2)).toContainEqual(new TestCardWithCost(13, 1, EnergyType.Red, 4));
-  expect(afterMove.pileCardsOfLevel(1).slice(-2)).toContainEqual(new TestCardWithCost(14, 1, EnergyType.Red, 5));
+  expect(afterMove.pileCardsOfLevel(1).slice(-2)).toContainEqual(TestCardWithCost(13, 1, EnergyType.Red, 4));
+  expect(afterMove.pileCardsOfLevel(1).slice(-2)).toContainEqual(TestCardWithCost(14, 1, EnergyType.Red, 5));
 });
 
 test("Returns invalid move if player's archive limit has been reached", () => {
   // Arrange
   const initialGameState = new GameS({
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 1), TestCardWithCost(11, 1, EnergyType.Red, 2)],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 3),
-      new TestCardWithCost(13, 1, EnergyType.Red, 4),
-      new TestCardWithCost(14, 1, EnergyType.Red, 5),
+      TestCardWithCost(12, 1, EnergyType.Red, 3),
+      TestCardWithCost(13, 1, EnergyType.Red, 4),
+      TestCardWithCost(14, 1, EnergyType.Red, 5),
     ],
     players: {
       "0": new PlayerState({
         playerId: "0",
-        machines: [new TestCard(16, 1)],
+        machines: [TestCard(16, 1)],
         researched: [],
         researchLimit: 3,
-        archive: [new TestCard(23, 2)],
+        archive: [TestCard(23, 2)],
         archiveLimit: 1,
       }),
-      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
+      "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)] }),
     },
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -133,23 +133,23 @@ test("Returns invalid move if player's archive limit has been reached", () => {
 test("Returns invalid move if player's archive ability has been blocked", () => {
   // Arrange
   const initialGameState = new GameS({
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 1), TestCardWithCost(11, 1, EnergyType.Red, 2)],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 3),
-      new TestCardWithCost(13, 1, EnergyType.Red, 4),
-      new TestCardWithCost(14, 1, EnergyType.Red, 5),
+      TestCardWithCost(12, 1, EnergyType.Red, 3),
+      TestCardWithCost(13, 1, EnergyType.Red, 4),
+      TestCardWithCost(14, 1, EnergyType.Red, 5),
     ],
     players: {
       "0": new PlayerState({
         playerId: "0",
-        machines: [new TestCard(16, 1)],
+        machines: [TestCard(16, 1)],
         researched: [],
         researchLimit: 3,
         archive: [],
         archiveLimit: 3,
         isArchivingBlocked: true,
       }),
-      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
+      "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)] }),
     },
     visibleCardsLimits: [0, 2, 2, 2],
   });

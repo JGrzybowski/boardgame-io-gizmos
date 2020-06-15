@@ -13,11 +13,11 @@ import { UpgradeEffectCard } from "../cards/upgradeEffectCard";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 1), TestCardWithCost(11, 1, EnergyType.Red, 2)],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 3),
-      new TestCardWithCost(13, 1, EnergyType.Red, 4),
-      new TestCardWithCost(14, 1, EnergyType.Red, 5),
+      TestCardWithCost(12, 1, EnergyType.Red, 3),
+      TestCardWithCost(13, 1, EnergyType.Red, 4),
+      TestCardWithCost(14, 1, EnergyType.Red, 5),
     ],
     players: {
       "0": new PlayerState({ playerId: "0", machines: [], energyStorage: new EnergyTypeDictionary(2, 2, 2, 2, 0) }),
@@ -78,7 +78,7 @@ test("Moves card to player's machines", () => {
   // Assert
   const afterConfirmBuildState: GameState = client.store.getState().G;
   const afterConfirmBuildPlayerState: PlayerState = afterConfirmBuildState.players["0"];
-  expect(afterConfirmBuildPlayerState.machines).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
+  expect(afterConfirmBuildPlayerState.machines).toContainEqual(TestCardWithCost(10, 1, EnergyType.Red, 1));
 });
 
 test("moves to activations stage", () => {
@@ -142,13 +142,13 @@ test("Activates single time triggers", () => {
   const mockCallback = jest.fn((G: GameState) => G);
   const initialGameState = new GameS({
     visibleCards: [
-      new UpgradeEffectCard(10, mockCallback, 1, EnergyType.Red, 1, 1),
-      new TestCardWithCost(11, 1, EnergyType.Red, 2),
+      UpgradeEffectCard(10, mockCallback, 1, EnergyType.Red, 1, 1),
+      TestCardWithCost(11, 1, EnergyType.Red, 2),
     ],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 3),
-      new TestCardWithCost(13, 1, EnergyType.Red, 4),
-      new TestCardWithCost(14, 1, EnergyType.Red, 5),
+      TestCardWithCost(12, 1, EnergyType.Red, 3),
+      TestCardWithCost(13, 1, EnergyType.Red, 4),
+      TestCardWithCost(14, 1, EnergyType.Red, 5),
     ],
     players: {
       "0": new PlayerState({ playerId: "0", machines: [], energyStorage: new EnergyTypeDictionary(2, 2, 2, 2, 0) }),

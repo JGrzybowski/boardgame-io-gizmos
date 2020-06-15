@@ -24,7 +24,7 @@ function InitialTestScenario(): GameState {
         energyStorageCapacity: 5,
       }),
     },
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 2)],
   });
 }
 
@@ -32,7 +32,7 @@ function GameWithInitialTestScenario(initialGameState = InitialTestScenario()): 
   return { ...Gizmos, setup: (): GameState => initialGameState };
 }
 
-function TestClient(game: Game<GameState, GameContext>) {
+function TestClient(game: Game<GameState, GameContext>): any {
   return Client({ game, numPlayers: 2, playerID: "0" });
 }
 
@@ -78,7 +78,7 @@ test("Removes one Any energy from cost if there is no energy of specified type",
   // Arrange
   const initialGameState = new GameS({
     ...InitialTestScenario(),
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Any, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Any, 2)],
   });
   const GameCustomScenario = GameWithInitialTestScenario(initialGameState);
   const client = TestClient(GameCustomScenario);
@@ -140,7 +140,7 @@ test("returns invalid move if the specified energy cannot pay for any part of th
   // Arrange
   const initialGameState = new GameS({
     ...InitialTestScenario(),
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Yellow, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Yellow, 2)],
   });
   const GameCustomScenario = GameWithInitialTestScenario(initialGameState);
   const client = TestClient(GameCustomScenario);
@@ -161,7 +161,7 @@ test("returns invalid move if the cost is zero", () => {
   // Arrange
   const initialGameState = new GameS({
     ...InitialTestScenario(),
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 0)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 0)],
   });
   const GameCustomScenario = GameWithInitialTestScenario(initialGameState);
   const client = TestClient(GameCustomScenario);

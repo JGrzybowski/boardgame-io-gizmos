@@ -19,7 +19,7 @@ function InitialTestScenario(): GameState {
         energyStorageCapacity: 5,
         researchLimit: 3,
         researched: [],
-        archive: [new TestCardWithCost(21, 2, EnergyType.Red, 2)],
+        archive: [TestCardWithCost(21, 2, EnergyType.Red, 2)],
       }),
       "1": new PlayerState({
         playerId: "1",
@@ -27,11 +27,11 @@ function InitialTestScenario(): GameState {
         energyStorageCapacity: 5,
       }),
     },
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 2), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 2), TestCardWithCost(11, 1, EnergyType.Red, 2)],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 2),
-      new TestCardWithCost(13, 1, EnergyType.Red, 2),
-      new TestCardWithCost(14, 1, EnergyType.Red, 2),
+      TestCardWithCost(12, 1, EnergyType.Red, 2),
+      TestCardWithCost(13, 1, EnergyType.Red, 2),
+      TestCardWithCost(14, 1, EnergyType.Red, 2),
     ],
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -171,7 +171,7 @@ test("Returns card to it's space on the table if the build is from table", () =>
 
   // Assert
   const afterCancelBuildState: GameState = client.store.getState().G;
-  expect(afterCancelBuildState.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 2));
+  expect(afterCancelBuildState.visibleCardsOfLevel(1)).toContainEqual(TestCardWithCost(10, 1, EnergyType.Red, 2));
 });
 
 test("Returns card to it's space on the researched if the build is from researched", () => {
@@ -191,9 +191,9 @@ test("Returns card to it's space on the researched if the build is from research
   const afterCancelBuildState: GameState = client.store.getState().G;
   const afterCancelBuildPlayerState = afterCancelBuildState.players["0"];
   expect(afterCancelBuildPlayerState.researched).toHaveLength(3);
-  expect(afterCancelBuildPlayerState.researched).toContainEqual(new TestCardWithCost(12, 1, EnergyType.Red, 2));
-  expect(afterCancelBuildPlayerState.researched).toContainEqual(new TestCardWithCost(13, 1, EnergyType.Red, 2));
-  expect(afterCancelBuildPlayerState.researched).toContainEqual(new TestCardWithCost(14, 1, EnergyType.Red, 2));
+  expect(afterCancelBuildPlayerState.researched).toContainEqual(TestCardWithCost(12, 1, EnergyType.Red, 2));
+  expect(afterCancelBuildPlayerState.researched).toContainEqual(TestCardWithCost(13, 1, EnergyType.Red, 2));
+  expect(afterCancelBuildPlayerState.researched).toContainEqual(TestCardWithCost(14, 1, EnergyType.Red, 2));
 });
 
 test("Returns card to it's space on the archived if the build is from archive", () => {
@@ -212,7 +212,7 @@ test("Returns card to it's space on the archived if the build is from archive", 
   const afterCancelBuildState: GameState = client.store.getState().G;
   const afterCancelBuildPlayerState = afterCancelBuildState.players["0"];
   expect(afterCancelBuildPlayerState.archive).toHaveLength(1);
-  expect(afterCancelBuildPlayerState.archive).toContainEqual(new TestCardWithCost(21, 2, EnergyType.Red, 2));
+  expect(afterCancelBuildPlayerState.archive).toContainEqual(TestCardWithCost(21, 2, EnergyType.Red, 2));
 });
 
 test.skip("can't be undone", () => {

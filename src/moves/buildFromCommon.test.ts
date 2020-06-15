@@ -11,15 +11,15 @@ import { Game } from "boardgame.io";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    visibleCards: [new TestCardWithCost(10, 1, EnergyType.Red, 1), new TestCardWithCost(11, 1, EnergyType.Red, 2)],
+    visibleCards: [TestCardWithCost(10, 1, EnergyType.Red, 1), TestCardWithCost(11, 1, EnergyType.Red, 2)],
     pileCards: [
-      new TestCardWithCost(12, 1, EnergyType.Red, 3),
-      new TestCardWithCost(13, 1, EnergyType.Red, 4),
-      new TestCardWithCost(14, 1, EnergyType.Red, 5),
+      TestCardWithCost(12, 1, EnergyType.Red, 3),
+      TestCardWithCost(13, 1, EnergyType.Red, 4),
+      TestCardWithCost(14, 1, EnergyType.Red, 5),
     ],
     players: {
-      "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)] }),
-      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)] }),
+      "0": new PlayerState({ playerId: "0", machines: [TestCard(16, 1)] }),
+      "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)] }),
     },
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -43,7 +43,7 @@ test("selected card is moved into the build slot", () => {
 
   // Assert
   const afterMove: GameState = client.store.getState().G;
-  expect(afterMove.cardToBeBuilt).toMatchObject(new TestCardWithCost(11, 1, EnergyType.Red, 2));
+  expect(afterMove.cardToBeBuilt).toMatchObject(TestCardWithCost(11, 1, EnergyType.Red, 2));
 });
 
 test("does not cause another card to be shown", () => {
@@ -57,7 +57,7 @@ test("does not cause another card to be shown", () => {
   // Assert
   const afterMove: GameState = client.store.getState().G;
   expect(afterMove.visibleCardsOfLevel(1)).toHaveLength(1);
-  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(new TestCardWithCost(10, 1, EnergyType.Red, 1));
+  expect(afterMove.visibleCardsOfLevel(1)).toContainEqual(TestCardWithCost(10, 1, EnergyType.Red, 1));
 });
 
 test("card cost is set up", () => {
@@ -106,13 +106,13 @@ test("returns invalid move if slot is occupied", () => {
     ...Gizmos,
     setup: (ctx: GameContext): GameState => {
       const G = new GameS({
-        visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+        visibleCards: [TestCard(10, 1), TestCard(11, 1)],
         players: {
-          "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)], researchLimit: 3 }),
-          "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)], researchLimit: 3 }),
+          "0": new PlayerState({ playerId: "0", machines: [TestCard(16, 1)], researchLimit: 3 }),
+          "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)], researchLimit: 3 }),
         },
         visibleCardsLimits: [0, 2, 2, 2],
-        cardToBeBuilt: new TestCardWithCost(13, 1, EnergyType.Red, 4),
+        cardToBeBuilt: TestCardWithCost(13, 1, EnergyType.Red, 4),
         cardToBeBuiltCost: EnergyTypeDictionary.fromTypeAndAmount(EnergyType.Red, 4),
       });
       ctx.events?.setStage?.(actionStage.name);

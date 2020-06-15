@@ -7,17 +7,25 @@ import { CardInfo, CardLevel } from "./cardInfo";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { CardEffect } from "./cardEffect";
 
-export class ConvertEffectCard extends CardInfo<ConvertEffect> {
-  constructor(
-    cardId: number,
-    effect: ConvertEffect,
-    victoryPoints: number,
-    color: EnergyType,
-    cost: number,
-    level: CardLevel
-  ) {
-    super(cardId, TriggerType.Upgrade, null, effect, victoryPoints, color, cost, level);
-  }
+export function ConvertEffectCard(
+  cardId: number,
+  victoryPoints: number,
+  color: EnergyType,
+  cost: number,
+  level: CardLevel,
+  effect1: ConvertEffect,
+  effect2?: ConvertEffect
+): CardInfo {
+  return {
+    cardId,
+    type: TriggerType.Converter,
+    primaryEffect: effect1,
+    secondaryEffect: effect2,
+    victoryPoints,
+    color,
+    cost,
+    level,
+  };
 }
 
 export function ConvertEffectFunction(
@@ -37,10 +45,8 @@ export function ConvertEffectFunction(
   return newGameState;
 }
 
-export class ConvertEffect extends CardEffect {
-  constructor(public readonly from: EnergyType, public readonly to: EnergyType) {
-    super();
-  }
+export class ConvertEffect implements CardEffect {
+  constructor(public readonly from: EnergyType, public readonly to: EnergyType) {}
 
   canBeResolved(G: GameState, ctx: GameContext): boolean {
     if (!G.cardToBeBuiltCost) return false;

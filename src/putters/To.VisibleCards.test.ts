@@ -5,10 +5,10 @@ import { To } from "./To";
 test("Increases number of cards on the table", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1)],
+    visibleCards: [TestCard(10, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(11, 1)];
+  const cardsToPut = [TestCard(11, 1)];
   const putter = To.VisibleCards();
 
   //Act
@@ -22,10 +22,10 @@ test("Increases number of cards on the table", () => {
 test("Adds given cards to the pile", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1)],
+    visibleCards: [TestCard(10, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(11, 1)];
+  const cardsToPut = [TestCard(11, 1)];
   const putter = To.VisibleCards();
 
   //Act
@@ -33,16 +33,16 @@ test("Adds given cards to the pile", () => {
   const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
-  expect(afterPut.visibleCards).toContainEqual(new TestCard(11, 1));
+  expect(afterPut.visibleCards).toContainEqual(TestCard(11, 1));
 });
 
 test("Throws Error if the number of cards overflows the limit of cards on the table", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
     visibleCardsLimits: [0, 3, 2, 2],
   });
-  const cardsToPut = [new TestCard(12, 1), new TestCard(13, 1)];
+  const cardsToPut = [TestCard(12, 1), TestCard(13, 1)];
   const putter = To.VisibleCards();
 
   //Act & Assert
@@ -53,14 +53,14 @@ test("Throws Error if the number of cards overflows the limit of cards on the ta
 test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1)],
+    visibleCards: [TestCard(10, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1)],
+    visibleCards: [TestCard(10, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(11, 1)];
+  const cardsToPut = [TestCard(11, 1)];
   const putter = To.VisibleCards();
 
   //Act
@@ -73,14 +73,14 @@ test("CanPut does not modify the original game state", () => {
 test("Put does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1)],
+    visibleCards: [TestCard(10, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1)],
+    visibleCards: [TestCard(10, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(11, 1)];
+  const cardsToPut = [TestCard(11, 1)];
   const putter = To.VisibleCards();
 
   //Act

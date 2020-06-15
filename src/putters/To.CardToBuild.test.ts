@@ -7,12 +7,12 @@ import { EnergyType } from "../energyType";
 test("Card is put into card into card slot", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardToPut = new TestCard(15, 1);
+  const cardToPut = TestCard(15, 1);
   const putter = To.CardToBuild("Table");
 
   //Act
@@ -21,19 +21,19 @@ test("Card is put into card into card slot", () => {
 
   //Assert
   expect(afterPut.cardToBeBuilt).not.toBeNull();
-  expect(afterPut.cardToBeBuilt).toMatchObject(new TestCard(15, 1));
+  expect(afterPut.cardToBeBuilt).toMatchObject(TestCard(15, 1));
 });
 
 test("Throws error if the card to be built slot is occupied", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(15, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(15, 1),
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
-  const cardToPut = new TestCard(17, 1);
+  const cardToPut = TestCard(17, 1);
   const putter = To.CardToBuild("Table");
 
   //Act & Assert
@@ -44,20 +44,20 @@ test("Throws error if the card to be built slot is occupied", () => {
 test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
-  const cardToPut = new TestCard(15, 1);
+  const cardToPut = TestCard(15, 1);
   const putter = To.CardToBuild("Table");
 
   //Act
@@ -70,20 +70,20 @@ test("CanPut does not modify the original game state", () => {
 test("Put does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
-  const cardToPut = new TestCard(15, 1);
+  const cardToPut = TestCard(15, 1);
   const putter = To.CardToBuild("Table");
 
   //Act
@@ -96,13 +96,13 @@ test("Put does not modify the original game state", () => {
 test("Sets Up Cards cost", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
-  const cardToPut = new TestCardWithCost(15, 1, EnergyType.Red, 3);
+  const cardToPut = TestCardWithCost(15, 1, EnergyType.Red, 3);
   const putter = To.CardToBuild("Table");
 
   //Act
@@ -120,13 +120,13 @@ test.each(["Archive", "Table", "Research"])("Sets Up Cards source", (source) => 
   if (!isBuildSource(source)) throw new Error(`The selected source ${source} is not a BuildSource`);
 
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
-  const cardToPut = new TestCardWithCost(15, 1, EnergyType.Red, 3);
+  const cardToPut = TestCardWithCost(15, 1, EnergyType.Red, 3);
   const putter = To.CardToBuild(source);
 
   //Act

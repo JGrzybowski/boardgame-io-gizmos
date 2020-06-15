@@ -3,7 +3,7 @@ import { GameState } from "../gameState";
 import { GameContext } from "../gameContext";
 import { archiveAction } from "../moves/archive";
 
-export class FileActionEffect extends CardEffect {
+export class FileActionEffect implements CardEffect {
   canBeResolved(G: GameState, ctx: GameContext): boolean {
     if (ctx.playerID) return G.players[ctx.playerID]?.canArchiveAnotherCard();
     return false;

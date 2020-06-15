@@ -10,7 +10,9 @@ import { To } from "../putters/To";
 
 type TakeEnergyLimit = 1 | 2 | 3;
 
-export class TakeEnergyEffect extends CardEffect {
+export class TakeEnergyEffect implements CardEffect {
+  constructor(public readonly howMany: TakeEnergyLimit) {}
+
   canBeResolved(G: GameState, ctx: GameContext): boolean {
     const playerId = ctx.playerID;
     if (!playerId) return false;
@@ -29,22 +31,16 @@ export class TakeEnergyEffect extends CardEffect {
     const newGameState = G.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.PlayerEnergyStorage(playerId));
     return newGameState;
   }
-
-  constructor(public readonly howMany: TakeEnergyLimit) {
-    super();
-  }
 }
 
-export class CardWithTakeEnergyEffect extends CardInfo<TakeEnergyEffect> {
-  constructor(
-    cardId: number,
-    type: TriggerType,
-    howMany: TakeEnergyLimit,
-    victoryPoints: number,
-    color: EnergyType,
-    cost: number,
-    level: CardLevel
-  ) {
-    super(cardId, type, null, new TakeEnergyEffect(howMany), victoryPoints, color, cost, level);
-  }
+export function CardWithTakeEnergyEffect(
+  cardId: number,
+  type: TriggerType,
+  howMany: TakeEnergyLimit,
+  victoryPoints: number,
+  color: EnergyType,
+  cost: number,
+  level: CardLevel
+): CardInfo {
+  return { cardId, type, primaryEffect: new TakeEnergyEffect(howMany), victoryPoints, color, cost, level };
 }

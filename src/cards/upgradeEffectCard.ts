@@ -5,31 +5,37 @@ import { GameContext } from "../gameContext";
 import { GameState } from "../gameState";
 import { INVALID_MOVE } from "boardgame.io/core";
 
-export class UpgradeEffectCard extends CardInfo<any> {
-  constructor(
-    cardId: number,
-    oneTimeEffect: CardEffectFunction | null,
-    victoryPoints: number,
-    color: EnergyType,
-    cost: number,
-    level: CardLevel
-  ) {
-    super(cardId, TriggerType.Upgrade, oneTimeEffect, null, victoryPoints, color, cost, level);
-  }
+export function UpgradeEffectCard(
+  cardId: number,
+  oneTimeEffect: CardEffectFunction,
+  victoryPoints: number,
+  color: EnergyType,
+  cost: number,
+  level: CardLevel
+): CardInfo {
+  return {
+    cardId,
+    type: TriggerType.Upgrade,
+    oneTimeEffect,
+    victoryPoints,
+    color,
+    cost,
+    level,
+  };
 }
 
-export function UpgradeEffectFunction(
-  G: GameState,
-  Ctx: GameContext,
+export function UpgradeLimitsEffectFunction(
   storage = 0,
   archive = 0,
   research = 0
-): GameState | string {
-  const playerId = Ctx.playerID;
-  if (!playerId) return INVALID_MOVE;
-  const playerState = G.players[playerId];
-  if (!playerState) return INVALID_MOVE;
+): (G: GameState, ctx: GameContext) => GameState | string {
+  return (G: GameState, ctx: GameContext): GameState | string => {
+    const playerId = ctx.playerID;
+    if (!playerId) return INVALID_MOVE;
+    const playerState = G.players[playerId];
+    if (!playerState) return INVALID_MOVE;
 
-  const newGameState = G.withUpdatedPlayer(playerId, playerState.withLimitsChangedBy(storage, archive, research));
-  return newGameState;
+    const newGameState = G.withUpdatedPlayer(playerId, playerState.withLimitsChangedBy(storage, archive, research));
+    return newGameState;
+  };
 }

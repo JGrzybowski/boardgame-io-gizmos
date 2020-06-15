@@ -5,9 +5,9 @@ import { From } from "./From";
 test("Card is taken from the built slot", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -19,14 +19,14 @@ test("Card is taken from the built slot", () => {
 
   //Assert
   expect(afterPick.cardToBeBuilt).toBeNull();
-  expect(pickedCard).toMatchObject(new TestCard(10, 1));
+  expect(pickedCard).toMatchObject(TestCard(10, 1));
 });
 
 test("Throws an error if there is no card in the slot", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     cardToBeBuilt: null,
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
@@ -41,17 +41,17 @@ test("Throws an error if there is no card in the slot", () => {
 test("CanPick does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -67,17 +67,17 @@ test("CanPick does not modify the original game state", () => {
 test("Pick does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
 
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -93,9 +93,9 @@ test("Pick does not modify the original game state", () => {
 test("Sets Card's cost to null", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -113,9 +113,9 @@ test("Sets Card's cost to null", () => {
 test("Sets Card's source to null", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
-    cardToBeBuilt: new TestCard(10, 1),
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
+    cardToBeBuilt: TestCard(10, 1),
     cardToBeBuiltSource: "Table",
     visibleCardsLimits: [0, 2, 2, 2],
   });

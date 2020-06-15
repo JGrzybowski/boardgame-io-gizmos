@@ -1,4 +1,4 @@
-import { CardInfo } from "./cards/cardInfo";
+import { CardInfo, isCardInfo } from "./cards/cardInfo";
 import { InitialCard } from "./cards/cardsList";
 import { EnergyTypeDictionary } from "./cards/energyTypeDictionary";
 import { PlayerID } from "boardgame.io";
@@ -118,9 +118,9 @@ export class PlayerState {
       let triggerConditionMet = false;
       if (triggerType === TriggerType.Pick && isEnergyType(triggerDetails))
         triggerConditionMet = card.pickTriggerCondition?.(triggerDetails) ?? false;
-      else if (triggerType === TriggerType.Build && triggerDetails instanceof CardInfo)
+      else if (triggerType === TriggerType.Build && isCardInfo(triggerDetails))
         triggerConditionMet = card.buildTriggerCondition?.(triggerDetails) ?? false;
-      else if (triggerType === TriggerType.Archive && triggerDetails instanceof CardInfo)
+      else if (triggerType === TriggerType.Archive && isCardInfo(triggerDetails))
         triggerConditionMet = card.archiveTriggerCondition?.(triggerDetails) ?? false;
 
       if (triggerConditionMet)

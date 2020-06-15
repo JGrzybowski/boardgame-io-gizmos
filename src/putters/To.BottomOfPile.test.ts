@@ -5,11 +5,11 @@ import { To } from "./To";
 test("Increases number of cards in the pile", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const cardsToPut = [TestCard(15, 1), TestCard(16, 1), TestCard(17, 1)];
   const putter = To.BottomOfPile();
 
   //Act
@@ -23,11 +23,11 @@ test("Increases number of cards in the pile", () => {
 test("Adds given cards to the pile", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const cardsToPut = [TestCard(15, 1), TestCard(16, 1), TestCard(17, 1)];
   const putter = To.BottomOfPile();
 
   //Act
@@ -35,19 +35,19 @@ test("Adds given cards to the pile", () => {
   const afterPut = putter.putMultiple(G, cardsToPut);
 
   //Assert
-  expect(afterPut.pileCards).toContainEqual(new TestCard(15, 1));
-  expect(afterPut.pileCards).toContainEqual(new TestCard(16, 1));
-  expect(afterPut.pileCards).toContainEqual(new TestCard(17, 1));
+  expect(afterPut.pileCards).toContainEqual(TestCard(15, 1));
+  expect(afterPut.pileCards).toContainEqual(TestCard(16, 1));
+  expect(afterPut.pileCards).toContainEqual(TestCard(17, 1));
 });
 
 test("Leaves the previous cards of the pile on the top and in the same order", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const cardsToPut = [TestCard(15, 1), TestCard(16, 1), TestCard(17, 1)];
   const putter = To.BottomOfPile();
 
   //Act
@@ -61,16 +61,16 @@ test("Leaves the previous cards of the pile on the top and in the same order", (
 test("CanPut does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const cardsToPut = [TestCard(15, 1), TestCard(16, 1), TestCard(17, 1)];
   const putter = To.BottomOfPile();
 
   //Act
@@ -83,16 +83,16 @@ test("CanPut does not modify the original game state", () => {
 test("Put does not modify the original game state", () => {
   //Arrange
   const G = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
   const originalGameState = new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     visibleCardsLimits: [0, 2, 2, 2],
   });
-  const cardsToPut = [new TestCard(15, 1), new TestCard(16, 1), new TestCard(17, 1)];
+  const cardsToPut = [TestCard(15, 1), TestCard(16, 1), TestCard(17, 1)];
   const putter = To.BottomOfPile();
 
   //Act

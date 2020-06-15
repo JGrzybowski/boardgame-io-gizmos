@@ -9,11 +9,11 @@ import { Game } from "boardgame.io";
 
 function InitialTestScenario(): GameState {
   return new GameS({
-    visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
-    pileCards: [new TestCard(12, 1), new TestCard(13, 1), new TestCard(14, 1)],
+    visibleCards: [TestCard(10, 1), TestCard(11, 1)],
+    pileCards: [TestCard(12, 1), TestCard(13, 1), TestCard(14, 1)],
     players: {
-      "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)], researchLimit: 3 }),
-      "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)], researchLimit: 3 }),
+      "0": new PlayerState({ playerId: "0", machines: [TestCard(16, 1)], researchLimit: 3 }),
+      "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)], researchLimit: 3 }),
     },
     visibleCardsLimits: [0, 2, 2, 2],
   });
@@ -77,10 +77,10 @@ test("No cards in the pile returns invalid move", () => {
     ...Gizmos,
     setup: (ctx: GameContext): GameState => {
       const G = new GameS({
-        visibleCards: [new TestCard(10, 1), new TestCard(11, 1)],
+        visibleCards: [TestCard(10, 1), TestCard(11, 1)],
         players: {
-          "0": new PlayerState({ playerId: "0", machines: [new TestCard(16, 1)], researchLimit: 3 }),
-          "1": new PlayerState({ playerId: "1", machines: [new TestCard(21, 2)], researchLimit: 3 }),
+          "0": new PlayerState({ playerId: "0", machines: [TestCard(16, 1)], researchLimit: 3 }),
+          "1": new PlayerState({ playerId: "1", machines: [TestCard(21, 2)], researchLimit: 3 }),
         },
         visibleCardsLimits: [0, 2, 2, 2],
       });
