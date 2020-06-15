@@ -26,6 +26,14 @@ export interface CardInfo {
   readonly archiveTriggerCondition?: (card: CardInfo) => boolean;
 }
 
-export function isCardInfo(x: any): x is CardInfo {
-  return "cardId" in x && "type" in x && "victoryPoints" in x && "color" in x && "cost" in x && "level" in x;
+export function isCardInfo(x: CardInfo | EnergyType): x is CardInfo {
+  return (
+    x instanceof Object &&
+    "cardId" in x &&
+    "type" in x &&
+    "victoryPoints" in x &&
+    "color" in x &&
+    "cost" in x &&
+    "level" in x
+  );
 }
