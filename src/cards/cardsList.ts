@@ -3,8 +3,10 @@ import { CardWithFileEffect } from "./cardWithFileEffect";
 import { CardWithTakeEnergyEffect } from "./cardWithTakeEnergyEffect";
 import { EnergyType } from "../energyType";
 import { TriggerType } from "./triggerType";
-import { UpgradeEffectCard, UpgradeLimitsEffectFunction } from "./upgradeEffectCard";
-import { ConvertEffect, ConvertEffectCard } from "./convertEffectCard";
+import { UpgradeEffectCard } from "./upgradeEffectCard";
+import { ConvertEffect } from "../cardEffects/convertEffect";
+import { ConvertEffectCard } from "./convertEffectCard";
+import { UpgradeLimitsEffectFunction } from "../cardEffects/upgradeLimitsEffect";
 
 export const InitialCard = CardWithTakeEnergyEffect(
   /*CardId */ 1,
