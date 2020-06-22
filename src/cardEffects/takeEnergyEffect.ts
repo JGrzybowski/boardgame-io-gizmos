@@ -21,7 +21,14 @@ export class TakeEnergyEffect implements CardEffect {
     const playerState = G.players[playerId];
     if (!playerState) throw new Error("Provided player Id is not in the game");
 
-    const newGameState = G.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.PlayerEnergyStorage(playerId));
+    const playersEnergyStorageFreeSpace = playerState.energyStorageCapacity - playerState.energyStorage.sum();
+    const amountOfEnergyToTake = Math.min(playersEnergyStorageFreeSpace, this.howMany);
+
+    let newGameState = G;
+    for (let i = 0; i < amountOfEnergyToTake; i++) {
+      newGameState = newGameState.moveEnergy(From.Dispenser(RandomIndex(ctx)), To.PlayerEnergyStorage(playerId));
+    }
+
     return newGameState;
   }
 }
