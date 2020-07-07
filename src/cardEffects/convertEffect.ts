@@ -24,12 +24,24 @@ export function ConvertEffectFunction(
 }
 
 export class ConvertEffect implements CardEffect {
-  constructor(public readonly from: EnergyType, public readonly to: EnergyType) {}
+  constructor(from: EnergyType, to: EnergyType) {
+    this.from = EnergyTypeDictionary.fromTypeAndAmount(from, 1);
+    this.to = EnergyTypeDictionary.fromTypeAndAmount(to, 1);
+  }
+
+  private readonly from: EnergyTypeDictionary;
+  private readonly to: EnergyTypeDictionary;
 
   canBeResolved(G: GameState, p: PlayerState): boolean {
     if (!G.cardToBeBuiltCost) return false;
     if (G.cardToBeBuiltCost.isPaid()) return false;
-    if (G.cardToBeBuiltCost.get(this.from) <= 0) return false;
+
+    return (
+      G.cardToBeBuiltCost.R <= this.from.R ||
+      G.cardToBeBuiltCost.U <= this.from.U ||
+      G.cardToBeBuiltCost.B <= this.from.B ||
+      G.cardToBeBuiltCost.Y <= this.from.Y
+    );
 
     return true;
   }
